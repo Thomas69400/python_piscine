@@ -156,7 +156,7 @@ class GardenManager:
             reg = 0
             flo = 0
             pri = 0
-            for p in garden.plants:
+            for p in garden.get_plants():
                 i += 1
                 growth += p.get_growth()
                 if p.plant_type() == "prize":
@@ -172,7 +172,7 @@ class GardenManager:
                         print(" (blooming)", end="")
                     else:
                         print(" (bloomed)", end="")
-                if type(p).__name__ == "prize":
+                if p.plant_type()== "prize":
                     print(f", Prize points : {p.prize}")
                 print("")
             print(f"\nPlants added: {i}, Total growth: {growth}cm")
@@ -208,26 +208,26 @@ class GardenManager:
 
         self.gardens.append(garden)
 
-    def add_plant_to_garden(self, garden: Garden, plant: Plant) -> None:
+    def add_plant_to_garden(self, garden_index: int, plant: Plant) -> None:
         """Add a Plant to a given Garden
 
         Args:
-            garden (Garden): A Garden
+            garden_index (int): the index of the garden
             plant (Plant): A Plant
         """
 
         print(f"Added {plant.name} to {self.name}'s garden")
-        self.gardens[garden].add_plant(plant)
+        self.gardens[garden_index].add_plant(plant)
 
-    def grow(self, garden: Garden) -> None:
+    def grow(self, garden_index: int) -> None:
         """Make all Plant from a Garden grow()
 
         Args:
-            garden (Garden): A Garden
+            garden_index (int): the index of the garden
         """
 
         print(f"{self.name} is helping all plants grow...")
-        for p in self.gardens[garden].get_plants():
+        for p in self.gardens[garden_index].get_plants():
             p.grow()
 
 

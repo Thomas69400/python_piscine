@@ -5,7 +5,7 @@ class Plant:
     """Define all information about a plant"""
 
     def __init__(self, name: str, height: int, age: int) -> None:
-        """Create a plant and define her attributes"""
+        """Create a plant and define its attributes"""
 
         self.name = name
         self.height = height
@@ -74,15 +74,14 @@ class Vegetable(Plant):
 if __name__ == "__main__":
     """Create a multiple types of plants and show their informations"""
 
-    plant = [Flower("Rose", 25, 30, "red"), Flower("Tulip", 20, 15, "yellow")]
-    plant[1].bloomed = 1
+    plants = [Flower("Rose", 25, 30, "red"), Flower("Tulip", 20, 15, "yellow")]
     trees = [Tree("Oak", 500, 1825, 50), Tree("Ficus", 400, 452, 20)]
     vegetables = [
         Vegetable("Tomato", 80, 90, "summer", "vitamin C"),
         Vegetable("Carrot", 20, 56, "winter", "vitamin D"),
     ]
     print("=== Garden Plant Types ===\n")
-    for p in plant:
+    for p in plants:
         p.get_info()
         print(f", {p.color} color")
         p.bloom()

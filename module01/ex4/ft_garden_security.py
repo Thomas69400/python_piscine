@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class Plant:
+class SecurePlant:
     """Define all information about a plant"""
 
     def __init__(self, name: str, height: int, age: int) -> None:
@@ -51,7 +51,7 @@ class Plant:
 if __name__ == "__main__":
     """Create a plant and try to modify its height and age"""
 
-    plant = Plant("Rose", 25, 30)
+    plant = SecurePlant("Rose", 25, 30)
     print("=== Garden Security System ===")
     print(f"Plant created: {plant.name}")
     plant.set_height(80)
