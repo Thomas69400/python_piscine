@@ -1,4 +1,4 @@
-def garden_operations(ope: str):
+def garden_operations(ope: str) -> int:
     """Try to make operations then catch the errors"""
 
     if ope == "NoError":
@@ -13,7 +13,7 @@ def garden_operations(ope: str):
         return ope[0]
 
 
-def test_error_types():
+def test_error_types() -> None:
     """Test the function garden_operations()"""
 
     try:
@@ -35,7 +35,7 @@ def test_error_types():
         print("Testing KeyError...")
         garden_operations("KeyError")
     except KeyError:
-        print("Caught KeyError: 'missing\_plant'")
+        print("Caught KeyError: 'missing_plant'")
     try:
         print("Testing multiple errors together...")
         garden_operations("NoError")
@@ -46,5 +46,5 @@ def test_error_types():
     print("All error types tested successfully!")
 
 
-if __name__ == "__main__":
-    test_error_types()
+print("=== Garden Error Types Demo ===\n")
+test_error_types()

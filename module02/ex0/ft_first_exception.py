@@ -27,11 +27,9 @@ def test_temperature_input(temp_str: str) -> None:
     check_temperature(temp_str)
 
 
-if __name__ == "__main__":
-    """Make some test to check the function check_temperature()"""
-
-    test_temperature_input("25")
-    test_temperature_input("abc")
-    test_temperature_input("100")
-    test_temperature_input("-50")
-    print("All tests completed - program didn't crash!")
+print("=== Garden Temperature Checker ===\n")
+test_temperature_input("25")
+test_temperature_input("abc")
+test_temperature_input("100")
+test_temperature_input("-50")
+print("All tests completed - program didn't crash!")
