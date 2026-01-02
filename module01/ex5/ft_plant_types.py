@@ -45,7 +45,8 @@ class Flower(Plant):
 class Tree(Plant):
     """Tree child of class Plant, get a trunk_diameter and can make shade"""
 
-    def __init__(self, name: str, height: int, age: int, trunk_diameter: int) -> None:
+    def __init__(self, name: str, height: int, age: int,
+                 trunk_diameter: int) -> None:
         """Create a tree and define his attributes with trunk_diameter"""
 
         super().__init__(name, height, age)

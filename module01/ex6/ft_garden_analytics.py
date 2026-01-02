@@ -172,12 +172,13 @@ class GardenManager:
                         print(" (blooming)", end="")
                     else:
                         print(" (bloomed)", end="")
-                if p.plant_type()== "prize":
+                if p.plant_type() == "prize":
                     print(f", Prize points : {p.prize}")
                 print("")
             print(f"\nPlants added: {i}, Total growth: {growth}cm")
             print(
-                f"Plant types: {reg} regular, {flo} flowering," f"{pri} prize flowers"
+                f"Plant types: {reg} regular, {flo} flowering,"
+                f"{pri} prize flowers"
             )
 
     @classmethod

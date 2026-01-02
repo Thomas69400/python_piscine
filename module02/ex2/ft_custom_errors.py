@@ -50,7 +50,7 @@ def test_error_types() -> None:
         garden_operations("WaterError")
     except WaterError as e:
         print(f"Caught a garden error: {e}")
-        
+
     print("\nTesting catching all garden errors...")
     try:
         garden_operations("PlantError")

@@ -20,26 +20,26 @@ def test_error_types() -> None:
     try:
         print("Testing ValueError...")
         garden_operations("ValueError")
-    except ValueError:
-        print("Caught ValueError: invalid literal for int()\n")
+    except ValueError as e:
+        print(f"Caught ValueError: {e}\n")
 
     try:
         print("Testing ZeroDivisionError...")
         garden_operations("ZeroDivisionError")
-    except ZeroDivisionError:
-        print("Caught ZeroDivisionError: division by zero\n")
+    except ZeroDivisionError as e:
+        print(f"Caught ZeroDivisionError: {e}\n")
 
     try:
         print("Testing FileNotFoundError...")
         garden_operations("FileNotFoundError")
-    except FileNotFoundError:
-        print("Caught FileNotFoundError: No such file 'missing.txt'\n")
+    except FileNotFoundError as e:
+        print(f"Caught FileNotFoundError: {e}\n")
 
     try:
         print("Testing KeyError...")
         garden_operations("KeyError")
-    except KeyError:
-        print("Caught KeyError: 'missing_plant'")
+    except KeyError as e:
+        print(f"Caught KeyError: {e}\n")
 
     try:
         print("Testing multiple errors together...")

@@ -3,7 +3,7 @@ def check_temperature(temp_str: str) -> int:
 
     try:
         temp_int = int(temp_str)
-    except:
+    except Exception:
         print(f"Error: '{temp_str}' is not a valid number\n")
         return None
     if (temp_int > 40):
