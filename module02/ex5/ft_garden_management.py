@@ -164,7 +164,7 @@ if __name__ == "__main__":
             GardenManager.check_plant_health(p.name, p.water, p.sunlight)
             p.get_info()
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error checking {p.name}: {e}")
 
     print("\nTesting error recovery...")
     try:
