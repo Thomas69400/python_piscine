@@ -87,7 +87,9 @@ class GardenManager:
         Raises:
             ValueError: error message when bad name
             ValueError: error message when water_level > 10
+            ValueError: error message when water_level < 1
             ValueError: error message when sunlight_hours < 2
+            ValueError: error message when sunlight_hours > 12
 
         Returns:
             str: success message
@@ -97,9 +99,13 @@ class GardenManager:
             raise ValueError("Plant name cannot be empty!")
         if water_level > 10:
             raise ValueError(f"Water level {water_level} is too high (max 10)")
+        if water_level < 1:
+            raise ValueError(f"Water level {water_level} is too low (min 1)")
         if sunlight_hours < 2:
-            raise ValueError(
-                f"Sunlight hours {sunlight_hours} is too low (min 2)")
+            raise ValueError(f"Sunlight hours {sunlight_hours} is too low (min 2)")
+        if sunlight_hours > 12:
+            raise ValueError(f"Sunlight hours {sunlight_hours} is too high" +
+                            "(max 12)")
         return 1
 
     def add_plant(self, plant: Plant) -> None:
@@ -115,20 +121,28 @@ class GardenManager:
             self.garden.add_plant(plant)
             print(f"Added {plant.name} successfully")
         except ValueError as e:
-            print(f"Error: {e}")
+            print(f"Error adding plant: {e}")
 
     def water_plants(self):
-        """Watering all the plant"""
+        """Watering all the plant
+
+        Raises:
+            Exception: error message when bad name
+            GardenError: error when tank level is too low
+        """
 
         print("Opening watering system")
-        for p in self.garden.plants:
-            if p is None:
-                raise Exception(f"Cannot give water to {p}")
-            if self.garden.tank < 5:
-                raise GardenError("Not enough water in tank")
-            p.add_water(5)
-            self.garden.tank -= 5
-            print(f"Watering {p.name} - success")
+        try:
+            for p in self.garden.plants:
+                if p is None or p == "":
+                    raise Exception("None")
+                if self.garden.tank < 5:
+                    raise GardenError("Not enough water in tank")
+                p.add_water(5)
+                self.garden.tank -= 5
+                print(f"Watering {p.name} - success")
+        finally:
+            print("Closing watering system (cleanup)")
 
     def get_plants(self):
         """Return the plants of the garden
@@ -155,8 +169,6 @@ if __name__ == "__main__":
         manager.water_plants()
     except Exception as e:
         print(f"Error: {e}")
-    finally:
-        print("Closing watering system (cleanup)")
 
     print("\nChecking plant health...")
     for p in manager.get_plants():

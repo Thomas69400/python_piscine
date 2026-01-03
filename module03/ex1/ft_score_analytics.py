@@ -17,12 +17,8 @@ def main():
             except ValueError:
                 print(f"Oops, I typed '{a}' instead of a number")
                 return
-        print("Scores processed: [", end="")
-        for s in scores:
-            print(f"{s}", end="")
-            if s != scores[-1]:
-                print(", ", end="")
-        print(f"]\nTotal Players: {len(scores)}")
+        print(f"Scores processed: {scores}")
+        print(f"Total players: {len(scores)}")
         print(f"Total score: {sum(scores)}")
         print(f"Average score: {sum(scores)/len(scores)}")
         print(f"High score: {max(scores)}")

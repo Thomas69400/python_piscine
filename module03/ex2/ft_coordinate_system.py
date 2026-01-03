@@ -23,6 +23,7 @@ def parse(to_parse: str) -> tuple:
                          f"Error parsing coordinates: {e}")
     else:
         print(f"Parsing coordinates: \"{to_parse}\"")
+        print(f"Parsed position: {t}")
         return t
 
 
@@ -51,9 +52,9 @@ if __name__ == "__main__":
         except ValueError as e:
             print(f"{e}")
         else:
-            print(f"Parsed position: {t}")
             d = calculate_distance(spawn, t)
-            print(f"Distance between {spawn} and {t}: " + "%.2f" % d)
+            print(f"Distance between {spawn} and {t}: {d:.2f}")
             print("\nUnpacking demonstration:")
             (x, y, z) = t
             print(f"Player at x={x}, y={y}, z={z}")
+            print(f"Coordinates: X={x}, Y={y}, Z={z}")
