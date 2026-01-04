@@ -20,7 +20,9 @@ def parse(to_parse: str) -> tuple:
         t = tuple((int(nbr[0]), int(nbr[1]), int(nbr[2])))
     except ValueError as e:
         raise ValueError(f"Parsing invalid coordinates: \"{to_parse}\"\n" +
-                         f"Error parsing coordinates: {e}")
+                         f"Error parsing coordinates: {e}\n" +
+                         f"Error details - Type: {e.__class__.__name__}, " +
+                         f"Args: {e.args}")
     else:
         print(f"Parsing coordinates: \"{to_parse}\"")
         print(f"Parsed position: {t}")
