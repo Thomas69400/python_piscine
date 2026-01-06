@@ -1,31 +1,37 @@
-def dict_comp(players: dict) -> None:
+def dict_comp(data: dict) -> None:
+    """_summary_
+
+    Args:
+        data (dict): a dictionary of data
+    """
+
     print("\n=== Dict Comprehension Examples ===")
     player_score = {
-        player: players["players"][player]["total_score"]
-        for player in players["players"]}
-    scores = {"high": len(list(session for session in players["sessions"]
+        player: data["players"][player]["total_score"]
+        for player in data["players"]}
+    scores = {"high": len(list(session for session in data["sessions"]
               if session["score"] >= 2500))}
     scores.update({"medium": len(list(session
-                                      for session in players["sessions"]
+                                      for session in data["sessions"]
                    if session["score"] >= 1500 and session["score"] < 2500))})
     scores.update({"low": len(list(session
-                   for session in players["sessions"]
+                   for session in data["sessions"]
                    if session["score"] < 1500))})
-    achievements = {player: players["players"][player]["achievements_count"]
-                    for player in players["players"]}
+    achievements = {player: data["players"][player]["achievements_count"]
+                    for player in data["players"]}
     print(f"Player scores: {player_score}")
     print(f"Scores categories: {scores}")
     print(f"Achievement counts: {achievements}")
 
 
-def list_comp(players: dict) -> None:
+def list_comp(data: dict) -> None:
     print("\n=== List Comprehension Examples ===")
-    high = [player for player in players["players"]
-            if players["players"][player]["total_score"] > 2000]
+    high = [player for player in data["players"]
+            if data["players"][player]["total_score"] > 2000]
     bob_sessions_time = [session["duration_minutes"]
-                         for session in players["sessions"]
+                         for session in data["sessions"]
                          if session["player"] == "bob"]
-    comp_games = [session["player"] for session in players["sessions"]
+    comp_games = [session["player"] for session in data["sessions"]
                   if session["mode"] == "competitive"]
     print(f"High scorers (>2000): {high}")
     print(f"Bob' sessions time: {bob_sessions_time}")
@@ -35,26 +41,26 @@ def list_comp(players: dict) -> None:
     print(f"All competitive games: {comp_games}")
 
 
-def set_comp(players: dict) -> None:
+def set_comp(data: dict) -> None:
     print("\n=== Set Comprehension Examples ===")
-    unique_play = {player for player in players["players"]}
+    unique_play = {player for player in data["players"]}
     unique_achievement = {
-        achievement for achievement in players["achievements"]}
+        achievement for achievement in data["achievements"]}
     print(f"Unique players: {unique_play}")
     print(f"Unique achievements: {unique_achievement}")
 
 
-def combine(players: dict) -> None:
+def combine(data: dict) -> None:
     print("\n=== Combined Analysis ===")
-    total = len({player for player in players["players"]})
-    unique = len({achievement for achievement in players["achievements"]})
-    scores = [score["score"] for score in players["sessions"]]
+    total = len({player for player in data["players"]})
+    unique = len({achievement for achievement in data["achievements"]})
+    scores = [score["score"] for score in data["sessions"]]
     average = sum(scores)/len(scores)
-    scores_player = [players["players"][player]["total_score"]
-                     for player in players["players"]]
-    top = {player: players["players"][player]
-           for player in players["players"]
-           if players["players"][player]["total_score"] == max(scores_player)}
+    scores_player = [data["players"][player]["total_score"]
+                     for player in data["players"]]
+    top = {player: data["players"][player]
+           for player in data["players"]
+           if data["players"][player]["total_score"] == max(scores_player)}
     print(f"Total players: {total}")
     print(f"Total unique achievement: {unique}")
     print(f"Average score by session: {'%.2f' % average}")
@@ -64,7 +70,7 @@ def combine(players: dict) -> None:
 
 
 def main():
-    players = {
+    data = {
         "players": {
             "alice": {
                 "level": 41,
@@ -337,10 +343,10 @@ def main():
     }
 
     print("=== Game Analytics Dashboard ===")
-    list_comp(players)
-    dict_comp(players)
-    set_comp(players)
-    combine(players)
+    list_comp(data)
+    dict_comp(data)
+    set_comp(data)
+    combine(data)
 
 
 if __name__ == "__main__":
