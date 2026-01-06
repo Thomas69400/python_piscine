@@ -1,36 +1,33 @@
-def processing(event: list):
+def processing(events: list):
     """Generator to show events and retrieve essential events
 
     Args:
-        event (list): all the events to show
+        events (list): all the events to show
 
     Yields:
         int: the essentials events
     """
 
-    i = 0
     high = 0
     treasure = 0
     level = 0
-    print(f"Processing {len(event)} game events...\n")
-    while True:
+    print(f"Processing {len(events)} game events...\n")
+    for i in range(len(events)):
         if i < 3:
             print(
-                f"Event {i + 1}: {event[i]['player']} "
-                + f"(level {event[i]['data']['level']})"
-                + f" {event[i]['event_type']}"
+                f"Event {i + 1}: {events[i]['player']} "
+                + f"(level {events[i]['data']['level']})"
+                + f" {events[i]['event_type']}"
             )
-        if i == len(event):
+        if i == 3:
             print("...")
-        if i < len(event):
-            if event[i]["data"]["level"] > 10:
-                high += 1
-            if event[i]["event_type"] == "item_found":
-                treasure += 1
-            if event[i]["event_type"] == "level_up":
-                level += 1
-        i += 1
-        yield high, treasure, level
+        if events[i]["data"]["level"] > 10:
+            high += 1
+        if events[i]["event_type"] == "item_found":
+            treasure += 1
+        if events[i]["event_type"] == "level_up":
+            level += 1
+        yield i+1, high, treasure, level
 
 
 def fibonacci():
@@ -423,12 +420,9 @@ if __name__ == "__main__":
         },
     ]
     pros = iter(processing(events))
-    n_event = 0
-
-    for i in range(0, 1000):
+    while True:
         try:
-            n_event += 1
-            high, treasure, lvl = next(pros)
+            n_event, high, treasure, lvl = next(pros)
         except StopIteration:
             break
     print("\n=== Stream Analytics ===")

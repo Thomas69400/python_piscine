@@ -1,3 +1,68 @@
+def dict_comp(players: dict) -> None:
+    print("\n=== Dict Comprehension Examples ===")
+    player_score = {
+        player: players["players"][player]["total_score"]
+        for player in players["players"]}
+    scores = {"high": len(list(session for session in players["sessions"]
+              if session["score"] >= 2500))}
+    scores.update({"medium": len(list(session
+                                      for session in players["sessions"]
+                   if session["score"] >= 1500 and session["score"] < 2500))})
+    scores.update({"low": len(list(session
+                   for session in players["sessions"]
+                   if session["score"] < 1500))})
+    achievements = {player: players["players"][player]["achievements_count"]
+                    for player in players["players"]}
+    print(f"Player scores: {player_score}")
+    print(f"Scores categories: {scores}")
+    print(f"Achievement counts: {achievements}")
+
+
+def list_comp(players: dict) -> None:
+    print("\n=== List Comprehension Examples ===")
+    high = [player for player in players["players"]
+            if players["players"][player]["total_score"] > 2000]
+    bob_sessions_time = [session["duration_minutes"]
+                         for session in players["sessions"]
+                         if session["player"] == "bob"]
+    comp_games = [session["player"] for session in players["sessions"]
+                  if session["mode"] == "competitive"]
+    print(f"High scorers (>2000): {high}")
+    print(f"Bob' sessions time: {bob_sessions_time}")
+    print(f"Bob's max session {max(bob_sessions_time)} minutes" +
+          f" -> average {sum(bob_sessions_time)/len(bob_sessions_time)}" +
+          " minutes")
+    print(f"All competitive games: {comp_games}")
+
+
+def set_comp(players: dict) -> None:
+    print("\n=== Set Comprehension Examples ===")
+    unique_play = {player for player in players["players"]}
+    unique_achievement = {
+        achievement for achievement in players["achievements"]}
+    print(f"Unique players: {unique_play}")
+    print(f"Unique achievements: {unique_achievement}")
+
+
+def combine(players: dict) -> None:
+    print("\n=== Combined Analysis ===")
+    total = len({player for player in players["players"]})
+    unique = len({achievement for achievement in players["achievements"]})
+    scores = [score["score"] for score in players["sessions"]]
+    average = sum(scores)/len(scores)
+    scores_player = [players["players"][player]["total_score"]
+                     for player in players["players"]]
+    top = {player: players["players"][player]
+           for player in players["players"]
+           if players["players"][player]["total_score"] == max(scores_player)}
+    print(f"Total players: {total}")
+    print(f"Total unique achievement: {unique}")
+    print(f"Average score by session: {'%.2f' % average}")
+    for p in top:
+        print(f"Top performer: {p} ({top[p]['total_score']} points, " +
+              f"{top[p]['achievements_count']} achievements)")
+
+
 def main():
     players = {
         "players": {
@@ -266,30 +331,16 @@ def main():
             "pixel_perfect",
             "combo_king",
             "explorer",
+            "combo_king",
+            "speed_runner"
         ],
     }
 
     print("=== Game Analytics Dashboard ===")
-    print("\n=== List Comprehension Examples ===")
-    high = [player for player in players["players"]
-            if players["players"][player]["total_score"] > 2000]
-    bob_sessions = [session for session in players["sessions"]
-                    if session["player"] == "bob"]
-    comp_games = [session["player"] for session in players["sessions"]
-                  if session["mode"] == "competitive"]
-    print(f"High scorers (>2000): {high}")
-    print(f"Bob' sessions: {bob_sessions}")
-    print(f"All competitive games: {comp_games}")
-
-    print("\n=== Dict Comprehension Examples ===")
-    player_score = {
-        player: players["players"][player]["total_score"]
-        for player in players["players"]}
-    duration_bob = {session["player"]: session["duration_minutes"]
-                    for session in players["sessions"]
-                    if session["mode"] == "casual"}
-    print(f"Player scores: {player_score}")
-    print(f"All sessions duration for Bob: {duration_bob}")
+    list_comp(players)
+    dict_comp(players)
+    set_comp(players)
+    combine(players)
 
 
 if __name__ == "__main__":
