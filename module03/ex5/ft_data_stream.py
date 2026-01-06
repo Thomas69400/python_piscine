@@ -11,23 +11,25 @@ def processing(events: list):
     high = 0
     treasure = 0
     level = 0
+    i = 0
     print(f"Processing {len(events)} game events...\n")
-    for i in range(len(events)):
-        if i < 3:
+    for event in events:
+        i += 1
+        if i <= 3:
             print(
-                f"Event {i + 1}: {events[i]['player']} "
-                + f"(level {events[i]['data']['level']})"
-                + f" {events[i]['event_type']}"
+                f"Event {i + 1}: {event['player']} "
+                + f"(level {event['data']['level']})"
+                + f" {event['event_type']}"
             )
-        if i == 3:
+        if i == 4:
             print("...")
-        if events[i]["data"]["level"] > 10:
+        if event["data"]["level"] >= 10:
             high += 1
-        if events[i]["event_type"] == "item_found":
+        if event["event_type"] == "item_found":
             treasure += 1
-        if events[i]["event_type"] == "level_up":
+        if event["event_type"] == "level_up":
             level += 1
-        yield i+1, high, treasure, level
+        yield i, high, treasure, level
 
 
 def fibonacci():
