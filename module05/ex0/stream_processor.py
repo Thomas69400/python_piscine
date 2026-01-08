@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Dict, Union, Optional
+from typing import Any
 
 
 class DataProcessor(ABC):
@@ -8,7 +8,6 @@ class DataProcessor(ABC):
 
     @abstractmethod
     def process(self, data: Any) -> str:
-        print("Processing multiple data types through same interface...")
         pass
 
     @abstractmethod
@@ -107,7 +106,7 @@ def main() -> None:
     nume = NumericProcessor()
     lst = [1, 2, 3, 4, 5, "test"]
     try:
-        print(nume.format_output(nume.process(lst)), end="\n\n")
+        print("Output: " + nume.format_output(nume.process(lst)), end="\n\n")
     except Exception as e:
         print(e, end="\n\n")
 
@@ -115,7 +114,7 @@ def main() -> None:
     txt = TextProcessor()
     s = "Hello Nexus World"
     try:
-        print(txt.format_output(txt.process(s)), end="\n\n")
+        print("Output: " + txt.format_output(txt.process(s)), end="\n\n")
     except Exception as e:
         print(e, end="\n\n")
 
@@ -123,7 +122,7 @@ def main() -> None:
     logs = LogProcessor()
     dct = {"ERROR": "Connection timeout"}
     try:
-        print(logs.format_output(logs.process(dct)), end="\n")
+        print("Output: " + logs.format_output(logs.process(dct)), end="\n")
     except Exception as e:
         print(e, end="\n\n")
 
