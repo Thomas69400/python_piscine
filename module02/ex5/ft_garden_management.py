@@ -102,10 +102,11 @@ class GardenManager:
         if water_level < 1:
             raise ValueError(f"Water level {water_level} is too low (min 1)")
         if sunlight_hours < 2:
-            raise ValueError(f"Sunlight hours {sunlight_hours} is too low (min 2)")
+            raise ValueError(
+                f"Sunlight hours {sunlight_hours} is too low (min 2)")
         if sunlight_hours > 12:
             raise ValueError(f"Sunlight hours {sunlight_hours} is too high" +
-                            "(max 12)")
+                             "(max 12)")
         return 1
 
     def add_plant(self, plant: Plant) -> None:

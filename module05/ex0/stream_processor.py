@@ -53,7 +53,7 @@ class NumericProcessor(DataProcessor):
 class TextProcessor(DataProcessor):
     def __init__(self) -> None:
         super().__init__()
-        self.lenght = None
+        self.length = None
         self.words = None
 
     def process(self, data: Any) -> str:
@@ -71,7 +71,7 @@ class TextProcessor(DataProcessor):
             print("Error: Data must be a string.")
         return False
 
-    def format_output(self, result):
+    def format_output(self, result: str) -> str:
         return result + \
             f"Processed text: {self.length} characters, {self.words} words"
 
