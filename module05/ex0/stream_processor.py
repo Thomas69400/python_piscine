@@ -21,15 +21,17 @@ class DataProcessor(ABC):
 class NumericProcessor(DataProcessor):
     def __init__(self) -> None:
         super().__init__()
+        self.count = None
+        self.total = None
+        self.avg = None
 
     def process(self, data: Any) -> str:
-        print(f"Processing data: {data}")
         if not self.validate(data):
             raise ValueError("Invalid data for NumericProcessor")
-        count = len(data)
-        total = sum(data)
-        avg = total/count
-        return f"Processed {count} numeric values, sum={total}, avg={avg}"
+        self.count = len(data)
+        self.total = sum(data)
+        self.avg = self.total/self.count
+        return f"Processing data: {data}"
 
     def validate(self, data: Any) -> bool:
         try:
@@ -37,66 +39,71 @@ class NumericProcessor(DataProcessor):
                 isinstance(data, list) and all(isinstance(x, int)
                                                for x in data)
             )
-            print("Validation: Numeric data verified")
             return True
         except AssertionError:
             print("Error: Data must be an int or a list of ints")
         return False
 
     def format_output(self, result: str) -> str:
-        return f"{result}"
+        return result + \
+            f"Processed {self.count} numeric values, " + \
+            f"sum={self.total}, avg={self.avg}"
 
 
 class TextProcessor(DataProcessor):
     def __init__(self) -> None:
         super().__init__()
+        self.lenght = None
+        self.words = None
 
     def process(self, data: Any) -> str:
-        print(f"Processing data: \"{data}\"")
         if not self.validate(data):
             raise ValueError("Invalid data for TextProcessor")
-        length = len(data)
-        words = len(data.split())
-        return f"Processed text: {length} characters, {words} words"
+        self.length = len(data)
+        self.words = len(data.split())
+        return f"Processing data: \"{data}\""
 
     def validate(self, data: Any) -> bool:
         try:
             assert isinstance(data, str)
-            print("Validation: Text data verified")
             return True
         except AssertionError:
             print("Error: Data must be a string.")
         return False
 
-    def format_output(self, result: str) -> str:
-        return f"{result}"
+    def format_output(self, result):
+        return result + \
+            f"Processed text: {self.length} characters, {self.words} words"
 
 
 class LogProcessor(DataProcessor):
     def __init__(self) -> None:
         super().__init__()
+        self.l_type = None
+        self.msg = None
 
     def process(self, data: Any) -> str:
-        print(f"Processing data: {data}")
         if not self.validate(data):
             raise ValueError("Invalid data for LogProcessor")
         for key in data:
-            if key == "ERROR":
-                return f"[ALERT] ERROR level detected: {data[key]}"
-            else:
-                return f"[INFO] INFO level detected: {data[key]}"
+            self.l_type = key
+            self.msg = data[key]
+        return f"Processing data: {data}"
 
     def validate(self, data: Any) -> bool:
         try:
             assert isinstance(data, dict)
-            print("Validation: Log entry verified")
             return True
         except AssertionError as e:
             print(f"Error: {e}")
         return False
 
     def format_output(self, result: str) -> str:
-        return f"{result}"
+        if self.l_type == "ERROR":
+            return result + f"[ALERT] ERROR level detected: {self.msg}"
+        elif self.l_type == "INFO":
+            return result + f"[INFO] INFO level detected: {self.msg}"
+        return result + f"[LOG] INFO level detected: {self.msg}"
 
 
 def main() -> None:
@@ -106,7 +113,9 @@ def main() -> None:
     nume = NumericProcessor()
     lst = [1, 2, 3, 4, 5, "test"]
     try:
-        print("Output: " + nume.format_output(nume.process(lst)), end="\n\n")
+        print(nume.process(lst))
+        print("Validation: Numeric data verified")
+        print(nume.format_output("Output: "), end="\n\n")
     except Exception as e:
         print(e, end="\n\n")
 
@@ -114,7 +123,9 @@ def main() -> None:
     txt = TextProcessor()
     s = "Hello Nexus World"
     try:
-        print("Output: " + txt.format_output(txt.process(s)), end="\n\n")
+        print(txt.process(s))
+        print("Validation: Text data verified")
+        print(txt.format_output("Output: "), end="\n\n")
     except Exception as e:
         print(e, end="\n\n")
 
@@ -122,7 +133,9 @@ def main() -> None:
     logs = LogProcessor()
     dct = {"ERROR": "Connection timeout"}
     try:
-        print("Output: " + logs.format_output(logs.process(dct)), end="\n")
+        print(logs.process(dct))
+        print("Validation: Log entry verified")
+        print(logs.format_output("Output: "), end="\n")
     except Exception as e:
         print(e, end="\n\n")
 
@@ -132,8 +145,10 @@ def main() -> None:
         TextProcessor(): "Hello World",
         LogProcessor(): {"INFO": "System ready"}
     }
+    print("Processing multiple data types through same interface...")
     for i, p in enumerate(proc):
-        print(f"Result {i+1}: " + p.process(proc[p]), end="\n")
+        p.process(proc[p])
+        print(p.format_output(f"Result {i+1}: "), end="\n")
     print("\nFoundation systems online. Nexus ready for advanced streams.")
 
 
