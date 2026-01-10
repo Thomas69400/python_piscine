@@ -147,8 +147,11 @@ def main() -> None:
     }
     print("Processing multiple data types through same interface...")
     for i, p in enumerate(proc):
-        p.process(proc[p])
-        print(p.format_output(f"Result {i+1}: "), end="\n")
+        try:
+            p.process(proc[p])
+            print(p.format_output(f"Result {i+1}: "), end="\n")
+        except Exception as e:
+            print(f"Error in processing: {e}")
     print("\nFoundation systems online. Nexus ready for advanced streams.")
 
 
