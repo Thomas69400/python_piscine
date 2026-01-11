@@ -15,7 +15,7 @@ class DataStream(ABC):
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
-        return self.stats
+        return data_batch
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return self.stats
@@ -30,19 +30,47 @@ class SensorStream(DataStream):
 
     def process_batch(self, data_batch: List[Any]) -> str:
         try:
-            self.stats = {splited[0]: float(splited[1])
-                          for splited in [data.split(":")
-                                          for data in data_batch]}
+            self.stats = {
+                splited[0]: float(splited[1])
+                for splited
+                in [
+                    data.split(":")
+                    for data
+                    in data_batch
+                ]
+            }
         except ValueError as e:
             raise ValueError(f"Processing sensor: {e}")
         return f"Processing sensor batch: {data_batch}"
 
     def format_output(self, result: str) -> str:
+        tmp = list(self.stats[temp]
+                   for temp
+                   in self.stats
+                   if temp == 'temp')
+        if len(tmp) == 0:
+            tmp = "No temp"
+        else:
+            tmp = str(tmp[0]) + "°C"
         return result + f"{len(self.stats)} readings processed, " + \
-            "avg temp: " + \
-            str(list(self.stats[temp] for temp
-                     in self.stats if temp == 'temp')[0]) + \
-            "°C"
+            f"avg temp: {tmp}"
+
+    def filter_data(self, data_batch: List[Any], criteria: Optional[str]
+                    = None) -> List[Any]:
+        if criteria is not None:
+            if criteria == "High-priority":
+                try:
+                    filtered = [
+                        data
+                        for data
+                        in data_batch
+                        if "temp" or "humidity" in data
+                        and float(data.split(":")[1]) > 50
+                    ]
+                    return filtered
+                except ValueError as e:
+                    raise ValueError(f"Error filtering sensor data: {e}")
+        return data_batch
 
 
 class TransactionStream(DataStream):
@@ -51,22 +79,53 @@ class TransactionStream(DataStream):
 
     def process_batch(self, data_batch: List[Any]) -> str:
         try:
-            self.stats = {f"{splited[0]}_{i}": int(splited[1])
-                          for i, splited
-                          in enumerate([data.split(":")
-                                        for data in data_batch])}
+            self.stats = {
+                f"{splited[0]}_{i}": int(splited[1])
+                for i, splited
+                in enumerate([
+                    data.split(":")
+                    for data
+                    in data_batch
+                ])
+            }
         except ValueError as e:
             raise ValueError(f"Error processing transaction: {e}")
         return f"Processing transaction batch: {data_batch}"
 
     def format_output(self, result: str) -> str:
-        buy = sum([self.stats[buy] for buy in self.stats if "buy" in buy])
-        sell = sum([self.stats[buy] for buy in self.stats if "sell" in buy])
+        buy = sum([
+            self.stats[buy]
+            for buy
+            in self.stats
+            if "buy" in buy
+        ])
+        sell = sum([
+            self.stats[buy]
+            for buy
+            in self.stats
+            if "sell" in buy
+        ])
         symbol = ""
         if buy - sell > 0:
             symbol = "+"
         return result + f"{len(self.stats)} operations, " + \
             f"net flow: {symbol}{buy - sell} units"
+
+    def filter_data(self, data_batch: List[Any], criteria: Optional[str]
+                    = None) -> List[Any]:
+        if criteria is not None:
+            if criteria == "High-priority":
+                try:
+                    filtered = [
+                        data
+                        for data
+                        in data_batch
+                        if float(data.split(":")[1]) > 500
+                    ]
+                    return filtered
+                except ValueError as e:
+                    raise ValueError(f"Error filtering transaction data: {e}")
+        return data_batch
 
 
 class EventStream(DataStream):
@@ -75,43 +134,79 @@ class EventStream(DataStream):
 
     def process_batch(self, data_batch: List[Any]) -> str:
         try:
-            self.stats.update({f"event_{i+1}": data
-                               for i, data in enumerate(data_batch)})
+            self.stats.update({
+                f"event_{i+1}": data
+                for i, data
+                in enumerate(data_batch)
+            })
         except ValueError as e:
             raise ValueError(f"Error processing event: {e}")
         return f"Processing event batch: {data_batch}"
 
     def format_output(self, result: str) -> str:
         ope = len(self.stats)
-        n_error = len([self.stats[error] for error
-                       in self.stats if self.stats[error] == "error"])
+        n_error = len([
+            self.stats[error]
+            for error
+            in self.stats
+            if self.stats[error] == "error"
+        ])
         return result + f"{ope} events, " + \
             f"{n_error} error detected"
+
+    def filter_data(self, data_batch: List[Any], criteria: Optional[str]
+                    = None) -> List[Any]:
+        if criteria is not None:
+            if criteria == "High-priority":
+                try:
+                    filtered = [
+                        data
+                        for data
+                        in data_batch
+                        if data == "error"
+                    ]
+                    return filtered
+                except ValueError as e:
+                    raise ValueError(f"Error filtering event data: {e}")
+        return data_batch
 
 
 class StreamProcessor:
     def __init__(self) -> None:
         pass
 
-    def stream(streams: Dict[Union[EventStream,
-                                   TransactionStream,
-                                   SensorStream], Union[str,
-                                                        float,
-                                                        int]]) -> None:
+    def process_stream(streams: Dict[Union[EventStream,
+                                           TransactionStream,
+                                           SensorStream],
+                                     Union[str,
+                                           float,
+                                           int]],
+                       criteria: Optional[str] = None) -> str:
         sensor = 0
         trans = 0
         event = 0
-        for stream in streams:
+        for s in streams:
             try:
-                stream.process_batch(streams[stream])
-                if isinstance(stream, SensorStream):
-                    sensor += len(stream.get_stats())
-                if isinstance(stream, TransactionStream):
-                    trans += len(stream.get_stats())
-                if isinstance(stream, EventStream):
-                    event += len(stream.get_stats())
+                streams[s] = s.filter_data(streams[s], criteria)
+                s.process_batch(streams[s])
+                if isinstance(s, SensorStream):
+                    sensor += len(s.get_stats())
+                if isinstance(s, TransactionStream):
+                    trans += len(s.get_stats())
+                if isinstance(s, EventStream):
+                    event += len(s.get_stats())
             except ValueError as e:
                 raise ValueError(f"Error: {e}")
+        if criteria is not None:
+            if criteria == "High-priority":
+                to_return = "Filtered results: "
+                if sensor != 0:
+                    to_return += f"{sensor} critical sensor alerts"
+                if trans != 0:
+                    to_return += f", {trans} large transaction"
+                if event != 0:
+                    to_return += f", {event} error detected"
+                return to_return
         return "Batch 1 Results:\n" + \
             f"- Sensor data: {sensor} readings processed\n" + \
             f"- Transaction data: {trans} operations processed\n" + \
@@ -156,16 +251,35 @@ def main() -> None:
 
     streams = {
         SensorStream("SENSOR_002"): ["temp:50",
-                                     "humidity:10"],
+                                     "humidity:70"],
         TransactionStream("TRANS_002"): ["buy:50",
                                          "buy:1000",
                                          "sell:250",
                                          "buy:100"],
         EventStream("EVENT_002"): ["login", "logout", "login"]
     }
-    print(StreamProcessor.stream(streams))
+    try:
+        print(StreamProcessor.process_stream(streams))
+    except ValueError as e:
+        print(f"Error: {e}")
 
-    print("Stream filtering active: High-priority data only")
+    streams_priority = {
+        SensorStream("SENSOR_003"): ["temp:50",
+                                     "humidity:70"],
+        TransactionStream("TRANS_003"): ["buy:50",
+                                         "buy:1000",
+                                         "sell:250",
+                                         "buy:100"],
+        EventStream("EVENT_003"): ["login", "logout", "login"]
+    }
+    print("\nStream filtering active: High-priority data only")
+    try:
+        print(StreamProcessor.process_stream(
+            streams_priority, "High-priority"))
+    except ValueError as e:
+        print(f"Error: {e}")
+
+    print("\nAll streams processed successfully. Nexus throughput optimal.")
 
 
 if __name__ == "__main__":
