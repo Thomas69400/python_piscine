@@ -4,50 +4,48 @@ def garden_operations(ope: str) -> int:
     if ope == "NoError":
         return 5
     if ope == "ValueError":
-        return int("abc")
+        try:
+            int("abc")
+        except ValueError as e:
+            print(f"Caught ValueError: {e}\n")
     if ope == "ZeroDivisionError":
-        return 5 / 0
+        try:
+            return 5 / 0
+        except ZeroDivisionError as e:
+            print(f"Caught ZeroDivisionError: {e}\n")
     if ope == "FileNotFoundError":
-        return open("missing.txt", 'r')
+        try:
+            open("missing.txt", 'r')
+        except FileNotFoundError as e:
+            print(f"Caught FileNotFoundError: {e}\n")
     if ope == "KeyError":
-        my_dict = {"plant": "tomato"}
-        return my_dict["missing_plant"]
+        try:
+            my_dict = {"plant": "tomato"}
+            my_dict["missing_plant"]
+        except KeyError as e:
+            print(f"Caught KeyError: {e}\n")
 
 
 def test_error_types() -> None:
     """Test the function garden_operations()"""
 
-    try:
-        print("Testing ValueError...")
-        garden_operations("ValueError")
-    except ValueError as e:
-        print(f"Caught ValueError: {e}\n")
+    print("Testing ValueError...")
+    garden_operations("ValueError")
 
-    try:
-        print("Testing ZeroDivisionError...")
-        garden_operations("ZeroDivisionError")
-    except ZeroDivisionError as e:
-        print(f"Caught ZeroDivisionError: {e}\n")
+    print("Testing ZeroDivisionError...")
+    garden_operations("ZeroDivisionError")
 
-    try:
-        print("Testing FileNotFoundError...")
-        garden_operations("FileNotFoundError")
-    except FileNotFoundError as e:
-        print(f"Caught FileNotFoundError: {e}\n")
+    print("Testing FileNotFoundError...")
+    garden_operations("FileNotFoundError")
 
-    try:
-        print("Testing KeyError...")
-        garden_operations("KeyError")
-    except KeyError as e:
-        print(f"Caught KeyError: {e}\n")
+    print("Testing KeyError...")
+    garden_operations("KeyError")
 
-    try:
-        print("Testing multiple errors together...")
-        garden_operations("NoError")
-        garden_operations("ValueError")
-        garden_operations("NoError")
-    except (ValueError, ZeroDivisionError, FileNotFoundError, KeyError):
-        print("Caught an error, but program continues!\n")
+    print("Testing multiple errors together...")
+    garden_operations("NoError")
+    garden_operations("ValueError")
+    garden_operations("NoError")
+    print("Caught an error, but program continues!\n")
 
     print("All error types tested successfully!")
 

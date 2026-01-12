@@ -3,7 +3,20 @@ from typing import Any, List, Dict, Union, Optional
 
 
 class DataStream(ABC):
+    """Abstract class
+
+    Args:
+        ABC: Abstract class
+    """
+
     def __init__(self, s_id: str, s_type: str) -> None:
+        """Initialize DataStream
+
+        Args:
+            s_id (str): the id of stream
+            s_type (str): the type of stream
+        """
+
         super().__init__()
         self.stats: Dict[str, Union[str, int, float]] = dict()
         self.s_id: str = s_id
@@ -11,24 +24,73 @@ class DataStream(ABC):
 
     @abstractmethod
     def process_batch(self, data_batch: List[Any]) -> str:
+        """Process the data
+
+        Args:
+            data_batch (List[Any]): the data to process
+
+        Returns:
+            str: The data processed
+        """
+
         pass
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         return data_batch
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
+        """Return the stats of stream
+
+        Returns:
+            Dict[str, Union[str, int, float]]: the data of stream
+        """
+
         return self.stats
 
     def display_base_data(self) -> None:
+        """Print the ID and Type of stream"""
+
         print(f"Stream ID: {self.s_id}, Type: {self.s_type}")
 
 
 class SensorStream(DataStream):
+    """SensorStream class
+
+    Args:
+        DataStream: parent
+    """
+
     def __init__(self, s_id: str) -> None:
+        """Initialize a SensorStream
+
+        Args:
+            s_id (str): the id
+        """
+
         super().__init__(s_id, "Environmental Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        """Process the data
+
+        Args:
+            data_batch (List[Any]): the data to process
+
+        Returns:
+            str: The data processed
+        """
+
         try:
             self.stats = {
                 splited[0]: float(splited[1])
@@ -44,6 +106,17 @@ class SensorStream(DataStream):
         return f"Processing sensor batch: {data_batch}"
 
     def format_output(self, result: str) -> str:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         tmp = list(self.stats[temp]
                    for temp
                    in self.stats
@@ -57,6 +130,17 @@ class SensorStream(DataStream):
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         if criteria is not None:
             if criteria == "High-priority":
                 try:
@@ -74,10 +158,31 @@ class SensorStream(DataStream):
 
 
 class TransactionStream(DataStream):
+    """TransactionStream class
+
+    Args:
+        DataStream: parent
+    """
+
     def __init__(self, s_id: str) -> None:
+        """Initialize a TransactionStream
+
+        Args:
+            s_id (str): id of stream
+        """
+
         super().__init__(s_id, "Financial Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        """Process the data
+
+        Args:
+            data_batch (List[Any]): the data to process
+
+        Returns:
+            str: The data processed
+        """
+
         try:
             self.stats = {
                 f"{splited[0]}_{i}": int(splited[1])
@@ -93,6 +198,17 @@ class TransactionStream(DataStream):
         return f"Processing transaction batch: {data_batch}"
 
     def format_output(self, result: str) -> str:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         buy = sum([
             self.stats[buy]
             for buy
@@ -113,6 +229,17 @@ class TransactionStream(DataStream):
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         if criteria is not None:
             if criteria == "High-priority":
                 try:
@@ -129,10 +256,31 @@ class TransactionStream(DataStream):
 
 
 class EventStream(DataStream):
+    """EventStream class
+
+    Args:
+        DataStream: parent
+    """
+
     def __init__(self, s_id: str) -> None:
+        """Initialize an EventStream
+
+        Args:
+            s_id (str): id of stream
+        """
+
         super().__init__(s_id, "System Events")
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        """Process the data
+
+        Args:
+            data_batch (List[Any]): the data to process
+
+        Returns:
+            str: The data processed
+        """
+
         try:
             self.stats.update({
                 f"event_{i+1}": data
@@ -144,6 +292,17 @@ class EventStream(DataStream):
         return f"Processing event batch: {data_batch}"
 
     def format_output(self, result: str) -> str:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         ope = len(self.stats)
         n_error = len([
             self.stats[error]
@@ -156,6 +315,17 @@ class EventStream(DataStream):
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
+        """Filter data depending on optional criteria
+
+        Args:
+            data_batch (List[Any]): the data to filter
+            criteria (Optional[str], optional): criteria to filter on.
+                Defaults to None.
+
+        Returns:
+            List[Any]: the data filtered
+        """
+
         if criteria is not None:
             if criteria == "High-priority":
                 try:
@@ -172,7 +342,11 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
+    """StreamProcessor class"""
+
     def __init__(self) -> None:
+        """Initialize a StreamProcessor"""
+
         pass
 
     def process_stream(streams: Dict[Union[EventStream,
@@ -182,6 +356,21 @@ class StreamProcessor:
                                            float,
                                            int]],
                        criteria: Optional[str] = None) -> str:
+        """Process all streams
+
+        Args:
+            streams (Dict[Union[EventStream, TransactionStream, SensorStream],
+                Union[str, float, int]]): the streams to process
+            criteria (Optional[str], optional): the criteria to
+                filter the data. Defaults to None.
+
+        Raises:
+            ValueError: if data can't be parsed
+
+        Returns:
+            str: a description of processed data
+        """
+
         sensor = 0
         trans = 0
         event = 0

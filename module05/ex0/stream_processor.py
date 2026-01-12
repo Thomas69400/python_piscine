@@ -3,29 +3,84 @@ from typing import Any
 
 
 class DataProcessor(ABC):
+    """Abstract class
+
+    Args:
+        ABC: Abstract class
+    """
+
     def __init__(self) -> None:
+        """Initialize DataProcessor"""
+
         super().__init__()
 
     @abstractmethod
     def process(self, data: Any) -> str:
+        """Abstract method to process data
+
+        Args:
+            data (Any): the data to process
+
+        Returns:
+            str: the data processed
+        """
+
         pass
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
+        """Check if data is valid
+
+        Args:
+            data (Any): the data to validate
+
+        Returns:
+            bool: true if data is valid false either
+        """
+
         pass
 
     def format_output(self, result: str) -> str:
+        """Format a string
+
+        Args:
+            result (str): the base message to output
+
+        Returns:
+            str: the final output
+        """
+
         return f"{result}"
 
 
 class NumericProcessor(DataProcessor):
+    """Process data for Numeric
+
+    Args:
+        DataProcessor (): parent class
+    """
+
     def __init__(self) -> None:
+        """Initialize NumericProcessor"""
+
         super().__init__()
         self.count = None
         self.total = None
         self.avg = None
 
     def process(self, data: Any) -> str:
+        """Process data
+
+        Args:
+            data (Any): the data to process
+
+        Raises:
+            ValueError: if data is not a int or list of int
+
+        Returns:
+            str: the data processed
+        """
+
         if not self.validate(data):
             raise ValueError("Invalid data for NumericProcessor")
         self.count = len(data)
@@ -34,6 +89,15 @@ class NumericProcessor(DataProcessor):
         return f"Processing data: {data}"
 
     def validate(self, data: Any) -> bool:
+        """Check if data if a int or list of int
+
+        Args:
+            data (Any): data to validate
+
+        Returns:
+            bool: true if int or list of int false either
+        """
+
         try:
             assert isinstance(data, int) or (
                 isinstance(data, list) and all(isinstance(x, int)
@@ -45,18 +109,47 @@ class NumericProcessor(DataProcessor):
         return False
 
     def format_output(self, result: str) -> str:
+        """Format a string
+
+        Args:
+            result (str): the base message to output
+
+        Returns:
+            str: the final output
+        """
+
         return result + \
             f"Processed {self.count} numeric values, " + \
             f"sum={self.total}, avg={self.avg}"
 
 
 class TextProcessor(DataProcessor):
+    """Process data for Text
+
+    Args:
+        DataProcessor: parent class
+    """
+
     def __init__(self) -> None:
+        """Initialize TextProcessor"""
+
         super().__init__()
         self.length = None
         self.words = None
 
     def process(self, data: Any) -> str:
+        """Process data
+
+        Args:
+            data (Any): the data to process
+
+        Raises:
+            ValueError: if data is not a str
+
+        Returns:
+            str: the data processed
+        """
+
         if not self.validate(data):
             raise ValueError("Invalid data for TextProcessor")
         self.length = len(data)
@@ -64,6 +157,15 @@ class TextProcessor(DataProcessor):
         return f"Processing data: \"{data}\""
 
     def validate(self, data: Any) -> bool:
+        """Check if data if a str
+
+        Args:
+            data (Any): data to validate
+
+        Returns:
+            bool: true if str false either
+        """
+
         try:
             assert isinstance(data, str)
             return True
@@ -72,17 +174,46 @@ class TextProcessor(DataProcessor):
         return False
 
     def format_output(self, result: str) -> str:
+        """Format a string
+
+        Args:
+            result (str): the base message to output
+
+        Returns:
+            str: the final output
+        """
+
         return result + \
             f"Processed text: {self.length} characters, {self.words} words"
 
 
 class LogProcessor(DataProcessor):
+    """Process data for Log
+
+    Args:
+        DataProcessor: The parent
+    """
+
     def __init__(self) -> None:
+        """Initialize LogProcessor"""
+
         super().__init__()
         self.l_type = None
         self.msg = None
 
     def process(self, data: Any) -> str:
+        """Process data
+
+        Args:
+            data (Any): the data to process
+
+        Raises:
+            ValueError: if data is not a dict
+
+        Returns:
+            str: the data processed
+        """
+
         if not self.validate(data):
             raise ValueError("Invalid data for LogProcessor")
         for key in data:
@@ -91,6 +222,15 @@ class LogProcessor(DataProcessor):
         return f"Processing data: {data}"
 
     def validate(self, data: Any) -> bool:
+        """Check if data if a dict
+
+        Args:
+            data (Any): data to validate
+
+        Returns:
+            bool: true if dict false either
+        """
+
         try:
             assert isinstance(data, dict)
             return True
@@ -99,6 +239,15 @@ class LogProcessor(DataProcessor):
         return False
 
     def format_output(self, result: str) -> str:
+        """Format a string
+
+        Args:
+            result (str): the base message to output
+
+        Returns:
+            str: the final output
+        """
+
         if self.l_type == "ERROR":
             return result + f"[ALERT] ERROR level detected: {self.msg}"
         elif self.l_type == "INFO":
