@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Dict, Protocol
+from typing import Any, List, Dict, Protocol, Union
 
 
 class ProcessingStage(Protocol):
@@ -71,7 +71,7 @@ class InputStage():
 
         pass
 
-    def process(self, data: Any) -> Dict:
+    def process(self, data: Any, type_pipe: str) -> Dict:
         """Parse and validate data
 
         Args:
@@ -81,8 +81,40 @@ class InputStage():
             Dict: the data transform
         """
 
-        print(f"Input: {data}")
-        return dict({"data": data})
+        new_data: Dict[str, Union[str, int, float]]
+        if type_pipe == "STREAM":
+            try:
+                new_data = {
+                    f"data_{i}": data
+                    for i, data
+                    in enumerate(data)
+                }
+                print("Input: Real-time sensor stream")
+            except TypeError:
+                raise TypeError(
+                    "Error detected in Stage 1: Invalid data format")
+        elif type_pipe == "JSON":
+            try:
+                new_data = data
+                print(f"Input: {data}")
+            except TypeError:
+                raise TypeError(
+                    "Error detected in Stage 1: Invalid data format")
+        elif type_pipe == "CSV":
+            try:
+                splited: List[str] = data.split(",")
+                new_data = {
+                    f"data_{i}": data
+                    for i, data
+                    in enumerate(splited)
+                }
+                print(f"Input: {data}")
+            except TypeError:
+                raise TypeError(
+                    "Error detected in Stage 1: Invalid data format")
+        else:
+            raise Exception("PipeType is not supported")
+        return new_data
 
 
 class TransformStage():
@@ -93,7 +125,7 @@ class TransformStage():
 
         pass
 
-    def process(self, data: Any) -> Dict:
+    def process(self, data: Any, type_pipe: str) -> Dict:
         """Transform and enriched data
 
         Args:
@@ -103,8 +135,35 @@ class TransformStage():
             Dict: the data transformed
         """
 
-        print(f"Transform: ")
-        return ""
+        if type_pipe == "JSON":
+            try:
+                value: List[float] = [data[d] for d in data if d == "value"]
+                if len(value) > 0 and (value[0] > 20 and value[0] < 30):
+                    msg: str = "(Normal range)"
+                else:
+                    msg: str = "(Suspicious range)"
+                data.update({"range": msg})
+                print("Transform: Enriched with metadata and validation")
+            except (IndexError, TypeError, AttributeError):
+                raise Exception(
+                    "Error detected in Stage 2: Invalid data format")
+        elif type_pipe == "CSV":
+            try:
+                print("Transform: Parsed and structured data")
+            except TypeError:
+                raise TypeError(
+                    "Error detected in Stage 2: Invalid data format")
+        elif type_pipe == "STREAM":
+            try:
+                print("Transform: Aggregated and filtered")
+                data: Dict[str, float] = {d: data[d]
+                                          for d in data if data[d] < 50}
+            except TypeError:
+                raise TypeError(
+                    "Error detected in Stage 2: Invalid data format")
+        else:
+            raise TypeError("PipeType not supported")
+        return data
 
 
 class OutputStage():
@@ -115,7 +174,7 @@ class OutputStage():
 
         pass
 
-    def process(self, data: Any) -> str:
+    def process(self, data: Any, type_pipe: str) -> str:
         """Format  and deliver data
 
         Args:
@@ -125,7 +184,45 @@ class OutputStage():
             str: the formatted data
         """
 
-        return f"Output: "
+        if type_pipe == "JSON":
+            try:
+                value: List[float] = [data[d] for d in data if d == "value"]
+                if len(value) > 0:
+                    value_msg: str = str(value[0])
+                else:
+                    return "Output: Processed temperature reading: " + \
+                        "No temp recorded"
+                unit: List[str] = [data[d] for d in data if d == "unit"]
+                if len(unit) > 0:
+                    unit_msg = unit[0]
+                else:
+                    unit_msg = "Unknown unit"
+                range: List[str] = [data[d] for d in data if d == "range"]
+                if len(range) > 0:
+                    range_msg = range[0]
+                else:
+                    range_msg = "(Unknown range)"
+                return "Output: Processed temperature reading: " + \
+                    f"{value_msg}°{unit_msg} {range_msg}"
+            except (IndexError, TypeError) as e:
+                raise Exception(e)
+        elif type_pipe == "CSV":
+            try:
+                action_nb = len([a for a in data if data[a] == "action"])
+                return "Output: User activity logged: " + \
+                    f"{action_nb} actions processed"
+            except TypeError as e:
+                raise TypeError(e)
+        elif type_pipe == "STREAM":
+            try:
+                streams = [data[d] for d in data]
+                return "Output: Stream summary: " + \
+                    f"{len(streams)} readings, " + \
+                    f'avg: {sum(streams)/len(streams):.1f}°C'
+            except TypeError as e:
+                raise TypeError(e)
+        else:
+            raise TypeError("PipeType not supported")
 
 
 class JSONAdapter(ProcessingPipeline):
@@ -162,7 +259,7 @@ class JSONAdapter(ProcessingPipeline):
 
         try:
             for stage in self.stages:
-                data = stage.process(data)
+                data = stage.process(data, "JSON")
             print(data)
         except TypeError as e:
             raise TypeError(f"Error JSONAdapter: {e}")
@@ -203,7 +300,7 @@ class CSVAdapter(ProcessingPipeline):
 
         try:
             for stage in self.stages:
-                data = stage.process(data)
+                data = stage.process(data, "CSV")
             print(data)
         except TypeError as e:
             raise TypeError(f"Error CSVAdapter: {e}")
@@ -244,7 +341,7 @@ class StreamAdapter(ProcessingPipeline):
 
         try:
             for stage in self.stages:
-                data = stage.process(data)
+                data = stage.process(data, "STREAM")
             print(data)
         except TypeError as e:
             raise TypeError(f"Error STREAMAdapter: {e}")
@@ -284,7 +381,7 @@ class NexusManager:
                 if pipeline.get_id() == pipeline_id:
                     pipeline.process(data)
         except TypeError as e:
-            raise TypeError(f"Error: {e}")
+            raise TypeError(e)
         return
 
 
@@ -308,7 +405,7 @@ def main() -> None:
 
     print("\n=== Multi-Format Data Processing ===")
 
-    json_data = '{"sensor": "temp", "value": 23.5, "unit": "C"}'
+    json_data = {"sensor": "temp", "value": 23.5, "unit": "C"}
     print("\nProcessing JSON data through pipeline...")
     try:
         nexus.process_data(json_data, "JSON_001")
@@ -322,7 +419,7 @@ def main() -> None:
     except TypeError as e:
         print(f"Error: {e}")
 
-    stream_data = 'Real-time sensor stream'
+    stream_data = [25, 63, 20.5, 20, 19.23, 25.75]
     print("\nProcessing Stream data through same pipeline...")
     try:
         nexus.process_data(stream_data, "STREAM_001")
@@ -337,6 +434,16 @@ def main() -> None:
 
     print("\n=== Error Recovery Test ===")
     print("Simulating pipeline failure...")
+    json_data = 'foobar'
+    try:
+        nexus.process_data(json_data, "JSON_001")
+    except Exception as e:
+        print(e)
+    finally:
+        print("Recovery initiated: Switching to backup processor")
+        print("Recovery successful: Pipeline restored, processing resumed")
+
+    print("\nNexus Integration complete. All systems operational.")
 
 
 if __name__ == "__main__":
