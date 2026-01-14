@@ -256,6 +256,8 @@ class LogProcessor(DataProcessor):
 
 
 def main() -> None:
+    """Execute program"""
+
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
 
     print("Initializing Numeric Processor...")

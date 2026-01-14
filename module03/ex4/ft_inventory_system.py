@@ -159,6 +159,8 @@ def analytics(inv1: Player, inv2: Player) -> None:
 
 
 if __name__ == "__main__":
+    """Execute program"""
+
     print("=== Player Inventory System ===\n")
     alice = Player("Alice")
     bob = Player("Bob")

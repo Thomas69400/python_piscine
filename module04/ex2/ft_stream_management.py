@@ -2,6 +2,8 @@ import sys
 
 
 def main():
+    """Execute program"""
+
     print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===\n")
     try:
         archiv_id = input("Input Stream active. Enter archivist ID: ")

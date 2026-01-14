@@ -1,4 +1,6 @@
 if __name__ == "__main__":
+    """Execute program"""
+
     print("=== Achievement Tracker System ===")
     alice = set(('first_kill', 'level_10', 'treasure_hunter', 'speed_demon'))
     bob = set(('first_kill', 'level_10', 'boss_slayer', 'collector'))

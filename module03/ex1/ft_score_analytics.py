@@ -2,7 +2,7 @@ import sys
 
 
 def main():
-    """Main function"""
+    """Execute program"""
 
     print("=== Player Score Analytics ===")
     if len(sys.argv) <= 1:

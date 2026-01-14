@@ -1,4 +1,6 @@
 def main():
+    """Execute program"""
+
     print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===\n")
     name = "ancient_fragment.txt"
     try:

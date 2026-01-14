@@ -1,4 +1,6 @@
 def main():
+    """Execute program"""
+
     print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===\n")
 
     name_lost = "lost_archive.txt"

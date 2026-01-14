@@ -403,6 +403,8 @@ class StreamProcessor:
 
 
 def main() -> None:
+    """Execute program"""
+
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===\n")
 
     print("Initializing Sensor Stream...")

@@ -1,4 +1,6 @@
 def main():
+    """Execute program"""
+
     name = "new_discovery.txt"
     print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===\n")
 

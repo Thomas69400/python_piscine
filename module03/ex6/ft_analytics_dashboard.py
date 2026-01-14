@@ -1,8 +1,8 @@
 def dict_comp(data: dict) -> None:
-    """_summary_
+    """Test dict
 
     Args:
-        data (dict): a dictionary of data
+        data (dict): the data to sort
     """
 
     print("\n=== Dict Comprehension Examples ===")
@@ -25,6 +25,12 @@ def dict_comp(data: dict) -> None:
 
 
 def list_comp(data: dict) -> None:
+    """Test lists
+
+    Args:
+        data (dict): the data to sort
+    """
+
     print("\n=== List Comprehension Examples ===")
     high = [player for player in data["players"]
             if data["players"][player]["total_score"] > 2000]
@@ -42,6 +48,12 @@ def list_comp(data: dict) -> None:
 
 
 def set_comp(data: dict) -> None:
+    """Test set
+
+    Args:
+        data (dict): the data to sort
+    """
+
     print("\n=== Set Comprehension Examples ===")
     unique_play = {player for player in data["players"]}
     unique_achievement = {
@@ -51,6 +63,12 @@ def set_comp(data: dict) -> None:
 
 
 def combine(data: dict) -> None:
+    """Test for combine data (list set tuples dict)
+
+    Args:
+        data (dict): the data to sort
+    """
+
     print("\n=== Combined Analysis ===")
     total = len({player for player in data["players"]})
     unique = len({achievement for achievement in data["achievements"]})
@@ -70,6 +88,8 @@ def combine(data: dict) -> None:
 
 
 def main():
+    """Execute program"""
+
     data = {
         "players": {
             "alice": {

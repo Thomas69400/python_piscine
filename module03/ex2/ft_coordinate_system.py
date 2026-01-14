@@ -44,6 +44,8 @@ def calculate_distance(t1: tuple, t2: tuple) -> float:
 
 
 if __name__ == "__main__":
+    """Execute program"""
+
     print("=== Game Coordinate System ===\n")
     spawn = tuple((0, 0, 0))
     if len(sys.argv) <= 1:

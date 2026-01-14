@@ -68,6 +68,8 @@ def prime():
 
 
 if __name__ == "__main__":
+    """Execute program"""
+
     print("=== Game Data Stream Processor ===\n")
     events = [
         {

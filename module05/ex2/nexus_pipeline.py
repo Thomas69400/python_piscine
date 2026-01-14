@@ -386,6 +386,8 @@ class NexusManager:
 
 
 def main() -> None:
+    """Execute program"""
+
     print("=== CODE NEXUS - ENTERPRISE PIPELINE SYSTEM ===\n")
 
     print("Initializing Nexus Manager...")

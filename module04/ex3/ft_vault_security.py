@@ -1,4 +1,6 @@
 def main():
+    """Execute program"""
+
     print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===\n")
 
     try:
