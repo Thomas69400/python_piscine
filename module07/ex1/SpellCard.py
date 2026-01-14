@@ -20,7 +20,7 @@ class SpellCard(Card):
             effect_type (str): effect of spell
         """
 
-        super.__init__(name, cost, rarity)
+        super().__init__(name, cost, rarity)
         self.effect_type: str = effect_type
 
     def play(self, game_state: dict) -> dict:

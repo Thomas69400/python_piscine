@@ -5,9 +5,30 @@ from typing import Dict, Union
 
 
 class EliteCard(Card, Combatable, Magical):
+    """EliteCard class
+
+    Args:
+        Card (Card): Parent
+        Combatable (Combatable): Parent
+        Magical (Magical): Parent
+    """
+
     def __init__(self, name: str, cost: int, rarity: str,
                  combat_type: str, health: int,
                  damage: int, defense: int, mana: int) -> None:
+        """Initialize an EliteCard
+
+        Args:
+            name (str): the name of card
+            cost (int): cost of card
+            rarity (str): rarity of card
+            combat_type (str): the combat type of card
+            health (int): the health of card
+            damage (int): the attack of card
+            defense (int): the defense of card
+            mana (int): the mana of card
+        """
+
         super().__init__(name, cost, rarity)
         self.combat_type: str = combat_type
         self.health: int = health

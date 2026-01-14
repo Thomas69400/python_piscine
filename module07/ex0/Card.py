@@ -88,3 +88,12 @@ class Card(ABC):
         """
 
         return "Card"
+
+    def get_value(self) -> str:
+        """Return the cost name and cost of card
+
+        Returns:
+            str: The name and cost of card
+        """
+
+        return f"{self.name} ({self.cost})"
