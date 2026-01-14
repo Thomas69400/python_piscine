@@ -18,7 +18,6 @@ class Card(ABC):
             rarity (str): rarity of Card
         """
 
-        super.__init__()
         self.name: str = name
         self.cost: int = cost
         self.rarity: str = rarity

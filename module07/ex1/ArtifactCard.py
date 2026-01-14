@@ -20,10 +20,7 @@ class ArtifactCard(Card):
             durability (int): durability of artifact
             effect (str): effect of artifact
         """
-
-        self.name: str = name
-        self.cost: int = cost
-        self.rarity: str = rarity
+        super.__init__(name, cost, rarity)
         self.durability: int = durability
         self.effect: str = effect
 

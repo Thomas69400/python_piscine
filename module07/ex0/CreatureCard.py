@@ -21,9 +21,7 @@ class CreatureCard(Card):
             health (int): health of CreatureCard
         """
 
-        self.name: str = name
-        self.cost: int = cost
-        self.rarity: str = rarity
+        super.__init__(name, cost, rarity)
         self.attack: int = attack
         self.health: int = health
 
