@@ -5,7 +5,12 @@ from ex1.SpellCard import SpellCard
 from ex1.ArtifactCard import ArtifactCard
 
 
-def main():
+def main() -> None:
+    """Main function demonstrating the Deck system with multiple card types.
+
+    Creates a deck with creatures, spells, and artifacts, then demonstrates
+    drawing and playing cards with polymorphic behavior.
+    """
     print("=== DataDeck Deck Builder ===\n")
     print("Building deck with different card types...")
     game_stat = {"mana": 10}

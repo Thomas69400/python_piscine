@@ -3,10 +3,13 @@ from ex0.Card import Card
 
 
 class ArtifactCard(Card):
-    """Child of Card
+    """A card representing an artifact with durability and special effects.
+
+    Extends the base Card class with artifact mechanics including durability
+    points and persistent effects that can be activated during the game.
 
     Args:
-        Card (Card): Parent
+        Card (Card): Parent abstract base class.
     """
 
     def __init__(self, name: str, cost: int,
@@ -49,13 +52,18 @@ class ArtifactCard(Card):
             raise (e)
 
     def activate_ability(self) -> dict:
-        """Activate the ability of the artifact
+        """Activate the ability of the artifact.
+
+        Parses the effect string (formatted as 'duration:effect') and
+        returns activation information.
 
         Raises:
-            IndexError: if effect is not formatted
+            IndexError: If the effect string is not properly formatted
+            with ':'.
 
         Returns:
-            dict: Resume of the effect
+            dict: Activation information containing card name, effect
+            description, and duration.
         """
 
         try:

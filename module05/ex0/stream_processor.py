@@ -64,9 +64,9 @@ class NumericProcessor(DataProcessor):
         """Initialize NumericProcessor"""
 
         super().__init__()
-        self.count = None
-        self.total = None
-        self.avg = None
+        self.count: int = None
+        self.total: int = None
+        self.avg: int = None
 
     def process(self, data: Any) -> str:
         """Process data
@@ -104,9 +104,8 @@ class NumericProcessor(DataProcessor):
                                                for x in data)
             )
             return True
-        except AssertionError:
-            print("Error: Data must be an int or a list of ints")
-        return False
+        except AssertionError as e:
+            raise AssertionError(e)
 
     def format_output(self, result: str) -> str:
         """Format a string
@@ -134,8 +133,8 @@ class TextProcessor(DataProcessor):
         """Initialize TextProcessor"""
 
         super().__init__()
-        self.length = None
-        self.words = None
+        self.length: int = None
+        self.words: int = None
 
     def process(self, data: Any) -> str:
         """Process data
@@ -169,9 +168,8 @@ class TextProcessor(DataProcessor):
         try:
             assert isinstance(data, str)
             return True
-        except AssertionError:
-            print("Error: Data must be a string.")
-        return False
+        except AssertionError as e:
+            raise AssertionError(e)
 
     def format_output(self, result: str) -> str:
         """Format a string
@@ -198,8 +196,8 @@ class LogProcessor(DataProcessor):
         """Initialize LogProcessor"""
 
         super().__init__()
-        self.l_type = None
-        self.msg = None
+        self.l_type: str = None
+        self.msg: str = None
 
     def process(self, data: Any) -> str:
         """Process data
@@ -235,8 +233,7 @@ class LogProcessor(DataProcessor):
             assert isinstance(data, dict)
             return True
         except AssertionError as e:
-            print(f"Error: {e}")
-        return False
+            raise AssertionError(e)
 
     def format_output(self, result: str) -> str:
         """Format a string

@@ -1,44 +1,54 @@
 def method_1() -> None:
+    """Test full module import method."""
     try:
-        import alchemy
+        import alchemy.elements
         print("Method 1 - Full module import:")
         print("alchemy.elements.create_fire(): ", end="")
-        print(alchemy.elements.create_fire())
+        result: str = alchemy.elements.create_fire()
+        print(result)
     except AttributeError:
         print("AttributeError : no attribute")
 
 
 def method_2() -> None:
+    """Test specific function import method."""
     try:
         from alchemy.elements import create_water
         print("\nMethod 2 - Specific function import:")
         print("create_water(): ", end="")
-        print(create_water())
+        result: str = create_water()
+        print(result)
     except AttributeError:
         print("AttributeError : no attribute")
 
 
 def method_3() -> None:
+    """Test aliased import method."""
     try:
         from alchemy.potions import healing_potion as heal
         print("\nMethod 3 - Aliased import:")
         print("heal(): ", end="")
-        print(heal())
+        result: str = heal()
+        print(result)
     except AttributeError:
         print("AttributeError : no attribute")
 
 
 def method_4() -> None:
+    """Test multiple imports method."""
     try:
         from alchemy.elements import create_earth, create_fire
         from alchemy.potions import strength_potion
         print("\nMethod 4 - Multiple imports:")
         print("create_earth(): ", end="")
-        print(create_earth())
+        result1: str = create_earth()
+        print(result1)
         print("create_fire(): ", end="")
-        print(create_fire())
+        result2: str = create_fire()
+        print(result2)
         print("strength_potion(): ", end="")
-        print(strength_potion())
+        result3: str = strength_potion()
+        print(result3)
     except AttributeError:
         print("AttributeError : no attribute")
 

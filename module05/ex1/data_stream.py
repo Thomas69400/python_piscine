@@ -91,6 +91,8 @@ class SensorStream(DataStream):
             str: The data processed
         """
 
+        if not isinstance(data_batch, list):
+            raise TypeError("Error SensorStream data is not a list")
         try:
             self.stats = {
                 splited[0]: float(splited[1])
@@ -117,10 +119,10 @@ class SensorStream(DataStream):
             List[Any]: the data filtered
         """
 
-        tmp = list(self.stats[temp]
-                   for temp
-                   in self.stats
-                   if temp == 'temp')
+        tmp: Union[List[float], str] = list(self.stats[temp]
+                                            for temp
+                                            in self.stats
+                                            if temp == 'temp')
         if len(tmp) == 0:
             tmp = "No temp"
         else:
@@ -144,11 +146,11 @@ class SensorStream(DataStream):
         if criteria is not None:
             if criteria == "High-priority":
                 try:
-                    filtered = [
+                    filtered: List[float] = [
                         data
                         for data
                         in data_batch
-                        if "temp" or "humidity" in data
+                        if ("temp" or "humidity" in data)
                         and float(data.split(":")[1]) > 50
                     ]
                     return filtered
@@ -183,6 +185,9 @@ class TransactionStream(DataStream):
             str: The data processed
         """
 
+        if not isinstance(data_batch, list):
+            raise TypeError(
+                "Error TransactionStream data is not a list")
         try:
             self.stats = {
                 f"{splited[0]}_{i}": int(splited[1])
@@ -209,19 +214,19 @@ class TransactionStream(DataStream):
             List[Any]: the data filtered
         """
 
-        buy = sum([
+        buy: int = sum([
             self.stats[buy]
             for buy
             in self.stats
             if "buy" in buy
         ])
-        sell = sum([
+        sell: int = sum([
             self.stats[buy]
             for buy
             in self.stats
             if "sell" in buy
         ])
-        symbol = ""
+        symbol: str = ""
         if buy - sell > 0:
             symbol = "+"
         return result + f"{len(self.stats)} operations, " + \
@@ -243,7 +248,7 @@ class TransactionStream(DataStream):
         if criteria is not None:
             if criteria == "High-priority":
                 try:
-                    filtered = [
+                    filtered: List[int] = [
                         data
                         for data
                         in data_batch
@@ -281,6 +286,8 @@ class EventStream(DataStream):
             str: The data processed
         """
 
+        if not isinstance(data_batch, list):
+            raise TypeError("Error EventStream data is not a list")
         try:
             self.stats.update({
                 f"event_{i+1}": data
@@ -303,8 +310,8 @@ class EventStream(DataStream):
             List[Any]: the data filtered
         """
 
-        ope = len(self.stats)
-        n_error = len([
+        ope: int = len(self.stats)
+        n_error: int = len([
             self.stats[error]
             for error
             in self.stats
@@ -329,7 +336,7 @@ class EventStream(DataStream):
         if criteria is not None:
             if criteria == "High-priority":
                 try:
-                    filtered = [
+                    filtered: List[str] = [
                         data
                         for data
                         in data_batch
@@ -349,12 +356,8 @@ class StreamProcessor:
 
         pass
 
-    def process_stream(streams: Dict[Union[EventStream,
-                                           TransactionStream,
-                                           SensorStream],
-                                     Union[str,
-                                           float,
-                                           int]],
+    def process_stream(self, streams: Dict[DataStream,
+                                           List[Any]],
                        criteria: Optional[str] = None) -> str:
         """Process all streams
 
@@ -371,9 +374,9 @@ class StreamProcessor:
             str: a description of processed data
         """
 
-        sensor = 0
-        trans = 0
-        event = 0
+        sensor: int = 0
+        trans: int = 0
+        event: int = 0
         for s in streams:
             try:
                 streams[s] = s.filter_data(streams[s], criteria)
@@ -388,7 +391,7 @@ class StreamProcessor:
                 raise ValueError(f"Error: {e}")
         if criteria is not None:
             if criteria == "High-priority":
-                to_return = "Filtered results: "
+                to_return: str = "Filtered results: "
                 if sensor != 0:
                     to_return += f"{sensor} critical sensor alerts"
                 if trans != 0:
@@ -408,9 +411,9 @@ def main() -> None:
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===\n")
 
     print("Initializing Sensor Stream...")
-    sensor = SensorStream("SENSOR_001")
+    sensor: SensorStream = SensorStream("SENSOR_001")
     sensor.display_base_data()
-    sens_data = ["temp:22.5", "humidity:65", "pressure:1013"]
+    sens_data: List[str] = ["temp:22.5", "humidity:65", "pressure:1013"]
     try:
         print(sensor.process_batch(sens_data))
         print(sensor.format_output("Sensor analysis: "))
@@ -418,9 +421,9 @@ def main() -> None:
         print(f"Error: {e}")
 
     print("\nInitializing Transaction Stream...")
-    trans = TransactionStream("TRANS_001")
+    trans: TransactionStream = TransactionStream("TRANS_001")
     trans.display_base_data()
-    trans_data = ["buy:100", "sell:150", "buy:75"]
+    trans_data: List[str] = ["buy:100", "sell:150", "buy:75"]
     try:
         print(trans.process_batch(trans_data))
         print(trans.format_output("Transaction analysis: "))
@@ -428,8 +431,8 @@ def main() -> None:
         print(f"Error: {e}")
 
     print("\nInitializing Event Stream...")
-    event = EventStream("EVENT_001")
-    event_data = ["login", "error", "logout"]
+    event: EventStream = EventStream("EVENT_001")
+    event_data: List[str] = ["login", "error", "logout"]
     event.display_base_data()
     try:
         print(event.process_batch(event_data))
@@ -440,7 +443,8 @@ def main() -> None:
     print("\n=== Polymorphic Stream Processing ===")
     print("Processing mixed stream types through unified interface...")
 
-    streams = {
+    proc: StreamProcessor = StreamProcessor()
+    streams: Dict[DataStream, List[str]] = {
         SensorStream("SENSOR_002"): ["temp:50",
                                      "humidity:70"],
         TransactionStream("TRANS_002"): ["buy:50",
@@ -450,11 +454,11 @@ def main() -> None:
         EventStream("EVENT_002"): ["login", "logout", "login"]
     }
     try:
-        print(StreamProcessor.process_stream(streams))
+        print(proc.process_stream(streams))
     except ValueError as e:
         print(f"Error: {e}")
 
-    streams_priority = {
+    streams_priority: Dict[DataStream, List[str]] = {
         SensorStream("SENSOR_003"): ["temp:50",
                                      "humidity:70"],
         TransactionStream("TRANS_003"): ["buy:50",
@@ -465,7 +469,7 @@ def main() -> None:
     }
     print("\nStream filtering active: High-priority data only")
     try:
-        print(StreamProcessor.process_stream(
+        print(proc.process_stream(
             streams_priority, "High-priority"))
     except ValueError as e:
         print(f"Error: {e}")

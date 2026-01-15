@@ -4,8 +4,12 @@ from ex2.Combatable import Combatable
 from ex0.Card import Card
 
 
-def main():
-    """Execute program"""
+def main() -> None:
+    """Main function demonstrating multiple interface implementation.
+
+    Shows EliteCard utilizing both Combatable and Magical interfaces,
+    demonstrating combat and magic abilities from multiple inheritance.
+    """
 
     print("=== DataDeck Ability System ===\n")
 

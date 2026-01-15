@@ -1,449 +1,382 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Dict, Protocol, Union
+from typing import Any, List, Dict, Protocol
+from collections import deque
 
 
 class ProcessingStage(Protocol):
-    """Duc typing class
+    """Protocol defining the interface for data processing stages.
 
-    Args:
-        Protocol: to set up the duck typing
+    Any class implementing this protocol must have a process method
+    that transforms input data into output data.
     """
 
     def process(self, data: Any) -> Any:
-        pass
+        """Process the input data.
+
+        Args:
+            data: The data to be processed.
+
+        Returns:
+            The processed data.
+        """
+        ...
 
 
 class ProcessingPipeline(ABC):
-    """Abstract class for pipelines
+    """Abstract base class for processing pipelines.
 
-    Args:
-        ABC: abstract class
+    A pipeline consists of multiple processing stages that are applied
+    sequentially to transform data.
     """
 
     def __init__(self, pipeline_id: str) -> None:
-        """Initialize a ProcessingPipeline
+        """Initialize the processing pipeline.
 
         Args:
-            pipeline_id (str): the id of a pipeline
+            pipeline_id: Unique identifier for the pipeline.
         """
-
-        super().__init__()
         self.pipeline_id: str = pipeline_id
         self.stages: List[ProcessingStage] = []
 
     def add_stage(self, stage: ProcessingStage) -> None:
-        """Add a stage to the list of stages
+        """Add a processing stage to the pipeline.
 
         Args:
-            stage (ProcessingStage): a stage
+            stage: The processing stage to add.
         """
-
         self.stages.append(stage)
 
     @abstractmethod
-    def process(self, data: Any) -> Dict:
-        """Abstract method to process data
+    def process(self, data: Any) -> Any:
+        """Process the input data through all stages.
 
         Args:
-            data (Any): the data to process
+            data: The data to process.
 
         Returns:
-            Dict: the data processed
+            The processed data.
         """
-
-        pass
+        ...
 
     def get_id(self) -> str:
-        """Return the id of a pipeline
+        """Get the pipeline's unique identifier.
 
         Returns:
-            str: id of pipeline
+            The pipeline ID.
         """
-
         return self.pipeline_id
 
 
-class InputStage():
-    """InputStage class"""
+class InputStage:
+    """Processing stage for input validation and parsing.
 
-    def __init__(self) -> None:
-        """Initialize an InputStage"""
+    Validates the input data format and converts it to appropriate
+    data structures for downstream processing.
+    """
 
-        pass
+    def process(self, data: Any) -> Any:
+        """Validate and parse input data.
 
-    def process(self, data: Any, type_pipe: str) -> Dict:
-        """Parse and validate data
-
-        Args:
-            data (Any): the data to parse and validate
-
-        Returns:
-            Dict: the data transform
-        """
-
-        new_data: Dict[str, Union[str, int, float]]
-        if type_pipe == "STREAM":
-            try:
-                new_data = {
-                    f"data_{i}": data
-                    for i, data
-                    in enumerate(data)
-                }
-                print("Input: Real-time sensor stream")
-            except TypeError:
-                raise TypeError(
-                    "Error detected in Stage 1: Invalid data format")
-        elif type_pipe == "JSON":
-            try:
-                new_data = data
-                print(f"Input: {data}")
-            except TypeError:
-                raise TypeError(
-                    "Error detected in Stage 1: Invalid data format")
-        elif type_pipe == "CSV":
-            try:
-                splited: List[str] = data.split(",")
-                new_data = {
-                    f"data_{i}": data
-                    for i, data
-                    in enumerate(splited)
-                }
-                print(f"Input: {data}")
-            except TypeError:
-                raise TypeError(
-                    "Error detected in Stage 1: Invalid data format")
-        else:
-            raise Exception("PipeType is not supported")
-        return new_data
-
-
-class TransformStage():
-    """TransformStage class"""
-
-    def __init__(self) -> None:
-        """Initialize a TransformStage"""
-
-        pass
-
-    def process(self, data: Any, type_pipe: str) -> Dict:
-        """Transform and enriched data
+        Supports string (CSV format), list, and dictionary inputs.
+        Converts list and CSV strings to deque for efficient processing.
 
         Args:
-            data (Any): the data to transform and enriched
+            data: The input data to validate and parse.
 
         Returns:
-            Dict: the data transformed
-        """
+            The parsed data in the appropriate format.
 
-        if type_pipe == "JSON":
-            try:
-                value: List[float] = [data[d] for d in data if d == "value"]
-                if len(value) > 0 and (value[0] > 20 and value[0] < 30):
-                    msg: str = "(Normal range)"
-                else:
-                    msg: str = "(Suspicious range)"
-                data.update({"range": msg})
-                print("Transform: Enriched with metadata and validation")
-            except (IndexError, TypeError, AttributeError):
-                raise Exception(
-                    "Error detected in Stage 2: Invalid data format")
-        elif type_pipe == "CSV":
-            try:
-                print("Transform: Parsed and structured data")
-            except TypeError:
-                raise TypeError(
-                    "Error detected in Stage 2: Invalid data format")
-        elif type_pipe == "STREAM":
-            try:
-                print("Transform: Aggregated and filtered")
-                data: Dict[str, float] = {d: data[d]
-                                          for d in data if data[d] < 50}
-            except TypeError:
-                raise TypeError(
-                    "Error detected in Stage 2: Invalid data format")
-        else:
-            raise TypeError("PipeType not supported")
+        Raises:
+            TypeError: If the input data type is not supported.
+        """
+        print(f"Input: {data}")
+        if isinstance(data, str):
+            if "," in data:
+                return deque(data.split(","))
+            return data
+        if isinstance(data, list):
+            return deque(data)
+        if isinstance(data, dict):
+            return data
+        raise TypeError("Invalid input data")
+
+
+class TransformStage:
+    """Processing stage for data transformation and enrichment.
+
+    Enhances data by adding derived fields or filtering unwanted elements.
+    """
+
+    def process(self, data: Any) -> Any:
+        """Transform and enrich the input data.
+
+        For dictionaries with 'value' key, adds a 'range' field indicating
+        if the value is in normal (20-30) or suspicious range.
+        For deques, filters out error entries.
+
+        Args:
+            data: The data to transform.
+
+        Returns:
+            The transformed data.
+        """
+        if isinstance(data, dict) and "value" in data:
+            value = data["value"]
+            data["range"] = (
+                "(Normal range)" if 20 <= value <= 30 else "(Suspicious range)"
+            )
+            return data
+
+        if isinstance(data, deque):
+            return [d for d in data if not isinstance(d, str) or d != "error"]
+
         return data
 
 
-class OutputStage():
-    """OutputStage class"""
+class OutputStage:
+    """Processing stage for output formatting and delivery.
 
-    def __init__(self) -> None:
-        """Initialize an OutputStage"""
+    Formats the processed data into human-readable output messages.
+    """
 
-        pass
+    def process(self, data: Any) -> Any:
+        """Format and prepare output data.
 
-    def process(self, data: Any, type_pipe: str) -> str:
-        """Format  and deliver data
+        Generates formatted output strings based on the data type:
+        - Dictionary: Temperature reading with range info
+        - List: Stream summary with statistics
+        - Deque: User activity log summary
 
         Args:
-            data (Any): the data to format
+            data: The processed data to format.
 
         Returns:
-            str: the formatted data
+            A formatted output string or the original data.
         """
+        if isinstance(data, dict):
+            return (
+                f"Output: Processed temperature reading: "
+                f"{data.get('value')}°{data.get('unit')} {data.get('range')}"
+            )
 
-        if type_pipe == "JSON":
-            try:
-                value: List[float] = [data[d] for d in data if d == "value"]
-                if len(value) > 0:
-                    value_msg: str = str(value[0])
-                else:
-                    return "Output: Processed temperature reading: " + \
-                        "No temp recorded"
-                unit: List[str] = [data[d] for d in data if d == "unit"]
-                if len(unit) > 0:
-                    unit_msg = unit[0]
-                else:
-                    unit_msg = "Unknown unit"
-                range: List[str] = [data[d] for d in data if d == "range"]
-                if len(range) > 0:
-                    range_msg = range[0]
-                else:
-                    range_msg = "(Unknown range)"
-                return "Output: Processed temperature reading: " + \
-                    f"{value_msg}°{unit_msg} {range_msg}"
-            except (IndexError, TypeError) as e:
-                raise Exception(e)
-        elif type_pipe == "CSV":
-            try:
-                action_nb = len([a for a in data if data[a] == "action"])
-                return "Output: User activity logged: " + \
-                    f"{action_nb} actions processed"
-            except TypeError as e:
-                raise TypeError(e)
-        elif type_pipe == "STREAM":
-            try:
-                streams = [data[d] for d in data]
-                return "Output: Stream summary: " + \
-                    f"{len(streams)} readings, " + \
-                    f'avg: {sum(streams)/len(streams):.1f}°C'
-            except TypeError as e:
-                raise TypeError(e)
-        else:
-            raise TypeError("PipeType not supported")
+        if isinstance(data, list):
+            avg = sum(data) / len(data) if data else 0
+            return f"Output: Stream summary: {len(data)} readings, " +\
+                f"avg: {avg:.1f}°C"
+
+        if isinstance(data, deque):
+            return f"Output: User activity logged: {len(data)}" +\
+                "actions processed"
+
+        return data
 
 
 class JSONAdapter(ProcessingPipeline):
-    """JSONAdapter class
+    """Pipeline adapter for processing JSON-formatted data.
 
-    Args:
-        ProcessingPipeline: parent
+    Includes input validation, data transformation, and output formatting
+    stages to handle JSON data end-to-end.
     """
 
     def __init__(self, pipeline_id: str) -> None:
-        """Initialize a JSONAdapter
+        """Initialize the JSON adapter pipeline.
 
         Args:
-            pipeline_id (str): id of pipeline
+            pipeline_id: Unique identifier for this pipeline.
         """
-
         super().__init__(pipeline_id)
         self.add_stage(InputStage())
         self.add_stage(TransformStage())
         self.add_stage(OutputStage())
 
     def process(self, data: Any) -> Any:
-        """Process data through stages
+        """Process JSON data through all pipeline stages.
 
         Args:
-            data (Any): the data to process
-
-        Raises:
-            TypeError: if stage in stages is not a ProcessingStage
+            data: The JSON data to process.
 
         Returns:
-            Any: the data processed
-        """
+            The processed and formatted output.
 
+        Raises:
+            Exception: If any stage fails during processing.
+        """
         try:
             for stage in self.stages:
-                data = stage.process(data, "JSON")
-            print(data)
-        except TypeError as e:
-            raise TypeError(f"Error JSONAdapter: {e}")
-        return "Successfully processed data for JSONAdapter"
+                data = stage.process(data)
+            return data
+        except Exception:
+            raise
 
 
 class CSVAdapter(ProcessingPipeline):
-    """CSVAdapter class
+    """Pipeline adapter for processing CSV-formatted data.
 
-    Args:
-        ProcessingPipeline: parent
+    Includes input validation and output formatting stages.
+    Excludes the transformation stage for simpler CSV processing.
     """
 
     def __init__(self, pipeline_id: str) -> None:
-        """Initialize a CSVAdapter
+        """Initialize the CSV adapter pipeline.
 
         Args:
-            pipeline_id (str): id of pipeline
+            pipeline_id: Unique identifier for this pipeline.
         """
-
         super().__init__(pipeline_id)
         self.add_stage(InputStage())
-        self.add_stage(TransformStage())
         self.add_stage(OutputStage())
 
     def process(self, data: Any) -> Any:
-        """Process data through stages
+        """Process CSV data through the pipeline stages.
 
         Args:
-            data (Any): the data to process
-
-        Raises:
-            TypeError: if stage in stages is not a ProcessingStage
+            data: The CSV data to process.
 
         Returns:
-            Any: the data processed
-        """
+            The processed and formatted output.
 
+        Raises:
+            Exception: If any stage fails during processing.
+        """
         try:
             for stage in self.stages:
-                data = stage.process(data, "CSV")
-            print(data)
-        except TypeError as e:
-            raise TypeError(f"Error CSVAdapter: {e}")
-        return "Successfully processed data for CSVAdapter"
+                data = stage.process(data)
+            return data
+        except Exception:
+            raise
 
 
 class StreamAdapter(ProcessingPipeline):
-    """StreamAdapter class
+    """Pipeline adapter for processing stream data.
 
-    Args:
-        ProcessingPipeline: parent
+    Handles continuous data streams with input validation, transformation,
+    and output formatting.
     """
 
     def __init__(self, pipeline_id: str) -> None:
-        """Initialize a StreamAdapter
+        """Initialize the stream adapter pipeline.
 
         Args:
-            pipeline_id (str): id of pipeline
+            pipeline_id: Unique identifier for this pipeline.
         """
-
         super().__init__(pipeline_id)
         self.add_stage(InputStage())
         self.add_stage(TransformStage())
         self.add_stage(OutputStage())
 
     def process(self, data: Any) -> Any:
-        """Process data through stages
+        """Process stream data through all pipeline stages.
 
         Args:
-            data (Any): the data to process
-
-        Raises:
-            TypeError: if stage in stages is not a ProcessingStage
+            data: The stream data to process.
 
         Returns:
-            Any: the data processed
-        """
+            The processed and formatted output.
 
+        Raises:
+            Exception: If any stage fails during processing.
+        """
         try:
             for stage in self.stages:
-                data = stage.process(data, "STREAM")
-            print(data)
-        except TypeError as e:
-            raise TypeError(f"Error STREAMAdapter: {e}")
-        return "Successfully processed data for STREAMAdapter"
+                data = stage.process(data)
+            return data
+        except Exception:
+            raise
 
 
 class NexusManager:
-    """NexusManager class"""
+    """Manager for coordinating multiple data processing pipelines.
+
+    Maintains a registry of pipelines and routes data to the appropriate
+    pipeline based on the pipeline ID.
+    """
 
     def __init__(self) -> None:
-        """Initialize a NexusManager"""
+        """Initialize the Nexus Manager.
 
-        self.pipelines: List[ProcessingPipeline] = []
+        Creates an empty pipeline registry.
+        """
+        self.pipelines: Dict[str, ProcessingPipeline] = {}
 
     def add_pipeline(self, pipeline: ProcessingPipeline) -> None:
-        """Add a pipeline to the list of pipelines
+        """Register a processing pipeline.
 
         Args:
-            pipeline (ProcessingPipeline): a pipeline
+            pipeline: The pipeline to register.
         """
+        self.pipelines[pipeline.get_id()] = pipeline
 
-        self.pipelines.append(pipeline)
-
-    def process_data(self, data: Any, pipeline_id: str) -> None:
-        """Process the data for a given pipeline
+    def process(self, pipeline_id: str, data: Any) -> Any:
+        """Process data using the specified pipeline.
 
         Args:
-            data (Any): the data to process
-            pipeline_id (str): the id of pipeline
+            pipeline_id: The ID of the pipeline to use.
+            data: The data to process.
+
+        Returns:
+            The processed data from the pipeline.
 
         Raises:
-            TypeError: if stage is not a stage in pipeline
+            ValueError: If the pipeline ID is not found in the registry.
         """
-
-        try:
-            for pipeline in self.pipelines:
-                if pipeline.get_id() == pipeline_id:
-                    pipeline.process(data)
-        except TypeError as e:
-            raise TypeError(e)
-        return
+        if pipeline_id not in self.pipelines:
+            raise ValueError("Pipeline not found")
+        return self.pipelines[pipeline_id].process(data)
 
 
 def main() -> None:
-    """Execute program"""
+    """Main function demonstrating the Nexus pipeline system.
 
+    Sets up multiple pipelines for different data formats (JSON, CSV, Stream),
+    processes sample data through each pipeline, and demonstrates
+    error recovery.
+    """
     print("=== CODE NEXUS - ENTERPRISE PIPELINE SYSTEM ===\n")
 
     print("Initializing Nexus Manager...")
     print("Pipeline capacity: 1000 streams/second\n")
-    nexus = NexusManager()
-    json = JSONAdapter("JSON_001")
-    csv = CSVAdapter("CSV_001")
-    stream = StreamAdapter("STREAM_001")
-    nexus.add_pipeline(json)
-    nexus.add_pipeline(csv)
-    nexus.add_pipeline(stream)
+    manager = NexusManager()
+
+    json_pipe = JSONAdapter("JSON")
+    csv_pipe = CSVAdapter("CSV")
+    stream_pipe = StreamAdapter("STREAM")
 
     print("Creating Data Processing Pipeline...")
-    print("Stage 1: Input validation and parsing\n" +
-          "Stage 2: Data transformation and enrichment\n" +
-          "Stage 3: Output formatting and delivery")
+    print("Stage 1: Input validation and parsing")
+    print("Stage 2: Data transformation and enrichment")
+    print("Stage 3: Output formatting and delivery\n")
+    manager.add_pipeline(json_pipe)
+    manager.add_pipeline(csv_pipe)
+    manager.add_pipeline(stream_pipe)
 
-    print("\n=== Multi-Format Data Processing ===")
+    print("=== Multi-Format Data Processing ===")
 
-    json_data = {"sensor": "temp", "value": 23.5, "unit": "C"}
     print("\nProcessing JSON data through pipeline...")
-    try:
-        nexus.process_data(json_data, "JSON_001")
-    except TypeError as e:
-        print(f"Error: {e}")
+    print(manager.process("JSON", {
+        "sensor": "temp",
+        "value": 23.5,
+        "unit": "C"
+    }))
 
-    csv_data = "user,action,timestamp"
     print("\nProcessing CSV data through same pipeline...")
-    try:
-        nexus.process_data(csv_data, "CSV_001")
-    except TypeError as e:
-        print(f"Error: {e}")
+    print(manager.process("CSV", "user,action,timestamp"))
 
-    stream_data = [25, 63, 20.5, 20, 19.23, 25.75]
     print("\nProcessing Stream data through same pipeline...")
-    try:
-        nexus.process_data(stream_data, "STREAM_001")
-    except TypeError as e:
-        print(f"Error: {e}")
+    print(manager.process("STREAM", [25, 22, 21, 24, 23]))
 
     print("\n=== Pipeline Chaining Demo ===")
-    print("Pipeline A -> Pipeline B -> Pipeline C")
-    print("Data flow: Raw -> Processed -> Analyzed -> Stored")
-    print("\nChain result: 100 records processed through 3-stage pipeline")
-    print("Performance: 95% efficiency, 0.2s total processing time")
+    manager.process("STREAM", [20, 21, 22])
+    manager.process("CSV", "processed,data,stored")
+    print("Chain result: 2 pipelines executed successfully")
 
     print("\n=== Error Recovery Test ===")
-    print("Simulating pipeline failure...")
-    json_data = 'foobar'
     try:
-        nexus.process_data(json_data, "JSON_001")
-    except Exception as e:
-        print(e)
-    finally:
+        print("Simulating pipeline failure..")
+        manager.process("XXX", "invalid")
+    except Exception:
+        print("Error detected in pipeline")
         print("Recovery initiated: Switching to backup processor")
-        print("Recovery successful: Pipeline restored, processing resumed")
+        print("Recovery successful")
 
     print("\nNexus Integration complete. All systems operational.")
 

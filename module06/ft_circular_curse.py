@@ -1,42 +1,44 @@
 def ingredient() -> None:
-    """Test function validate_ingredient()"""
-
+    """Test the validate_ingredients function."""
     from alchemy.grimoire.validator import validate_ingredients
 
     try:
         print("\nTesting ingredient validation:")
         print("validate_ingredients(\"fire air\"): ", end="")
-        print(validate_ingredients("fire air"))
+        result1: str = validate_ingredients("fire air")
+        print(result1)
         print("validate_ingredients(\"dragon scales\"): ", end="")
-        print(validate_ingredients("dragon scales"))
+        result2: str = validate_ingredients("dragon scales")
+        print(result2)
     except AttributeError:
         print("AttributeError: no attribute")
 
 
 def spell() -> None:
-    """Test function record_spell()"""
-
+    """Test the record_spell function."""
     from alchemy.grimoire.spellbook import record_spell
 
     try:
         print("\nTesting spell recording with validation:")
         print("record_spell(\"Fireball\", \"fire air\"): ", end="")
-        print(record_spell("Fireball", "fire air"))
+        result1: str = record_spell("Fireball", "fire air")
+        print(result1)
         print("record_spell(\"Dark Magic\", \"shadow\"): ", end="")
-        print(record_spell("Dark Magic", "shadow"))
+        result2: str = record_spell("Dark Magic", "shadow")
+        print(result2)
     except AttributeError:
         print("AttributeError: no attribute")
 
 
 def late() -> None:
-    """Test late import"""
-
+    """Test late import technique to avoid circular dependencies."""
     from alchemy.grimoire.spellbook import record_spell
 
     try:
         print("\nTesting late import technique:")
         print("record_spell(\"Lightning\", \"air\"): ", end="")
-        print(record_spell("Lightning", "air"))
+        result: str = record_spell("Lightning", "air")
+        print(result)
     except AttributeError:
         print("AttributeError: no attribute")
 

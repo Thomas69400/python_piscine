@@ -1,7 +1,11 @@
 from ex0.CreatureCard import CreatureCard
 
 
-def main():
+def main() -> None:
+    """Main function demonstrating the Card system with CreatureCard.
+
+    Tests abstract base class design, card playability, and combat mechanics.
+    """
     print("=== DataDeck Card Foundation ===\n")
 
     print("Testing Abstract Base Class Design:")

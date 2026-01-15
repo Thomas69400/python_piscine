@@ -3,10 +3,13 @@ from typing import Dict, Union
 
 
 class CreatureCard(Card):
-    """Child of Card, it is a card that can attack and die
+    """A card representing a creature that can attack other creatures.
+
+    Extends the base Card class with combat mechanics including attack power,
+    health points, and targeting capabilities.
 
     Args:
-        Card (ABC): Parent
+        Card (ABC): Parent abstract base class.
     """
 
     def __init__(self, name: str, cost: int, rarity: str,
@@ -22,6 +25,8 @@ class CreatureCard(Card):
         """
 
         super().__init__(name, cost, rarity)
+        if attack < 0 or health < 0:
+            raise ValueError("Attack and health must be positive integers")
         self.attack: int = attack
         self.health: int = health
 
@@ -72,17 +77,6 @@ class CreatureCard(Card):
             return attack
         except TypeError as e:
             raise TypeError(e)
-
-    def validate_health_attack(self) -> bool:
-        """Check if either the health or attack is negative
-
-        Returns:
-            bool: False if negative true if positive
-        """
-
-        if self.health < 0 or self.attack < 0:
-            return False
-        return True
 
     def is_damage_to_kill(self, target) -> bool:
         """Check if the attack of self is enough to kill the target

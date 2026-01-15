@@ -1,21 +1,21 @@
 def philosophers_stone() -> str:
-    """Return a string
+    """Create a philosopher's stone using transmutation and potions.
 
     Returns:
-        str: string referencing philosopher
+        str: Description of the philosopher's stone creation.
     """
-
     from .basic import lead_to_gold
     from ..potions import healing_potion
-    return "Philosopher’s stone created using " + \
-        f"{lead_to_gold()} and {healing_potion()}"
+    gold: str = lead_to_gold()
+    potion: str = healing_potion()
+    return "Philosopher's stone created using " + \
+        f"{gold} and {potion}"
 
 
 def elixir_of_life() -> str:
-    """Return a string
+    """Create the elixir of life for eternal youth.
 
     Returns:
-        str: string referencing elixir
+        str: Description of the elixir of life creation.
     """
-
     return "Elixir of life: eternal youth achieved!"

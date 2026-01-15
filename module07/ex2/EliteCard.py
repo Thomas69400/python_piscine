@@ -5,12 +5,15 @@ from typing import Dict, Union
 
 
 class EliteCard(Card, Combatable, Magical):
-    """EliteCard class
+    """An elite card implementing both combat and magical interfaces.
+
+    Combines the properties of a standard Card with Combatable and Magical
+    interfaces, providing comprehensive combat and spell casting abilities.
 
     Args:
-        Card (Card): Parent
-        Combatable (Combatable): Parent
-        Magical (Magical): Parent
+        Card (Card): Base card class.
+        Combatable (Combatable): Combat interface.
+        Magical (Magical): Magic interface.
     """
 
     def __init__(self, name: str, cost: int, rarity: str,
@@ -60,17 +63,22 @@ class EliteCard(Card, Combatable, Magical):
         except TypeError as e:
             raise TypeError(e)
 
-    def attack(self, target) -> dict:
-        """Deal damage to a target
+    def attack(self, target: Combatable) -> dict:
+        """Deal damage to a target combatable card.
+
+        Performs an attack on a Combatable target, causing it to defend
+        against the damage.
 
         Args:
-            target (Card): A card
+            target (Combatable): A Combatable card to attack.
 
         Raises:
-            TypeError: if can't access to the attribute
+            TypeError: If the target is not Combatable or if unable
+            to access attributes.
 
         Returns:
-            dict: a resume of what happened
+            dict: Attack information including attacker, target, damage,
+            and combat type.
         """
 
         if not isinstance(target, Combatable):
@@ -131,18 +139,22 @@ class EliteCard(Card, Combatable, Magical):
         })
         return stat
 
-    def cast_spell(self, spell_name: str, targets: list) -> dict:
-        """Cast a spell on multiple target
+    def cast_spell(self, spell_name: str, targets: list[Combatable]) -> dict:
+        """Cast a spell on multiple target cards.
+
+        Casts a spell that affects multiple Combatable targets, consuming mana.
 
         Args:
-            spell_name (str): the name of the spell
-            targets (list): the targets to cast the spell on
+            spell_name (str): The name of the spell to cast.
+            targets (list[Combatable]): The Combatable cards to cast
+            the spell on.
 
         Raises:
-            TypeError: if can't access the attribute
+            TypeError: If unable to access card attributes.
 
         Returns:
-            dict: a resume of what append
+            dict: Spell cast information including caster, spell name, targets,
+            and mana used.
         """
 
         try:
@@ -174,7 +186,7 @@ class EliteCard(Card, Combatable, Magical):
         try:
             self.mana += amount
             channel = {
-                "channeled": 3,
+                "channeled": amount,
                 "total_mana": self.mana
             }
             return channel
@@ -194,11 +206,11 @@ class EliteCard(Card, Combatable, Magical):
         })
         return stat
 
-    def get_type(self):
-        """Get the type of the card
+    def get_type(self) -> str:
+        """Get the card type.
 
         Returns:
-            _type_: Elite Card
+            str: The card type 'Elite Card'.
         """
 
         return "Elite Card"
@@ -217,8 +229,6 @@ class EliteCard(Card, Combatable, Magical):
         """
 
         try:
-            if self.health < damage:
-                return False
-            return True
+            return self.health <= damage
         except TypeError as e:
             raise TypeError(e)

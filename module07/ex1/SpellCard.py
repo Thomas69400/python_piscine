@@ -3,10 +3,13 @@ from typing import Dict, Union
 
 
 class SpellCard(Card):
-    """Child of Card
+    """A card representing a spell with various effects.
+
+    Extends the base Card class with spell mechanics including different
+    effect types (damage, heal, buff, debuff) that can be applied to targets.
 
     Args:
-        Card (Card): Parent
+        Card (Card): Parent abstract base class.
     """
 
     def __init__(self, name: str, cost: int,
@@ -47,17 +50,23 @@ class SpellCard(Card):
         except TypeError as e:
             raise (e)
 
-    def resolve_effect(self, targets: list) -> dict:
-        """Resolve the effect of spell
+    def resolve_effect(self, targets: list[Card]) -> dict:
+        """Resolve the effect of the spell on target cards.
+
+        Extracts numeric values from the effect_type string and applies
+        the appropriate effect (damage, heal, buff, debuff) to each target.
 
         Args:
-            targets (list): a list of Cards
+            targets (list[Card]): A list of Card objects to apply the effect
+            to.
 
         Raises:
-            IndexError: if no value in effect
+            IndexError: If no numeric value is found in effect_type.
+            TypeError: If unable to access target attributes.
 
         Returns:
-            dict: resumed information as dict
+            dict: Information about the spell effect including card name,
+                  targets, value, and effect type.
         """
 
         try:
@@ -85,7 +94,7 @@ class SpellCard(Card):
         except IndexError as e:
             raise IndexError(e)
         except TypeError as e:
-            raise (e)
+            raise TypeError(e)
 
     def get_type(self) -> str:
         """Get the type of SpellCard

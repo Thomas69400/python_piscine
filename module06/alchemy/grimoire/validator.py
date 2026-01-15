@@ -1,13 +1,14 @@
 def validate_ingredients(ingredients: str) -> str:
-    """Return a string
+    """Validate if ingredients contain allowed elements.
 
     Args:
-        ingredients (str): the ingredient to check
+        ingredients (str): The ingredient string to validate.
 
     Returns:
-        str: Valid if ingredient is valid else invalid
+        str: Validation result with status (VALID or INVALID).
     """
-
-    if "fire" or "water" or "earth" or "air" in ingredients:
+    allowed: list[str] = ["fire", "water", "earth", "air"]
+    words: list[str] = ingredients.split()
+    if any(word in allowed for word in words):
         return f"{ingredients} - VALID"
     return f"{ingredients} - INVALID"

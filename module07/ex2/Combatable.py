@@ -2,24 +2,27 @@ from abc import ABC, abstractmethod
 
 
 class Combatable(ABC):
-    """Abstract class Combatable
+    """Abstract interface for cards that can engage in combat.
+
+    Defines the contract for any card that can attack, defend,
+    and provide combat statistics.
 
     Args:
-        ABC (ABC): Parent
+        ABC (ABC): Abstract base class parent.
     """
 
     @abstractmethod
-    def attack(self, target) -> dict:
-        """Deal damage to a target
+    def attack(self, target: 'Combatable') -> dict:
+        """Deal damage to a target combatable card.
 
         Args:
-            target (Card): A card
+            target (Combatable): A Combatable card to attack.
 
         Raises:
-            TypeError: if can't access to the attribute
+            TypeError: If unable to access card attributes.
 
         Returns:
-            dict: a resume of what happened
+            dict: Information about the attack result.
         """
 
         pass

@@ -7,21 +7,28 @@ from random import shuffle
 
 
 class Deck:
-    """Manage Cards"""
+    """Manages a collection of Card objects for card games.
 
-    def __init__(self):
-        """Initialize a Deck"""
+    Provides functionality to add, remove, shuffle, and draw cards from
+    a deck, as well as retrieve statistics about the deck composition.
+    """
+
+    def __init__(self) -> None:
+        """Initialize an empty Deck.
+
+        Creates an empty list to store Card objects.
+        """
 
         self.cards: List[Card] = []
 
     def add_card(self, card: Card) -> None:
-        """Add a Card to the Deck
+        """Add a Card to the Deck.
 
         Args:
-            card (Card): a Card
+            card (Card): A Card object to add to the deck.
 
         Raises:
-            TypeError: if card is not a Card
+            TypeError: If the card is not an instance of Card.
         """
 
         if isinstance(card, Card):
@@ -30,13 +37,13 @@ class Deck:
             raise TypeError(f"{card} is not a Card")
 
     def remove_card(self, card_name: str) -> bool:
-        """Remove a card from deck by the name
+        """Remove a card from the deck by its name.
 
         Args:
-            card_name (str): the name of the card
+            card_name (str): The name of the card to remove.
 
         Returns:
-            bool: True if the card has been removed, false if not
+            bool: True if the card was successfully removed, False otherwise.
         """
 
         for card in self.cards:
@@ -46,18 +53,21 @@ class Deck:
         return False
 
     def shuffle(self) -> None:
-        """Randomize the deck"""
+        """Randomize the order of cards in the deck.
+
+        Uses the random.shuffle function to reorder cards randomly.
+        """
 
         shuffle(self.cards)
 
     def draw_card(self) -> Card:
-        """Draw a card from deck
+        """Draw the first card from the deck and remove it.
 
         Raises:
-            IndexError: If no card in deck
+            IndexError: If the deck is empty.
 
         Returns:
-            Card: the Card drew
+            Card: The card drawn from the top of the deck.
         """
 
         try:
@@ -68,13 +78,17 @@ class Deck:
             raise IndexError(e)
 
     def get_deck_stats(self) -> dict:
-        """Resume information about Deck in a dict
+        """Get detailed statistics about the deck composition.
+
+        Calculates the total number of cards, number of each card type,
+        and the average mana cost of cards in the deck.
 
         Raises:
-            ZeroDivisionError: if no value in list
+            ZeroDivisionError: If the deck is empty (handled internally).
 
         Returns:
-            dict: information on Deck
+            dict: A dictionary containing total_cards, creatures, spells,
+                  artifacts, and avg_cost (float).
         """
 
         try:
@@ -99,6 +113,7 @@ class Deck:
                     card.cost for card
                     in self.cards])/len(self.cards)+0.9))
             }
-            return stat
-        except ZeroDivisionError as e:
-            raise ZeroDivisionError(e)
+        except ZeroDivisionError:
+            stat = {"total_cards": 0, "creatures": 0, "spells": 0,
+                    "artifacts": 0, "avg_cost": 0.0}
+        return stat

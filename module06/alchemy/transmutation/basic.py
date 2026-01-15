@@ -2,20 +2,20 @@ from alchemy.elements import create_fire, create_earth
 
 
 def lead_to_gold() -> str:
-    """Return a string
+    """Transmute lead into gold using fire element.
 
     Returns:
-        str: string referencing lead_to_gold
+        str: Description of the lead to gold transmutation.
     """
-
-    return f"Lead transmuted to gold using {create_fire()}"
+    fire_element: str = create_fire()
+    return f"Lead transmuted to gold using {fire_element}"
 
 
 def stone_to_gem() -> str:
-    """Return a string
+    """Transmute stone into gem using earth element.
 
     Returns:
-        str: string referencing stone_to_gem
+        str: Description of the stone to gem transmutation.
     """
-
-    return f"Stone transmuted to gem using {create_earth()}"
+    earth_element: str = create_earth()
+    return f"Stone transmuted to gem using {earth_element}"

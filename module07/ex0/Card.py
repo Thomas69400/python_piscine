@@ -3,10 +3,13 @@ from typing import Dict, Union
 
 
 class Card(ABC):
-    """Abstract class Card
+    """Abstract base class for all card types in the card game.
+
+    Defines the interface that all cards must implement, including
+    playing mechanics, mana cost checking, and card information retrieval.
 
     Args:
-        ABC: Parent
+        ABC: Abstract base class parent.
     """
 
     def __init__(self, name: str, cost: int, rarity: str) -> None:
