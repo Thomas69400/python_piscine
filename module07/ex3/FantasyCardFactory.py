@@ -8,10 +8,11 @@ from ex0.CreatureCard import CreatureCard
 
 
 class FantasyCardFactory(CardFactory):
-    """Class to create random Card"""
+    """Concrete CardFactory that produces fantasy-themed creature, spell
+    and artifact cards."""
 
     def __init__(self) -> None:
-        """Initialize a FantasyCardFactory"""
+        """Initialize a FantasyCardFactory with predefined card templates"""
 
         super().__init__()
         self.creatures: List[Dict[str, Union[str, int]]] = [
@@ -42,19 +43,17 @@ class FantasyCardFactory(CardFactory):
         ]
 
     def create_creature(self, name_or_power: str | int | None = None) -> Card:
-        """Create a random creature card
+        """Create and return a CreatureCard based on name or attack power
+        or random choice.
 
         Args:
-            name_or_power (str | int | None, optional):
-                the name or attack of creature.
-                Defaults to None.
-
-        Raises:
-            TypeError: if name or power is not a str or int
-            TypeError: if can't access to attribute
+            name_or_power (str | int | None): If a string, select creature
+            by name.
+            If an int, select by attack value.
+            If None, select randomly.
 
         Returns:
-            Card: The card created
+            Card: A CreatureCard instance.
         """
 
         try:
@@ -89,19 +88,14 @@ class FantasyCardFactory(CardFactory):
             raise TypeError(e)
 
     def create_spell(self, name_or_power: str | int | None = None) -> Card:
-        """Create a random spell card
+        """Create and return a SpellCard based on name or random choice.
 
         Args:
-            name_or_power (str | int | None, optional):
-                the name or attack of spell.
-                Defaults to None.
-
-        Raises:
-            TypeError: if name or power is not a str or int
-            TypeError: if can't access to attribute
+            name_or_power (str | None): If a string, select spell by name.
+            If None, select randomly.
 
         Returns:
-            Card: The card created
+            Card: A SpellCard instance.
         """
 
         try:
@@ -129,19 +123,14 @@ class FantasyCardFactory(CardFactory):
             raise TypeError(e)
 
     def create_artifact(self, name_or_power: str | int | None = None) -> Card:
-        """Create a random artifact card
+        """Create and return an ArtifactCard based on name or random choice.
 
         Args:
-            name_or_power (str | int | None, optional):
-                the name or attack of artifact.
-                Defaults to None.
-
-        Raises:
-            TypeError: if name or power is not a str or int
-            TypeError: if can't access to attribute
+            name_or_power (str | None): If a string, select artifact by name.
+            If None, select randomly.
 
         Returns:
-            Card: The card created
+            Card: An ArtifactCard instance.
         """
 
         try:
@@ -169,17 +158,45 @@ class FantasyCardFactory(CardFactory):
         except TypeError as e:
             raise TypeError(e)
 
-    def create_themed_deck(self, size: int) -> dict:
-        pass
+    def create_themed_deck(self,
+                           size: int) -> Dict[str, List[Dict[str,
+                                                             Union[str,
+                                                                   int]]]]:
+        """Build a themed deck dictionary containing lists
+        of raw card templates.
 
-    def get_supported_types(self) -> dict:
-        pass
-
-    def get_info(self) -> str:
-        """Return the type of class
+        Args:
+            size (int): Number of entries of each type to include.
 
         Returns:
-            str: Fantasy Factory
+            dict: Dictionary with keys 'creatures', 'spells', 'artifacts'
+            and values lists of templates.
         """
+        deck = {"creatures": [],
+                "spells": [],
+                "artifacts": []}
+        for _ in range(size):
+            deck["creatures"].append(random.choice(self.creatures))
+            deck["spells"].append(random.choice(self.spells))
+            deck["artifacts"].append(random.choice(self.artifacts))
+        return deck
 
+    def get_supported_types(self) -> Dict[str, List[str]]:
+        """Return the supported card type names provided by this factory.
+
+        Returns:
+            dict: Mapping of category to list of supported card names.
+        """
+        cards = {
+            "creatures": [creature["name"] for creature
+                          in self.creatures],
+            "spells": [spell["name"] for spell
+                       in self.spells],
+            "artifacts": [artifact["name"] for artifact
+                          in self.artifacts]
+        }
+        return cards
+
+    def get_info(self) -> str:
+        """Return a short description of the factory."""
         return "Fantasy Factory"
