@@ -32,7 +32,8 @@ class EliteCard(Card, Combatable, Magical):
             mana (int): the mana of card
         """
 
-        super().__init__(name, cost, rarity)
+        Card.__init__(self, name, cost, rarity)
+        Combatable.__init__(self, damage, defense, health)
         self.combat_type: str = combat_type
         self.health: int = health
         self.damage: int = damage

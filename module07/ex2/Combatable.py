@@ -11,6 +11,11 @@ class Combatable(ABC):
         ABC (ABC): Abstract base class parent.
     """
 
+    def __init__(self, damage: int, defense: int, health: int) -> None:
+        self.health: int = health
+        self.damage: int = damage
+        self.defense: int = defense
+
     @abstractmethod
     def attack(self, target: 'Combatable') -> dict:
         """Deal damage to a target combatable card.
