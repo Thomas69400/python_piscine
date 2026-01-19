@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 class SecurePlant:
     """Define all information about a plant"""
 
