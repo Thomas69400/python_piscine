@@ -1,8 +1,8 @@
 from typing import Dict, List
 
 
-def mage_counter(start: int = 0) -> callable:
-    i: int = start
+def mage_counter() -> callable:
+    i: int = 0
 
     def count() -> int:
         nonlocal i
@@ -15,7 +15,7 @@ def mage_counter(start: int = 0) -> callable:
 def spell_accumulator(initial_power: int) -> callable:
     accumulation: int = initial_power
 
-    def accumulator(power: int = 0) -> int:
+    def accumulator(power: int) -> int:
         nonlocal accumulation
         accumulation += power
         return accumulation
@@ -24,11 +24,8 @@ def spell_accumulator(initial_power: int) -> callable:
 
 
 def enchantment_factory(enchantment_type: str) -> callable:
-    enchantment: str = enchantment_type
-
     def enchant(item_name: str) -> str:
-        nonlocal enchantment
-        return enchantment + " " + item_name
+        return enchantment_type + " " + item_name
     return enchant
 
 
@@ -69,7 +66,7 @@ def main():
     print("\nTesting spell accumulator...")
     try:
         accumulator: callable = spell_accumulator(initial_powers[0])
-        print(f"Accumulated power: {accumulator()}")
+        print(f"Accumulated power: {accumulator(power_additions[0])}")
         print(f"Accumulated power: {accumulator(power_additions[2])}")
         print(f"Accumulated power: {accumulator(power_additions[1])}")
     except TypeError as e:
