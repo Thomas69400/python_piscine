@@ -34,7 +34,8 @@ def mage_stats(mages: list[dict]) -> dict:
         sort: Dict[str, Union[int, float]] = {
             "max_power": max(mages, key=lambda m: m["power"])["power"],
             "min_power": min(mages, key=lambda m: m["power"])["power"],
-            "avg_power": sum([mage["power"] for mage in mages]) / len(mages)
+            "avg_power": round(sum(
+                map(lambda m: m["power"], mages)) / len(mages), 2)
         }
         return sort
     except KeyError as e:

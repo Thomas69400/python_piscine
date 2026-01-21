@@ -43,23 +43,23 @@ def test_error_types() -> None:
         print("Testing PlantError...")
         garden_operations("PlantError")
     except PlantError as e:
-        print(f"Caught a garden error: {e}")
+        print(f"Caught a PlantError: {e}")
 
     try:
         print("\nTesting WaterError...")
         garden_operations("WaterError")
     except WaterError as e:
-        print(f"Caught a garden error: {e}")
+        print(f"Caught a WaterError: {e}")
 
     print("\nTesting catching all garden errors...")
     try:
         garden_operations("PlantError")
     except GardenError as e:
-        print(f"Caught a garden error: {e}")
+        print(f"Caught a GardenError: {e}")
     try:
         garden_operations("WaterError")
     except GardenError as e:
-        print(f"Caught a garden error: {e}")
+        print(f"Caught a GardenError: {e}")
 
     print("\nAll custom error types work correctly!")
 
