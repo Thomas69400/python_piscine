@@ -2,46 +2,30 @@ from typing import List, Dict, Union
 
 
 def artifact_sorter(artifacts: list[dict]) -> list[dict]:
-    try:
-        sort: List[dict] = sorted(artifacts,
-                                  key=lambda a: a["power"], reverse=True)
-        return sort
-    except KeyError as e:
-        raise KeyError(e)
+    sort: List[dict] = sorted(artifacts,
+                              key=lambda a: a["power"], reverse=True)
+    return sort
 
 
 def power_filter(mages: list[dict], min_power: int) -> list[dict]:
-    try:
-        sort: List[dict] = list(
-            filter(lambda m: m["power"] >= min_power, mages))
-        return sort
-    except KeyError as e:
-        raise KeyError(e)
-    except TypeError as e:
-        raise TypeError(f"Min power = '{min_power}', {e}")
+    filtered: List[dict] = list(
+        filter(lambda m: m["power"] >= min_power, mages))
+    return filtered
 
 
 def spell_transformer(spells: list[str]) -> list[str]:
-    try:
-        sort: List[str] = list(map(lambda s: '* ' + s + ' *', spells))
-        return sort
-    except TypeError as e:
-        raise TypeError(f"Spells = {spells}. {e}")
+    sort: List[str] = list(map(lambda s: '* ' + s + ' *', spells))
+    return sort
 
 
 def mage_stats(mages: list[dict]) -> dict:
-    try:
-        sort: Dict[str, Union[int, float]] = {
-            "max_power": max(mages, key=lambda m: m["power"])["power"],
-            "min_power": min(mages, key=lambda m: m["power"])["power"],
-            "avg_power": round(sum(
-                map(lambda m: m["power"], mages)) / len(mages), 2)
-        }
-        return sort
-    except KeyError as e:
-        raise KeyError(e)
-    except TypeError as e:
-        raise TypeError(e)
+    sort: Dict[str, Union[int, float]] = {
+        "max_power": max(mages, key=lambda m: m["power"])["power"],
+        "min_power": min(mages, key=lambda m: m["power"])["power"],
+        "avg_power": round(sum(
+            map(lambda m: m["power"], mages)) / len(mages), 2)
+    }
+    return sort
 
 
 def main():
@@ -82,7 +66,7 @@ def main():
     print("\nTesting mage statistics...")
     try:
         print(mage_stats(mages))
-    except (KeyError, TypeError) as e:
+    except (KeyError, TypeError, ZeroDivisionError) as e:
         print(f"Error mages statistics : {e}")
 
 
