@@ -26,15 +26,11 @@ def power_amplifier(base_spell: callable, multiplier: int) -> callable:
 
 
 def conditional_caster(condition: callable, spell: callable) -> callable:
-    return lambda x: "Spell casted" \
-        if condition(spell(x)) \
-        else "Spell fizzled"
+    return lambda x: spell(x) if condition(x) else "Spell fizzled"
 
 
 def spell_sequence(spells: list[callable]) -> callable:
-    def cast_spells(target: str) -> List[str]:
-        return [spell(target) for spell in spells]
-    return cast_spells
+    return lambda x: [spell(x) for spell in spells]
 
 
 def main():
