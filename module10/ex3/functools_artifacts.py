@@ -1,6 +1,6 @@
 from functools import partial, reduce, lru_cache, singledispatch
 import operator
-from typing import Dict
+from typing import Dict, List, Optional, Any
 
 
 def base_enchant(power: int, element: str, target: str) -> dict:
@@ -39,14 +39,29 @@ def memoized_fibonacci(n: int) -> int:
     return a
 
 
-@singledispatch
 def spell_dispatcher() -> callable:
-    pass
+    @singledispatch
+    def dispatcher(arg: Any):
+        return f"Argument type not supported: {type(arg).__name__}"
+
+    @dispatcher.register(int)
+    def _(spell: int) -> str:
+        return f"{spell} damage inflict"
+
+    @dispatcher.register(str)
+    def _(enchantment: str) -> str:
+        return f"{enchantment} applied"
+
+    @dispatcher.register(list)
+    def _(spells: list) -> str:
+        return "".join([spell + " casted, " for spell in spells]).rstrip(", ")
+    return dispatcher
 
 
 def main():
-    spell_powers = [25, 48, 15, 30, 48, 35]
-    operations = ['add', 'multiply', 'max', 'min']
+    spells: List[str] = ["earthquake", "tsunami", "fireball", "freeze"]
+    spell_powers: List[int] = [25, 48, 15, 30, 48, 35]
+    operations: List[str] = ['add', 'multiply', 'max', 'min']
 
     print("Testing spell reducer...")
     try:
@@ -81,6 +96,10 @@ def main():
     print("\nTesting spell dispatcher...")
     try:
         dispatcher = spell_dispatcher()
+        print(dispatcher(spells))
+        print(dispatcher(50))
+        print(dispatcher("fire"))
+        print(dispatcher({"test": 1}))
     except TypeError as e:
         print(f"Error spell dispatcher: {e}")
 
