@@ -1,6 +1,6 @@
 from functools import partial, reduce, lru_cache, singledispatch
 import operator
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 
 
 def base_enchant(power: int, element: str, target: str) -> dict:
