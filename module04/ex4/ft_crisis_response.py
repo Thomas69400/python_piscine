@@ -14,7 +14,7 @@ def main() -> None:
     """
 
     name_lost: str = "lost_archive.txt"
-    name_class: str = "classified_data.txt"
+    name_class: str = "classified_vault.txt"
     name_stan: str = "standard_archive.txt"
 
     try:
