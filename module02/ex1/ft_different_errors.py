@@ -1,5 +1,8 @@
-def garden_operations() -> int:
-    """Try to make operations then catch the errors"""
+"""Demonstrate handling of various Python built-in exceptions for learning."""
+
+
+def garden_operations() -> None:
+    """Demonstrate handling of various built-in exceptions."""
 
     try:
         print("Testing ValueError...")
@@ -34,7 +37,7 @@ def garden_operations() -> int:
 
 
 def test_error_types() -> None:
-    """Test the function garden_operations()"""
+    """Run the garden_operations demonstration."""
 
     garden_operations()
 

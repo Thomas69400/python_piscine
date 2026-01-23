@@ -24,7 +24,8 @@ def main() -> None:
     env: Optional[str] = os.getenv("VIRTUAL_ENV")
     if not env:
         print("MATRIX STATUS: You're still plugged in\n")
-        print(f"Current Python: {sys.executable}\n")
+        python_exec: str = sys.executable
+        print(f"Current Python: {python_exec}\n")
 
         print("Virtual Environment: None detected")
         print("WARNING: You're in the global environment! " +
@@ -40,14 +41,17 @@ def main() -> None:
         print("Then run this program again.")
     else:
         print("MATRIX STATUS: Welcome to the construct\n")
-        print(f"Current Python: {sys.executable}")
-        print(f"Virtual Environment: {env.split('/')[-1]}")
+        python_exec: str = sys.executable
+        env_name: str = env.split(os.sep)[-1]
+        site_packages: str = f"{env}/lib/python3.11/site-packages"
+        print(f"Current Python: {python_exec}")
+        print(f"Virtual Environment: {env_name}")
         print(f"Environment Path: {env}")
         print("\nSUCCESS You're in an isolated environment! " +
               "Safe to install packages without affecting " +
               "the global system.")
         print("\nPackage installation path:")
-        print(f"{env}/lib/python3.11/site-packages")
+        print(site_packages)
 
 
 if __name__ == "__main__":

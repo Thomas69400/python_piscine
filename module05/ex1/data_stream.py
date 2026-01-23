@@ -3,10 +3,9 @@ from typing import Any, List, Dict, Union, Optional
 
 
 class DataStream(ABC):
-    """Abstract class
+    """Abstract base class representing a generic data stream.
 
-    Args:
-        ABC: Abstract class
+    Subclasses must implement process_batch to handle a batch of data.
     """
 
     def __init__(self, s_id: str, s_type: str) -> None:
@@ -66,10 +65,10 @@ class DataStream(ABC):
 
 
 class SensorStream(DataStream):
-    """SensorStream class
+    """Stream handling environmental sensor readings.
 
-    Args:
-        DataStream: parent
+    SensorStream parses key:value strings (e.g., "temp:22.5") and stores
+    parsed numeric stats in self.stats.
     """
 
     def __init__(self, s_id: str) -> None:
@@ -160,10 +159,10 @@ class SensorStream(DataStream):
 
 
 class TransactionStream(DataStream):
-    """TransactionStream class
+    """Stream handling financial transaction records.
 
-    Args:
-        DataStream: parent
+    TransactionStream parses key:value strings (e.g., "buy:100") and stores
+    integer values of operations in self.stats with enumerated keys.
     """
 
     def __init__(self, s_id: str) -> None:
@@ -261,10 +260,10 @@ class TransactionStream(DataStream):
 
 
 class EventStream(DataStream):
-    """EventStream class
+    """Stream handling system event records.
 
-    Args:
-        DataStream: parent
+    EventStream stores each event from the batch into self.stats using
+    event_<n> keys and supports simple event-based reporting.
     """
 
     def __init__(self, s_id: str) -> None:
@@ -349,10 +348,14 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
-    """StreamProcessor class"""
+    """Coordinator for processing multiple DataStream instances.
+
+    Accepts a mapping of DataStream -> list of raw batch items and applies
+    filtering and processing for each registered stream.
+    """
 
     def __init__(self) -> None:
-        """Initialize a StreamProcessor"""
+        """Initialize a StreamProcessor instance."""
 
         pass
 

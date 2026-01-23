@@ -1,3 +1,8 @@
+"""Demo script exercising the public API of the alchemy package.
+
+Calls element-creation helpers and prints package metadata.
+"""
+
 import alchemy
 import alchemy.elements
 

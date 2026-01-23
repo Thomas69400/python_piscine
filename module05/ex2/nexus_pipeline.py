@@ -335,11 +335,11 @@ def main() -> None:
 
     print("Initializing Nexus Manager...")
     print("Pipeline capacity: 1000 streams/second\n")
-    manager = NexusManager()
+    manager: NexusManager = NexusManager()
 
-    json_pipe = JSONAdapter("JSON")
-    csv_pipe = CSVAdapter("CSV")
-    stream_pipe = StreamAdapter("STREAM")
+    json_pipe: JSONAdapter = JSONAdapter("JSON")
+    csv_pipe: CSVAdapter = CSVAdapter("CSV")
+    stream_pipe: StreamAdapter = StreamAdapter("STREAM")
 
     print("Creating Data Processing Pipeline...")
     print("Stage 1: Input validation and parsing")

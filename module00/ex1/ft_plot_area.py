@@ -1,8 +1,8 @@
-def ft_plot_area():
-    """Ask user a height and a length"""
-
+def ft_plot_area() -> None:
+    """Prompt the user for plot dimensions and print the area."""
     print("Enter length: ", end="")
-    len = int(input())
+    length: int = int(input())
     print("Enter width: ", end="")
-    wid = int(input())
-    print(f"Plot area: {len * wid}")
+    width: int = int(input())
+    area: int = length * width
+    print(f"Plot area: {area}")

@@ -1,9 +1,13 @@
+"""Command-line inventory analysis utility.
+
+Parses argv items of the form name:count and prints summaries and suggestions.
+"""
 import sys
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 
-def main():
-    """Execute program"""
+def main() -> None:
+    """Execute the inventory analysis from command-line arguments."""
 
     if len(sys.argv) <= 1:
         return
@@ -22,7 +26,7 @@ def main():
     print(f"Unique item types: {len(inventory)}")
 
     print("\n=== Current Inventory ===")
-    sort: Dict[str, int] = sorted(
+    sort: List[Tuple[str, int]] = sorted(
         inventory.items(), key=lambda x: x[1], reverse=True)
     for item in sort:
         print(item[0] + ": " + str(item[1]) + " units" +

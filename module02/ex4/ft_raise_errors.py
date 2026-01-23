@@ -1,6 +1,6 @@
 def check_plant_health(plant_name: str, water_level: int,
                        sunlight_hours: int) -> str:
-    """If error occurs on a variable then raise an error
+    """Validate plant parameters and raise ValueError on invalid values.
 
     Args:
         plant_name (str): the name of a plant
@@ -15,7 +15,7 @@ def check_plant_health(plant_name: str, water_level: int,
         ValueError: error message when sunlight_hours > 12
 
     Returns:
-        str: success message
+        str: success message when the plant is healthy.
     """
 
     if plant_name is None or plant_name == "":
@@ -32,8 +32,8 @@ def check_plant_health(plant_name: str, water_level: int,
     return f"Plant '{plant_name}' is healthy!"
 
 
-def test_plant_checks():
-    """Test all errors types of check_plant_health()"""
+def test_plant_checks() -> None:
+    """Run tests for check_plant_health to demonstrate raised errors."""
 
     print("Testing good values...")
     try:

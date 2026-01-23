@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Dict, Union, List
 from ex2.Combatable import Combatable
 
 
@@ -7,50 +8,43 @@ class Magical(ABC):
 
     Defines the contract for any card with magical abilities including
     spell casting, mana channeling, and magic statistics.
-
-    Args:
-        ABC (ABC): Abstract base class parent.
     """
 
     @abstractmethod
-    def cast_spell(self, spell_name: str, targets: list[Combatable]) -> dict:
+    def cast_spell(self, spell_name: str,
+                   targets: List[Combatable]) -> Dict[str,
+                                                      Union[str,
+                                                            int,
+                                                            List[str]]]:
         """Cast a spell on multiple targets.
 
         Args:
-            spell_name (str): The name of the spell to cast.
-            targets (list[Combatable]): The target cards to cast the spell on.
-
-        Raises:
-            TypeError: If unable to access card attributes.
+            spell_name (str): Name of the spell.
+            targets (List[Combatable]): Targets to affect.
 
         Returns:
-            dict: Information about the spell cast.
+            Dict[str, Union[str, int, List[str]]]: Summary of the spell cast.
         """
-
         pass
 
     @abstractmethod
-    def channel_mana(self, amount: int) -> dict:
-        """Channel mana
+    def channel_mana(self, amount: int) -> Dict[str, Union[str, int]]:
+        """Channel mana into this card.
 
         Args:
-            amount (int): the amount of mana channeled
-
-        Raises:
-            TypeError: if the amount is not an int
+            amount (int): Amount of mana to channel.
 
         Returns:
-            dict: a resume of what happened
+            Dict[str, Union[str, int]]: Summary including channeled amount
+            and total mana.
         """
-
         pass
 
     @abstractmethod
-    def get_magic_stats(self) -> dict:
-        """Get the stat of magic of card
+    def get_magic_stats(self) -> Dict[str, Union[str, int]]:
+        """Get this card's magic-related statistics.
 
         Returns:
-            dict: a resume of magic stat
+            Dict[str, Union[str, int]]: Magic stats summary.
         """
-
         pass

@@ -1,3 +1,11 @@
+"""Potion brewing helpers that combine elemental creators."""
+
+__all__: list[str] = [
+    "healing_potion",
+    "strength_potion",
+    "invisibility_potion",
+    "wisdom_potion",
+]
 
 
 def healing_potion() -> str:

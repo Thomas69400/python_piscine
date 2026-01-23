@@ -1,34 +1,48 @@
-from typing import List, Dict, Union
+"""Small helpers demonstrating lambda usage: sorting, filtering and mapping.
+
+Functions operate on simple artifact / mage / spell data structures and return
+typed collections.
+"""
+
+from typing import List, Dict, Union, Any
 
 
-def artifact_sorter(artifacts: list[dict]) -> list[dict]:
-    sort: List[dict] = sorted(artifacts,
-                              key=lambda a: a["power"], reverse=True)
+def artifact_sorter(artifacts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return artifacts sorted by descending 'power' key."""
+    sort: List[Dict[str, Any]] = sorted(
+        artifacts, key=lambda a: a["power"], reverse=True
+    )
     return sort
 
 
-def power_filter(mages: list[dict], min_power: int) -> list[dict]:
-    filtered: List[dict] = list(
-        filter(lambda m: m["power"] >= min_power, mages))
+def power_filter(mages: List[Dict[str, Any]], min_power: int
+                 ) -> List[Dict[str, Any]]:
+    """Filter mages and return those with power >= min_power."""
+    filtered: List[Dict[str, Any]] = list(
+        filter(lambda m: m["power"] >= min_power, mages)
+    )
     return filtered
 
 
-def spell_transformer(spells: list[str]) -> list[str]:
-    sort: List[str] = list(map(lambda s: '* ' + s + ' *', spells))
+def spell_transformer(spells: List[str]) -> List[str]:
+    """Return a transformed list of spell names with decorative markers."""
+    sort: List[str] = list(map(lambda s: "* " + s + " *", spells))
     return sort
 
 
-def mage_stats(mages: list[dict]) -> dict:
+def mage_stats(mages: List[Dict[str, Any]]) -> Dict[str, Union[int, float]]:
+    """Compute simple statistics (max, min, avg) for mage power."""
     sort: Dict[str, Union[int, float]] = {
         "max_power": max(mages, key=lambda m: m["power"])["power"],
         "min_power": min(mages, key=lambda m: m["power"])["power"],
-        "avg_power": round(sum(
-            map(lambda m: m["power"], mages)) / len(mages), 2)
+        "avg_power": round(
+            sum(map(lambda m: m["power"], mages)) / len(mages), 2
+        )
     }
     return sort
 
 
-def main():
+def main() -> None:
     artifacts = [
         {"name": "Storm Crown", "power": 75, "type": "accessory"},
         {"name": "Ice Wand", "power": 68, "type": "relic"},

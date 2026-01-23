@@ -1,14 +1,14 @@
-from pydantic import BaseModel, field_validator, \
-    model_validator, ValidationError
-from datetime import datetime
-from typing import List, Type
-from enum import Enum
-from typing_extensions import Self
-
 """space_crew module
 
 Provides Pydantic models for CrewMember and SpaceMission with validation.
 """
+
+from pydantic import (BaseModel, field_validator,
+                      model_validator, ValidationError)
+from datetime import datetime
+from typing import List, Type
+from enum import Enum
+from typing_extensions import Self
 
 
 class Rank(Enum):

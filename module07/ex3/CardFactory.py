@@ -1,3 +1,8 @@
+"""Abstract factory interfaces for creating card objects used by the card game.
+
+Concrete factories should implement creation methods returning Card instances
+or themed deck templates.
+"""
 from abc import ABC, abstractmethod
 from ex0.Card import Card
 from typing import Dict, List

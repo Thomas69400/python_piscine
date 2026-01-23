@@ -19,17 +19,17 @@ class EliteCard(Card, Combatable, Magical):
     def __init__(self, name: str, cost: int, rarity: str,
                  combat_type: str, health: int,
                  damage: int, defense: int, mana: int) -> None:
-        """Initialize an EliteCard
+        """Initialize an EliteCard that supports both combat and magic.
 
         Args:
-            name (str): the name of card
-            cost (int): cost of card
-            rarity (str): rarity of card
-            combat_type (str): the combat type of card
-            health (int): the health of card
-            damage (int): the attack of card
-            defense (int): the defense of card
-            mana (int): the mana of card
+            name (str): Card name.
+            cost (int): Mana cost.
+            rarity (str): Rarity descriptor.
+            combat_type (str): Combat style/type.
+            health (int): Health points.
+            damage (int): Attack value.
+            defense (int): Defense value.
+            mana (int): Mana pool for spells.
         """
 
         Card.__init__(self, name, cost, rarity)
@@ -40,18 +40,10 @@ class EliteCard(Card, Combatable, Magical):
         self.defense: int = defense
         self.mana: int = mana
 
-    def play(self, game_state: dict) -> dict:
-        """Play a card on terrain
-
-        Args:
-            game_state (dict): the state of the game
-
-        Raises:
-            TypeError: if can't access to attribute
-
-        Returns:
-            dict: a resume of what append
-        """
+    def play(self,
+             game_state: Dict[str, Union[int, str]]) -> Dict[str, Union[str,
+                                                                        int]]:
+        """Play this elite card onto the battlefield and deduct mana."""
 
         try:
             play: Dict[str, Union[str, int]] = dict({
@@ -64,23 +56,9 @@ class EliteCard(Card, Combatable, Magical):
         except TypeError as e:
             raise TypeError(e)
 
-    def attack(self, target: Combatable) -> dict:
-        """Deal damage to a target combatable card.
-
-        Performs an attack on a Combatable target, causing it to defend
-        against the damage.
-
-        Args:
-            target (Combatable): A Combatable card to attack.
-
-        Raises:
-            TypeError: If the target is not Combatable or if unable
-            to access attributes.
-
-        Returns:
-            dict: Attack information including attacker, target, damage,
-            and combat type.
-        """
+    def attack(self, target: Combatable) -> Dict[str, Union[str, int, bool]]:
+        """Perform an attack against a Combatable target and return
+        attack summary."""
 
         if not isinstance(target, Combatable):
             raise TypeError("Target is not Combatable")
@@ -96,18 +74,8 @@ class EliteCard(Card, Combatable, Magical):
         except TypeError as e:
             raise TypeError(e)
 
-    def defend(self, incoming_damage: int) -> dict:
-        """Defend from damage taken
-
-        Args:
-            incoming_damage (int): the damage taken
-
-        Raises:
-            TypeError: if can't access attribute
-
-        Returns:
-            dict: a resume of what happened
-        """
+    def defend(self, incoming_damage: int) -> Dict[str, Union[str, int, bool]]:
+        """Defend against incoming damage and return defense summary."""
 
         try:
             damage = self.defense - incoming_damage
@@ -124,12 +92,8 @@ class EliteCard(Card, Combatable, Magical):
         except TypeError as e:
             raise TypeError(e)
 
-    def get_combat_stats(self) -> dict:
-        """Get all the combat stats of the card
-
-        Returns:
-            dict: resume information of combat stats
-        """
+    def get_combat_stats(self) -> Dict[str, Union[str, int]]:
+        """Return combat statistics for this elite card."""
 
         stat = dict({
             "name": self.name,
@@ -140,23 +104,13 @@ class EliteCard(Card, Combatable, Magical):
         })
         return stat
 
-    def cast_spell(self, spell_name: str, targets: list[Combatable]) -> dict:
-        """Cast a spell on multiple target cards.
-
-        Casts a spell that affects multiple Combatable targets, consuming mana.
-
-        Args:
-            spell_name (str): The name of the spell to cast.
-            targets (list[Combatable]): The Combatable cards to cast
-            the spell on.
-
-        Raises:
-            TypeError: If unable to access card attributes.
-
-        Returns:
-            dict: Spell cast information including caster, spell name, targets,
-            and mana used.
-        """
+    def cast_spell(self,
+                   spell_name: str,
+                   targets: list[Combatable]) -> Dict[str,
+                                                      Union[str,
+                                                            int,
+                                                            list]]:
+        """Cast a spell affecting multiple targets and consume mana."""
 
         try:
             mana = 4
@@ -171,18 +125,8 @@ class EliteCard(Card, Combatable, Magical):
         except TypeError as e:
             raise TypeError(e)
 
-    def channel_mana(self, amount: int) -> dict:
-        """Channel mana
-
-        Args:
-            amount (int): the amount of mana channeled
-
-        Raises:
-            TypeError: if the amount is not an int
-
-        Returns:
-            dict: a resume of what happened
-        """
+    def channel_mana(self, amount: int) -> Dict[str, Union[str, int]]:
+        """Channel the given amount of mana into this card."""
 
         try:
             self.mana += amount
@@ -194,12 +138,8 @@ class EliteCard(Card, Combatable, Magical):
         except TypeError as e:
             raise TypeError(e)
 
-    def get_magic_stats(self) -> dict:
-        """Get the stat of magic of card
-
-        Returns:
-            dict: a resume of magic stat
-        """
+    def get_magic_stats(self) -> Dict[str, Union[str, int]]:
+        """Return magic-related statistics for this card."""
 
         stat = dict({
             "name": self.name,
@@ -217,17 +157,7 @@ class EliteCard(Card, Combatable, Magical):
         return "Elite Card"
 
     def is_damage_to_kill(self, damage: int) -> bool:
-        """Check if the attack of self is enough to kill the target
-
-        Args:
-            damage (int): the damage taken
-
-        Raises:
-            TypeError: if can't access to value
-
-        Returns:
-            bool: True if it kill, false if it does not kill
-        """
+        """Determine whether the given damage would be lethal to this card."""
 
         try:
             return self.health <= damage

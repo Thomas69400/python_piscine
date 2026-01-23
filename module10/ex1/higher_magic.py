@@ -1,39 +1,54 @@
-from typing import List
+from typing import List, Callable, Any, Tuple
 
 
 def fireball(target: str) -> str:
+    """Return a string describing a fireball hitting the target."""
     return f"Fireball hits {target}"
 
 
 def heal(target: str) -> str:
+    """Return a string describing a heal applied to the target."""
     return f"Heals hits {target}"
 
 
 def lightning(damage: int) -> int:
+    """Return the integer damage value from a lightning spell."""
     return damage
 
 
 def ft_condition(name: str) -> bool:
+    """Return True when the provided name satisfies a condition."""
     return "Dragon" in name
 
 
-def spell_combiner(spell1: callable, spell2: callable) -> callable:
+def spell_combiner(spell1: Callable[[str], Any],
+                   spell2: Callable[[str], Any]
+                   ) -> Callable[[str], Tuple[Any, Any]]:
+    """Combine two single-argument spells into one that returns a tuple."""
     return lambda s: (spell1(s), spell2(s))
 
 
-def power_amplifier(base_spell: callable, multiplier: int) -> callable:
+def power_amplifier(base_spell: Callable[[int], int],
+                    multiplier: int) -> Callable[[int], int]:
+    """Return a new spell that amplifies the base spell's integer result."""
     return lambda s: base_spell(s) * multiplier
 
 
-def conditional_caster(condition: callable, spell: callable) -> callable:
+def conditional_caster(condition: Callable[[str], bool],
+                       spell: Callable[[str], Any]
+                       ) -> Callable[[str], Any]:
+    """Return a caster that only calls spell if condition is True."""
     return lambda x: spell(x) if condition(x) else "Spell fizzled"
 
 
-def spell_sequence(spells: list[callable]) -> callable:
+def spell_sequence(spells: List[Callable[[str], Any]]
+                   ) -> Callable[[str], List[Any]]:
+    """Return a function that runs a sequence of spells and collects results.
+    """
     return lambda x: [spell(x) for spell in spells]
 
 
-def main():
+def main() -> None:
 
     test_targets: List[str] = ['Dragon', 'Goblin', 'Wizard', 'Knight']
 

@@ -1,8 +1,15 @@
-def check_temperature(temp_str: str) -> int:
-    """Try to convert a temperature from str to int"""
+from typing import Optional
+
+
+def check_temperature(temp_str: str) -> Optional[int]:
+    """Convert a temperature string to int and validate range for plants.
+
+    Returns:
+        Optional[int]: the integer temperature if valid, otherwise None
+    """
 
     try:
-        temp_int = int(temp_str)
+        temp_int: int = int(temp_str)
     except Exception:
         print(f"Error: '{temp_str}' is not a valid number\n")
         return None
@@ -17,7 +24,7 @@ def check_temperature(temp_str: str) -> int:
 
 
 def test_temperature_input(temp_str: str) -> None:
-    """Test if a temperature is valid
+    """Test if a temperature string is valid for plants
 
     Args:
         temp_str (str): The temperature to test

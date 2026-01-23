@@ -4,7 +4,7 @@ This module defines a SpaceStation model using pydantic for runtime data
 validation and provides a small CLI demo that constructs valid and invalid
 instances to show validation behavior.
 """
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import datetime
 from pydantic import BaseModel, field_validator, ValidationError
 
@@ -110,7 +110,7 @@ def main() -> None:
     print("Space Station Data Validation")
     print("========================================")
     try:
-        valid_station = SpaceStation(
+        valid_station: SpaceStation = SpaceStation(
             station_id="SS-001",
             name="Orbital One",
             crew_size=6,
@@ -124,7 +124,7 @@ def main() -> None:
     except ValidationError as e:
         print("Validation Error:", e)
 
-    invalid_station_data = {
+    invalid_station_data: Dict[str, Any] = {
         "station_id": "SS001",
         "name": "ISS",
         "crew_size": 20,

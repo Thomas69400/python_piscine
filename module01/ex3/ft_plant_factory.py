@@ -25,11 +25,7 @@ class Plant:
 
 
 class PlantFactory:
-    """
-    Create a list of Plant objects from a list of specs.
-
-    Each spec is: (name, starting_height_cm, starting_age_days)
-    """
+    """Factory to create many Plant instances from specs."""
 
     def create_plants(
         self,
@@ -54,7 +50,7 @@ class PlantFactory:
 
 
 if __name__ == "__main__":
-    plant_specs = [
+    plant_specs: List[Tuple[str, int, int]] = [
         ("Rose", 25, 30),
         ("Oak", 200, 365),
         ("Cactus", 5, 90),

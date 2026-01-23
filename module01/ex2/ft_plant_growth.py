@@ -1,27 +1,27 @@
 class Plant:
-    """Define all information about a plant"""
+    """A plant tracking height (cm), age (days) and weekly growth."""
 
     def __init__(self, name: str, height: int, age_days: int) -> None:
-        """Create a plant and define its attributes attributes"""
+        """Initialize Plant attributes."""
 
-        self.name = name
-        self.height = height
-        self.age_days = age_days
-        self.growth = 0
+        self.name: str = name
+        self.height: int = height
+        self.age_days: int = age_days
+        self.growth: int = 0
 
     def grow(self) -> None:
-        """Augment the height of the plant by 7 & set the growth param to 7"""
+        """Increase height by 1 cm and track growth by 1 cm."""
 
         self.height += 1
         self.growth += 1
 
     def age(self) -> None:
-        """Augment the age of the plant by 7"""
+        """Increase age by 1 day."""
 
         self.age_days += 1
 
     def get_info(self) -> None:
-        """Display information about the plant"""
+        """Print information about the plant"""
 
         print(f"{self.name} : {self.height} cm, {self.age_days} days old")
 

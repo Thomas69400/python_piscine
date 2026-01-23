@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Optional
 
 
 class DataProcessor(ABC):
-    """Abstract class
+    """Abstract base class for data processors.
 
-    Args:
-        ABC: Abstract class
+    Subclasses must implement process and validate to handle and check data.
     """
 
     def __init__(self) -> None:
@@ -54,19 +53,15 @@ class DataProcessor(ABC):
 
 
 class NumericProcessor(DataProcessor):
-    """Process data for Numeric
-
-    Args:
-        DataProcessor (): parent class
-    """
+    """Processor for numeric data."""
 
     def __init__(self) -> None:
-        """Initialize NumericProcessor"""
+        """Initialize NumericProcessor with accumulator attributes."""
 
         super().__init__()
-        self.count: int = None
-        self.total: int = None
-        self.avg: int = None
+        self.count: Optional[int] = None
+        self.total: Optional[int] = None
+        self.avg: Optional[float] = None
 
     def process(self, data: Any) -> str:
         """Process data
@@ -123,18 +118,14 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-    """Process data for Text
-
-    Args:
-        DataProcessor: parent class
-    """
+    """Processor for text data."""
 
     def __init__(self) -> None:
-        """Initialize TextProcessor"""
+        """Initialize TextProcessor with summary attributes."""
 
         super().__init__()
-        self.length: int = None
-        self.words: int = None
+        self.length: Optional[int] = None
+        self.words: Optional[int] = None
 
     def process(self, data: Any) -> str:
         """Process data
@@ -186,18 +177,14 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    """Process data for Log
-
-    Args:
-        DataProcessor: The parent
-    """
+    """Processor for log-entry dictionaries."""
 
     def __init__(self) -> None:
-        """Initialize LogProcessor"""
+        """Initialize LogProcessor with extracted log fields."""
 
         super().__init__()
-        self.l_type: str = None
-        self.msg: str = None
+        self.l_type: Optional[str] = None
+        self.msg: Optional[str] = None
 
     def process(self, data: Any) -> str:
         """Process data

@@ -1,33 +1,42 @@
+"""Custom exception types for garden domain and a small demonstration."""
+
+
 class GardenError(Exception):
-    """Define custom error for Garden"""
+    """Custom exception base class for garden domain errors."""
+
+    message: str
 
     def __init__(self, message: str) -> None:
-        """Initialize the error message"""
+        """Initialize the error message."""
 
         self.message = message
         super().__init__(self.message)
 
 
 class PlantError(GardenError):
-    """Define custom error for Plant"""
+    """Exception for plant-related errors."""
 
     def __init__(self, message: str) -> None:
-        """Initialize the error message"""
+        """Initialize a PlantError with a message."""
 
         super().__init__(message)
 
 
 class WaterError(GardenError):
-    """Define custom error for Water"""
+    """Exception for water-related errors."""
 
     def __init__(self, message: str) -> None:
-        """Initialize the error message"""
+        """Initialize a WaterError with a message."""
 
         super().__init__(message)
 
 
 def garden_operations(ope: str) -> None:
-    """Try to make operations then catch the errors"""
+    """Perform a garden operation that may raise a custom error.
+
+    Args:
+        ope (str): operation name that triggers a specific error
+    """
 
     if ope == "PlantError":
         raise PlantError("The tomato plant is wilting!")
@@ -37,7 +46,7 @@ def garden_operations(ope: str) -> None:
 
 
 def test_error_types() -> None:
-    """Test the function garden_operations()"""
+    """Demonstrate raising and catching custom garden errors"""
 
     try:
         print("Testing PlantError...")

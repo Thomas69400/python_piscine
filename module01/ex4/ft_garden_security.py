@@ -1,15 +1,21 @@
 class SecurePlant:
-    """Define all information about a plant"""
+    """A plant model with private height and age attributes and safe
+    setters."""
 
     def __init__(self, name: str, height: int, age: int) -> None:
-        """Create a plant and define her attributes"""
+        """Initialize SecurePlant.
 
-        self.name = name
-        self.__height = height
-        self.__age = age
+        Args:
+            name: Plant name.
+            height: Initial height in cm.
+            age: Initial age in days.
+        """
+        self.name: str = name
+        self.__height: int = height
+        self.__age: int = age
 
     def set_height(self, new_height: int) -> None:
-        """Set the height of the plant can't be negative"""
+        """Safely set the plant height if non-negative"""
 
         if (new_height < 0):
             print(f"Invalid operation attempted: height {new_height}"
@@ -20,7 +26,7 @@ class SecurePlant:
         print(f"Height updated: {self.__height}cm [OK]")
 
     def set_age(self, new_age: int) -> None:
-        """Set the age of the plant can't be negative"""
+        """Safely set the plant age if non-negative"""
 
         if (new_age < 0):
             print(f"Invalid operation attempted: age {new_age}"
@@ -31,17 +37,17 @@ class SecurePlant:
         print(f"Age updated: {self.__age} days [OK]")
 
     def get_height(self) -> int:
-        """Return the height of the plant"""
+        """Return the plant height in cm"""
 
         return self.__height
 
     def get_age(self) -> int:
-        """Return the age of the plant"""
+        """Return the plant age in days"""
 
         return self.__age
 
     def get_info(self) -> None:
-        """Display informations about the plant"""
+        """Print a summary of the plant's current state"""
         print(f"Current plant: {self.name} ({self.__height}cm,"
               f" {self.__age} days)")
 

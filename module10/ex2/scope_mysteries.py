@@ -1,10 +1,12 @@
-from typing import Dict, List
+from typing import Dict, List, Callable, Any
 
 
-def mage_counter() -> callable:
+def mage_counter() -> Callable[[], int]:
+    """Return a counter function that increments and returns an integer."""
     i: int = 0
 
     def count() -> int:
+        """Increment the enclosed counter and return the new value."""
         nonlocal i
         i += 1
         return i
@@ -12,10 +14,12 @@ def mage_counter() -> callable:
     return count
 
 
-def spell_accumulator(initial_power: int) -> callable:
+def spell_accumulator(initial_power: int) -> Callable[[int], int]:
+    """Return an accumulator that adds subsequent power values."""
     accumulation: int = initial_power
 
     def accumulator(power: int) -> int:
+        """Add power to the accumulated total and return the sum."""
         nonlocal accumulation
         accumulation += power
         return accumulation
@@ -23,24 +27,25 @@ def spell_accumulator(initial_power: int) -> callable:
     return accumulator
 
 
-def enchantment_factory(enchantment_type: str) -> callable:
+def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
+    """Return a simple enchantment function that prefixes the item name."""
     def enchant(item_name: str) -> str:
+        """Apply the enchantment type to the given item name."""
         return enchantment_type + " " + item_name
     return enchant
 
 
-def memory_vault() -> dict[str, callable]:
-    vault: Dict[str, callable] = dict()
+def memory_vault() -> Dict[str, Callable[..., Any]]:
+    """Return a simple in-memory vault with 'store' and 'recall' callables."""
+    vault: Dict[str, Any] = dict()
 
-    def store(key: str, value: str) -> None:
-        nonlocal vault
-        vault.update({
-            key: value
-        })
-        return
+    def store(key: str, value: Any) -> None:
+        """Store a value under a string key in the vault."""
+        vault.update({key: value})
+        return None
 
-    def recall(key: str) -> str:
-        nonlocal vault
+    def recall(key: str) -> Any:
+        """Return the stored value for key or a not-found message."""
         if key in vault:
             return vault[key]
         return "Memory not found"
@@ -48,7 +53,7 @@ def memory_vault() -> dict[str, callable]:
     return {"store": store, "recall": recall}
 
 
-def main():
+def main() -> None:
     initial_powers: List[int] = [66, 24, 65]
     power_additions: List[int] = [18, 12, 10, 12, 19]
     enchantment_types: List[str] = ['Shocking', 'Frozen', 'Earthen']
@@ -88,6 +93,8 @@ def main():
         vault["store"]("2", items_to_enchant[1])
         print(vault["recall"]("1"))
         print(vault["recall"]("3"))
+        vault2: callable = memory_vault()
+        print(vault2["recall"]("1"))
     except TypeError as e:
         print(f"Error memory vault: {e}")
     except KeyError as e:

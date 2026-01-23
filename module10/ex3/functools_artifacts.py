@@ -1,13 +1,24 @@
+"""Examples of functools utilities: partial, reduce, lru_cache and
+singledispatch.
+
+Includes base enchantment factory, spell reduction helpers, a memoized
+Fibonacci, and a singledispatch-based dispatcher factory.
+"""
 from functools import partial, reduce, lru_cache, singledispatch
 import operator
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Callable
 
 
-def base_enchant(power: int, element: str, target: str) -> dict:
+def base_enchant(power: int, element: str, target: str) -> Dict[str, Any]:
+    """Create a base enchantment dictionary for a target."""
     return {"power": power, "element": element, "target": target}
 
 
-def spell_reducer(spells: list[int], operation: str) -> int:
+def spell_reducer(spells: List[int], operation: str) -> int:
+    """Reduce a list of integer spell powers by operation.
+
+    Supported operations: "add", "min", "multiply", "max".
+    """
     if operation == "add":
         reduced = reduce(operator.add, spells)
     elif operation == "min":
@@ -21,26 +32,34 @@ def spell_reducer(spells: list[int], operation: str) -> int:
     return reduced
 
 
-def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
-    enchant: Dict[str, callable] = {
+def partial_enchanter(base_enchantment: Callable[[int, str, str],
+                                                 Dict[str, Any]]
+                      ) -> Dict[str, Callable[..., Dict[str, Any]]]:
+    """Return a mapping of partially applied enchantment factories.
+
+    base_enchantment is expected to accept (power, element, target).
+    """
+    enchant: Dict[str, Callable[..., Dict[str, Any]]] = {
         "fire_enchant": partial(base_enchantment, 50, "fire"),
         "ice_enchant": partial(base_enchantment, 50, "ice"),
-        "lightning_enchant": partial(base_enchantment, 50,
-                                     "lightning")
+        "lightning_enchant": partial(base_enchantment, 50, "lightning")
     }
     return enchant
 
 
 @lru_cache
 def memoized_fibonacci(n: int) -> int:
+    """Return the nth Fibonacci number using memoization."""
     if n < 2:
         return n
     return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 
-def spell_dispatcher() -> callable:
+def spell_dispatcher() -> Callable[[Any], str]:
+    """Return a singledispatch dispatcher that handles int, str and list
+    args."""
     @singledispatch
-    def dispatcher(arg: Any):
+    def dispatcher(arg: Any) -> str:
         return f"Argument type not supported: {type(arg).__name__}"
 
     @dispatcher.register(int)
@@ -57,7 +76,7 @@ def spell_dispatcher() -> callable:
     return dispatcher
 
 
-def main():
+def main() -> None:
     spells: List[str] = ["earthquake", "tsunami", "fireball", "freeze"]
     spell_powers: List[int] = [25, 48, 15, 30, 48, 35]
     operations: List[str] = ['add', 'multiply', 'max', 'min']

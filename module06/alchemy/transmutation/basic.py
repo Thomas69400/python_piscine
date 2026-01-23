@@ -1,3 +1,6 @@
+"""Basic transmutation functions using elemental helpers."""
+__all__: list[str] = ["lead_to_gold", "stone_to_gem"]
+
 from alchemy.elements import create_fire, create_earth
 
 

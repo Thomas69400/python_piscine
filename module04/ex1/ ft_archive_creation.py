@@ -1,7 +1,16 @@
-def main():
-    """Execute program"""
+"""Preservation system demo for creating a new archive file.
 
-    name = "new_discovery.txt"
+Creates a new text archive, writes several entries, and prints status
+messages. Intended to show safe file creation and writing.
+"""
+
+
+def main() -> None:
+    """Execute archive creation routine.
+
+    Creates a new archive file and writes several entries. Returns None.
+    """
+    name: str = "new_discovery.txt"
     print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===\n")
 
     try:

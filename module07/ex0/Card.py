@@ -1,3 +1,7 @@
+"""Abstract Card base class used by the simple card game examples.
+
+Defines interface methods for play, inspection and simple helpers.
+"""
 from abc import ABC, abstractmethod
 from typing import Dict, Union
 
@@ -26,17 +30,19 @@ class Card(ABC):
         self.rarity: str = rarity
 
     @abstractmethod
-    def play(self, game_state: dict) -> dict:
-        """Play a Card on the battlefield
+    def play(self,
+             game_state: Dict[str, Union[int, str]]) -> Dict[str,
+                                                             Union[str,
+                                                                   int]]:
+        """Play a Card on the battlefield.
 
         Args:
-            game_state (dict): the actual state of the game
-
-        Raises:
-            TypeError: if can't access to value
+            game_state (Dict[str, Union[int, str]]): Mutable game state
+            (must contain 'mana').
 
         Returns:
-            dict: a dictionary of the play state
+            Dict[str, Union[str, int]]: Summary of the play action (card name,
+            mana used, effect).
         """
 
         try:
@@ -50,7 +56,7 @@ class Card(ABC):
         except TypeError as e:
             raise TypeError(e)
 
-    def get_card_info(self) -> dict:
+    def get_card_info(self) -> Dict[str, Union[str, int]]:
         """Get the information of the Card
 
         Returns:

@@ -27,17 +27,18 @@ class ArtifactCard(Card):
         self.durability: int = durability
         self.effect: str = effect
 
-    def play(self, game_state: dict) -> dict:
-        """Play an Artifact
+    def play(self,
+             game_state: Dict[str, Union[int, str]]) -> Dict[str,
+                                                             Union[str,
+                                                                   int]]:
+        """Play an artifact and apply its mana cost.
 
         Args:
-            game_state (dict): the actual state of the game
-
-        Raises:
-            TypeError: if can't access to value
+            game_state (Dict[str, Union[int, str]]): Mutable game state
+            containing 'mana'.
 
         Returns:
-            dict: a dictionary of the play state
+            Dict[str, Union[str, int]]: Summary of the play action.
         """
 
         try:
@@ -51,19 +52,10 @@ class ArtifactCard(Card):
         except TypeError as e:
             raise (e)
 
-    def activate_ability(self) -> dict:
-        """Activate the ability of the artifact.
+    def activate_ability(self) -> Dict[str, Union[str, int]]:
+        """Activate the ability described in the effect string.
 
-        Parses the effect string (formatted as 'duration:effect') and
-        returns activation information.
-
-        Raises:
-            IndexError: If the effect string is not properly formatted
-            with ':'.
-
-        Returns:
-            dict: Activation information containing card name, effect
-            description, and duration.
+        Effect should be formatted as 'duration:effect'; returns parsed data.
         """
 
         try:

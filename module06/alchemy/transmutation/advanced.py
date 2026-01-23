@@ -1,3 +1,8 @@
+"""Advanced transmutation helpers (philosopher's stone, elixirs)."""
+
+__all__: list[str] = ["philosophers_stone", "elixir_of_life"]
+
+
 def philosophers_stone() -> str:
     """Create a philosopher's stone using transmutation and potions.
 

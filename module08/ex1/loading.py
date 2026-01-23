@@ -6,7 +6,7 @@ step and saves a small plot to disk.
 """
 
 import sys
-from typing import Any
+from typing import Sequence
 
 
 def main() -> None:
@@ -20,7 +20,8 @@ def main() -> None:
         None
     """
     print("LOADING STATUS: Loading programs...\n")
-    print("Env path: " + sys.executable, end="\n\n")
+    python_exec: str = sys.executable
+    print("Env path: " + python_exec, end="\n\n")
     print("Checking dependencies:")
     try:
         import numpy
@@ -41,8 +42,8 @@ def main() -> None:
 
     print("\nAnalyzing Matrix data...")
     print("Processing 1000 data points..")
-    x_points: Any = numpy.array([10, 20, 20, 50])
-    y_points: Any = numpy.array([3, 10, 5, 4])
+    x_points: Sequence[int] = numpy.array([10, 20, 20, 50])
+    y_points: Sequence[int] = numpy.array([3, 10, 5, 4])
 
     print("Generating visualization...\n")
 

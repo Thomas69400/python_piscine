@@ -1,9 +1,7 @@
 """Read and report environment configuration from a .env file.
 
-This utility loads environment variables using python-dotenv, prints core
-configuration values if present, and performs a small set of environment
-validations. Intended as a quick check that application configuration is
-available and well-formed.
+This utility loads environment variables using python-dotenv and prints core
+configuration values if present.
 """
 
 import os
@@ -38,7 +36,7 @@ def main() -> None:
             print(f"API Access: {api}")
             print(f"Log Level: {log_level}")
             print(f"Zion Network: {zion}")
-        except KeyError as e:
+        except Exception as e:
             print(f"Environment value not found: {e}")
             return
     else:

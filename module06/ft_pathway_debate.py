@@ -1,3 +1,10 @@
+"""Demonstrate different import styles: absolute, relative and package-level.
+
+This script attempts to import and call functions from the alchemy.
+transmutation package using different import approaches.
+"""
+
+
 def absolute() -> None:
     """Test absolute import method."""
     from alchemy.transmutation.basic import lead_to_gold, stone_to_gem

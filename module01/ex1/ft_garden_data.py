@@ -1,17 +1,16 @@
 class Plant:
-    """Define all information about a plant"""
+    """Simple Plant data holder for registry."""
 
     def __init__(self, name: str, height: int, age: int) -> None:
-        """Create a plant and define its attributes attributes"""
-        self.name = name
-        self.height = height
-        self.age = age
+        """Initialize Plant with name, height (cm) and age (days)."""
+        self.name: str = name
+        self.height: int = height
+        self.age: int = age
 
 
 if __name__ == "__main__":
     """Print information about plants"""
-
-    plants = [
+    plants: list[Plant] = [
         Plant("Rose", 25, 30),
         Plant("Tulip", 20, 25),
         Plant("Jonquil", 22, 20),

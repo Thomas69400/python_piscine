@@ -1,3 +1,6 @@
+"""Demonstrate late imports to avoid circular dependencies in the grimoire."""
+
+
 def ingredient() -> None:
     """Test the validate_ingredients function."""
     from alchemy.grimoire.validator import validate_ingredients

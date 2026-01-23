@@ -1,15 +1,15 @@
 class Plant:
-    """Define all information about a plant"""
+    """Basic plant with name, height (cm) and age (days)."""
 
     def __init__(self, name: str, height: int, age: int) -> None:
-        """Create a plant and define its attributes"""
+        """Initialize Plant attributes."""
 
-        self.name = name
-        self.height = height
-        self.age = age
+        self.name: str = name
+        self.height: int = height
+        self.age: int = age
 
     def get_info(self) -> None:
-        """Display informations about the plant"""
+        """Print information about the plant"""
 
         print(
             f"{self.name} ({type(self).__name__}): "
@@ -20,17 +20,17 @@ class Plant:
 
 
 class Flower(Plant):
-    """Flower child of class Plant, get a color and can bloom"""
+    """A Plant that has a color and can bloom once."""
 
     def __init__(self, name: str, height: int, age: int, color: str) -> None:
-        """Create a flower and define her attributes with color"""
+        """Initialize Flower with color and bloom state"""
 
         super().__init__(name, height, age)
-        self.color = color
-        self.bloomed = 0
+        self.color: str = color
+        self.bloomed: int = 0
 
     def bloom(self) -> None:
-        """If not bloom then bloom"""
+        """Trigger bloom if not already bloomed"""
 
         if self.bloomed == 0:
             print(f"{self.name} is blooming beautifully!")
@@ -40,33 +40,32 @@ class Flower(Plant):
 
 
 class Tree(Plant):
-    """Tree child of class Plant, get a trunk_diameter and can make shade"""
+    """A Plant that has a trunk diameter and can compute shade area."""
 
     def __init__(self, name: str, height: int, age: int,
                  trunk_diameter: int) -> None:
-        """Create a tree and define his attributes with trunk_diameter"""
+        """Initialize Tree with trunk diameter in cm."""
 
         super().__init__(name, height, age)
-        self.trunk_diameter = trunk_diameter
+        self.trunk_diameter: int = trunk_diameter
 
     def produce_shade(self) -> None:
-        """Display information about the size of shade created by the tree"""
+        """Print the approximate shade area produced by the tree"""
 
         shade = self.height // self.trunk_diameter
         print(f"{self.name} provides {shade} square meters of shade")
 
 
 class Vegetable(Plant):
-    """Vegetable child of class Plant, get a harvest season and a nutritional
-        value"""
+    """A Plant with harvest season and nutritional value metadata."""
 
     def __init__(self, name: str, height: int, age: int, harvest_season: str,
                  nutritional_value: str) -> None:
-        """Create a plant and define her attributes"""
+        """Initialize Vegetable with harvest season and nutrition info"""
 
         super().__init__(name, height, age)
-        self.harvest_season = harvest_season
-        self.nutritional_value = nutritional_value
+        self.harvest_season: str = harvest_season
+        self.nutritional_value: str = nutritional_value
 
 
 if __name__ == "__main__":

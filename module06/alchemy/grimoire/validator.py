@@ -1,3 +1,11 @@
+"""Validator utilities for grimoire ingredients.
+
+This module exposes helpers to validate ingredient strings used by spells.
+"""
+
+__all__: list[str] = ["validate_ingredients"]
+
+
 def validate_ingredients(ingredients: str) -> str:
     """Validate if ingredients contain allowed elements.
 

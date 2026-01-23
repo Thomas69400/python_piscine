@@ -1,11 +1,14 @@
-def water_plants(plant_list):
-    """Print all the plant getting water
+from typing import List, Optional
+
+
+def water_plants(plant_list: List[Optional[str]]) -> None:
+    """Open the watering system and water each plant; always perform cleanup.
 
     Args:
-        plant_list (array): an array containing plant
-
+        plant_list (List[Optional[str]]): a list of plant names, items may
+        be None
     Raises:
-        Exception: error message when bad name
+        Exception: raised when a plant name is invalid (None or empty)
     """
 
     print("Opening watering system")
@@ -19,12 +22,8 @@ def water_plants(plant_list):
         print("Closing watering system (cleanup)")
 
 
-def test_watering_system():
-    """Test all errors for water_plants()
-
-    Args:
-        plant_list (array): an array containing plant
-    """
+def test_watering_system() -> None:
+    """Run example scenarios demonstrating the watering system behavior."""
 
     print("\nTesting normal watering...")
     try:

@@ -1,15 +1,34 @@
+"""Classes modeling plants, gardens and managers with simple reporting
+helpers."""
+from typing import List, Dict
+
+
 class Plant:
-    """Define all information about a plant"""
+    """Represent a generic plant with a name, height (cm) and growth counter.
+
+    Attributes:
+        name (str): The plant's name.
+        __height (int): Current height in cm.
+        __growth (int): Cumulative growth in cm since creation.
+    """
 
     def __init__(self, name: str, height: int) -> None:
-        """Create a plant and define her attributes"""
+        """Initialize a Plant.
 
-        self.name = name
-        self.__height = height
-        self.__growth = 0
+        Args:
+            name: Plant name.
+            height: Initial height in cm.
+        """
+        self.name: str = name
+        self.__height: int = height
+        self.__growth: int = 0
 
     def set_height(self, new_height: int) -> None:
-        """Set the height of the plant can't be negative"""
+        """Set the plant height if non-negative.
+
+        Args:
+            new_height: New height in cm. Negative values are rejected.
+        """
 
         if new_height < 0:
             print(
@@ -20,48 +39,52 @@ class Plant:
         self.__height = new_height
 
     def get_height(self) -> int:
-        """Return the height of the plant"""
+        """Return the plant height in cm."""
 
         return self.__height
 
     def get_growth(self) -> int:
-        """Return the growth of the plant"""
+        """Return cumulative growth in cm."""
 
         return self.__growth
 
     def grow(self) -> None:
-        """Make a plant grow (+1 to height and growth)"""
+        """Increase height and growth by 1 cm and print a short message."""
 
         print(f"{self.name} grew 1cm")
         self.__height += 1
         self.__growth += 1
 
     def plant_type(self) -> str:
-        """Return the type of plant"""
+        """Return the type label for the plant."""
 
         return "plant"
 
     def validate_height(self) -> bool:
+        """Return True if height is non-negative."""
+
         if self.get_height() < 0:
             return False
         return True
 
     def get_info(self) -> str:
+        """Return a short printable description of the plant."""
+
         return f"- {self.name}: {self.get_height()}cm"
 
 
 class FloweringPlant(Plant):
-    """FloweringPlant child of Plant. It has color and blooming parameters"""
+    """A Plant that has flower color and blooming state."""
 
     def __init__(self, name: str, height: int, color: str,
                  blooming: str) -> None:
-        """Initialize a FloweringPlant
+        """Initialize a FloweringPlant.
 
         Args:
-            name (str): name of plant
-            height (int): height of plant
-            color (str): color of plant
-            blooming (str): if flower has bloom
+            name: Plant name.
+            height: Initial height in cm.
+            color: Flower color.
+            blooming: Blooming state description.
         """
 
         super().__init__(name, height)
@@ -69,21 +92,23 @@ class FloweringPlant(Plant):
         self.color = color
 
     def plant_type(self) -> str:
-        """Return the type of the plant"""
+        """Return 'flowering' as the type label."""
 
         return "flowering"
 
     def get_info(self) -> str:
+        """Return detailed info including color and blooming."""
+
         return f"- {self.name}: {self.get_height()}cm, " + \
             f"{self.color} flowers ({self.blooming})"
 
 
 class PrizeFlower(FloweringPlant):
-    """PrizeFlower child of FloweringPlant. It has prize parameters"""
+    """A FloweringPlant that carries a prize point value."""
 
     def __init__(self, name: str, height: int, color: str, blooming: str,
                  prize: int) -> None:
-        """Initialize a PrizeFlower
+        """Initialize a PrizeFlower.
 
         Args:
             name (str): name of plant
@@ -97,76 +122,69 @@ class PrizeFlower(FloweringPlant):
         self.prize = prize
 
     def plant_type(self) -> str:
-        """Get type of plant
-
-        Returns:
-            str: the type of the plant
-        """
+        """Return 'prize' as the type label."""
 
         return "prize"
 
     def get_info(self) -> str:
+        """Return detailed info including prize points."""
+
         return f"- {self.name}: {self.get_height()}cm, " + \
             f"{self.color} flowers ({self.blooming}), " + \
             f"Prize points: {self.prize}"
 
 
 class Garden:
-    """class Garden. It has plants"""
+    """Container for Plant objects."""
 
     def __init__(self) -> None:
-        """Initialize a Garden"""
+        """Create an empty garden."""
 
-        self.plants = []
+        self.plants: List[Plant] = []
 
     def add_plant(self, plant: Plant) -> None:
-        """Add a plant to the garden
-
-        Args:
-            plant (Plant): A plant
-        """
+        """Add a Plant instance to the garden."""
 
         self.plants.append(plant)
 
     @classmethod
-    def create_garden(cls):
-        """Create an instance of Garden
+    def create_garden(cls) -> "Garden":
+        """Return a new Garden instance."""
 
-        Returns:
-            Garden: a garden
-        """
         return cls()
 
-    def get_plants(self):
-        """Return the plants of the garden
+    def get_plants(self) -> List[Plant]:
+        """Return the list of plants in the garden."""
 
-        Returns:
-            Array: Array of plants
-        """
         return self.plants
 
 
 class GardenManager:
-    """Make a manager of gardens"""
-    total_garden = 0
+    """Manage multiple gardens and report statistics.
+
+    Attributes:
+        name (str): Manager name.
+        gardens (List[Garden]): Gardens managed by this manager.
+        total_garden (int): Class-level counter of total gardens added.
+    """
+    total_garden: int = 0
 
     def __init__(self, name: str) -> None:
-        """Initialize a GardenManager
+        """Initialize a GardenManager with a name."""
 
-        Args:
-            name (str): the name of the manager
-        """
-        self.name = name
-        self.gardens = []
+        self.name: str = name
+        self.gardens: List[Garden] = []
 
     class GardenStats:
-        """Display information about a garden"""
+        """Collection of static helpers to display garden statistics."""
 
         @staticmethod
         def show_types(garden: Garden) -> str:
-            reg = 0
-            flo = 0
-            pri = 0
+            """Return a summary string of plant types counts in the garden."""
+
+            reg: int = 0
+            flo: int = 0
+            pri: int = 0
             for p in garden.get_plants():
                 if p.plant_type() == "prize":
                     pri += 1
@@ -179,15 +197,27 @@ class GardenManager:
 
         @staticmethod
         def show_stats(garden: Garden) -> str:
-            growth = 0
+            """Return a summary string containing number of plants and total
+            growth."""
+
+            growth: int = 0
             for p in garden.get_plants():
                 growth += p.get_growth()
             return f"\nPlants added: {len(garden.get_plants())}, " + \
                 f"Total growth: {growth}cm"
 
         @staticmethod
-        def get_garden_score(garden_managers) -> str:
-            scores = {}
+        def get_garden_score(garden_managers: List["GardenManager"]) -> str:
+            """Compute prize-based scores for each manager.
+
+            Args:
+                garden_managers: List of GardenManager instances to score.
+
+            Returns:
+                A formatted string listing each manager and their score.
+            """
+
+            scores: Dict[str, int] = {}
             for manager in garden_managers:
                 scores.update({manager.name: 0})
             for manager in garden_managers:
@@ -195,14 +225,17 @@ class GardenManager:
                     for plant in garden.get_plants():
                         if isinstance(plant, PrizeFlower):
                             scores[manager.name] += plant.prize
-            msg = "Garden scores - "
+            msg: str = "Garden scores - "
             for score in scores:
                 msg += f"{score}: {scores[score]}, "
             return msg.rstrip(", ")
 
         @classmethod
         def show_garden(cls, name: str,
-                        garden: Garden, garden_managers) -> None:
+                        garden: Garden,
+                        garden_managers: List["GardenManager"]) -> None:
+            """Print a full garden report for a manager."""
+
             print(f"=== {name}'s Garden Report ===")
             print("Plants in garden:")
 
@@ -217,50 +250,31 @@ class GardenManager:
             print(f"Total gardens managed: {GardenManager.total_garden}")
 
     @classmethod
-    def create_garden_network(cls):
-        """Create a GardenManager
-
-        Returns:
-            GardenManager: An instance of a GardenManager
-        """
+    def create_garden_network(cls) -> "GardenManager":
+        """Create and return a GardenManager placeholder for building a
+        network."""
 
         return cls("")
 
-    def get_gardens(self) -> None:
-        """_summary_
-
-        Returns:
-            Array: Array of gardens
-        """
+    def get_gardens(self) -> List[Garden]:
+        """Return gardens managed by this manager."""
 
         return self.gardens
 
     def add_garden(self, garden: Garden) -> None:
-        """Add a Garden to a GardenManager
+        """Add a Garden to this manager and increment global counter."""
 
-        Args:
-            garden (Garden): A Garden
-        """
         GardenManager.total_garden += 1
         self.gardens.append(garden)
 
     def add_plant_to_garden(self, garden_index: int, plant: Plant) -> None:
-        """Add a Plant to a given Garden
-
-        Args:
-            garden_index (int): the index of the garden
-            plant (Plant): A Plant
-        """
+        """Add a Plant to a garden referenced by index."""
 
         print(f"Added {plant.name} to {self.name}'s garden")
         self.gardens[garden_index].add_plant(plant)
 
     def grow(self, garden_index: int) -> None:
-        """Make all Plant from a Garden grow()
-
-        Args:
-            garden_index (int): the index of the garden
-        """
+        """Invoke grow() on every plant in the specified garden."""
 
         print(f"{self.name} is helping all plants grow...")
         for p in self.gardens[garden_index].get_plants():

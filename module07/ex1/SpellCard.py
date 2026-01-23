@@ -1,5 +1,5 @@
 from ex0.Card import Card
-from typing import Dict, Union
+from typing import Dict, Union, List
 
 
 class SpellCard(Card):
@@ -26,17 +26,18 @@ class SpellCard(Card):
         super().__init__(name, cost, rarity)
         self.effect_type: str = effect_type
 
-    def play(self, game_state: dict) -> dict:
-        """Play a spell
+    def play(self,
+             game_state: Dict[str, Union[int, str]]) -> Dict[str,
+                                                             Union[str,
+                                                                   int]]:
+        """Play a spell and deduct mana from the game state.
 
         Args:
-            game_state (dict): the actual state of the game
-
-        Raises:
-            TypeError: if can't access to value
+            game_state (Dict[str, Union[int, str]]): Mutable game state
+            containing 'mana'.
 
         Returns:
-            dict: a dictionary of the play state
+            Dict[str, Union[str, int]]: Summary of the play.
         """
 
         try:
@@ -50,23 +51,19 @@ class SpellCard(Card):
         except TypeError as e:
             raise (e)
 
-    def resolve_effect(self, targets: list[Card]) -> dict:
-        """Resolve the effect of the spell on target cards.
+    def resolve_effect(self, targets: List[Card]) -> Dict[str,
+                                                          Union[str, int]]:
+        """Resolve the effect of this spell against the given targets.
 
-        Extracts numeric values from the effect_type string and applies
-        the appropriate effect (damage, heal, buff, debuff) to each target.
+        Extracts a numeric value from the effect_type string and applies
+        damage/heal/buff/debuff accordingly.
 
         Args:
-            targets (list[Card]): A list of Card objects to apply the effect
-            to.
-
-        Raises:
-            IndexError: If no numeric value is found in effect_type.
-            TypeError: If unable to access target attributes.
+            targets (List[Card]): Targets to apply the effect to.
 
         Returns:
-            dict: Information about the spell effect including card name,
-                  targets, value, and effect type.
+            Dict[str, Union[str, int]]: Summary including card, targets,
+            value and effect kind.
         """
 
         try:

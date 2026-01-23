@@ -18,3 +18,23 @@ from ex3.GameStrategy import GameStrategy
 from ex4.Rankable import Rankable
 from ex4.TournamentCard import TournamentCard
 from ex4.TournamentPlatform import TournamentPlatform
+
+
+__all__ = [
+    'Card',
+    'CreatureCard',
+    'SpellCard',
+    'ArtifactCard',
+    'Deck',
+    'Combatable',
+    'EliteCard',
+    'Magical',
+    'CardFactory',
+    'GameEngine',
+    'FantasyCardFactory',
+    'AggressiveStrategy',
+    'GameStrategy',
+    'Rankable',
+    'TournamentCard',
+    'TournamentPlatform',
+]

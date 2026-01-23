@@ -4,8 +4,8 @@ This module defines ContactType and AlienContact models used to validate
 incoming contact reports, and a small demonstration that constructs valid
 and invalid examples to show validation behavior.
 """
-from pydantic import BaseModel, model_validator, \
-    field_validator, ValidationError
+from pydantic import (BaseModel, model_validator,
+                      field_validator, ValidationError)
 from datetime import datetime
 from typing_extensions import Self
 from typing import Optional, Dict, Any
@@ -25,7 +25,7 @@ class AlienContact(BaseModel):
 
     Attributes:
         contact_id: Unique contact identifier, must start with 'AC'
-        and be 5-15 chars.
+            and be 5-15 chars.
         timestamp: Datetime of the event.
         location: Human-readable location (3-100 chars).
         contact_type: ContactType instance describing modalities.
@@ -108,7 +108,8 @@ class AlienContact(BaseModel):
     @model_validator(mode='after')
     def validate_telepathic(self) -> Self:
         """Ensure telepathic contact has at least three witnesses."""
-        if (self.contact_type == 4 and self.witness_count < 3):
+        if (self.contact_type == ContactType.TELEPATHIC
+                and self.witness_count < 3):
             raise ValueError(
                 'telepathic contacts must have at least three witnesses')
         return self

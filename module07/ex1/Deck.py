@@ -2,7 +2,7 @@ from ex0.Card import Card
 from ex0.CreatureCard import CreatureCard
 from ex1.SpellCard import SpellCard
 from ex1.ArtifactCard import ArtifactCard
-from typing import List
+from typing import List, Dict, Union
 from random import shuffle
 
 
@@ -77,18 +77,12 @@ class Deck:
         except IndexError as e:
             raise IndexError(e)
 
-    def get_deck_stats(self) -> dict:
+    def get_deck_stats(self) -> Dict[str, Union[int, float]]:
         """Get detailed statistics about the deck composition.
 
-        Calculates the total number of cards, number of each card type,
-        and the average mana cost of cards in the deck.
-
-        Raises:
-            ZeroDivisionError: If the deck is empty (handled internally).
-
         Returns:
-            dict: A dictionary containing total_cards, creatures, spells,
-                  artifacts, and avg_cost (float).
+            Dict[str, Union[int, float]]: total_cards, creatures, spells,
+            artifacts, avg_cost
         """
 
         try:

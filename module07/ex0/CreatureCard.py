@@ -30,17 +30,18 @@ class CreatureCard(Card):
         self.attack: int = attack
         self.health: int = health
 
-    def play(self, game_state: dict) -> dict:
-        """Summon a creature to the battlefield
+    def play(self,
+             game_state: Dict[str, Union[int, str]]) -> Dict[str,
+                                                             Union[str,
+                                                                   int]]:
+        """Summon this creature to the battlefield.
 
         Args:
-            game_state (dict): the actual state of the game
-
-        Raises:
-            TypeError: if can't access to value
+            game_state (Dict[str, Union[int, str]]): The mutable game state
+            (must contain 'mana').
 
         Returns:
-            dict: a dictionary of the play state
+            Dict[str, Union[str, int]]: Summary of the play action.
         """
 
         try:
@@ -54,17 +55,19 @@ class CreatureCard(Card):
         except TypeError as e:
             raise TypeError(e)
 
-    def attack_target(self, target) -> dict:
-        """Reduce health of target by attack of self
+    def attack_target(self,
+                      target: "CreatureCard") -> Dict[str,
+                                                      Union[str,
+                                                            int,
+                                                            bool]]:
+        """Attack a target creature and return the attack summary.
 
         Args:
-            target (CreatureCard): The creature attacked
-
-        Raises:
-            TypeError: if can't access to value
+            target (CreatureCard): The creature that is attacked.
 
         Returns:
-            dict: the state of the attack
+            Dict[str, Union[str, int, bool]]: Summary including attacker,
+            target, damage and whether the attack would kill.
         """
 
         try:
@@ -78,17 +81,14 @@ class CreatureCard(Card):
         except TypeError as e:
             raise TypeError(e)
 
-    def is_damage_to_kill(self, target) -> bool:
-        """Check if the attack of self is enough to kill the target
+    def is_damage_to_kill(self, target: "CreatureCard") -> bool:
+        """Determine whether this creature's attack would kill the target.
 
         Args:
-            target (CreatureCard): the creature attacked
-
-        Raises:
-            TypeError: if can't access to value
+            target (CreatureCard): Creature being evaluated.
 
         Returns:
-            bool: True if it kill, false if it does not kill
+            bool: True if this attack is lethal, False otherwise.
         """
 
         try:
@@ -98,7 +98,7 @@ class CreatureCard(Card):
         except TypeError as e:
             raise TypeError(e)
 
-    def get_card_info(self) -> dict:
+    def get_card_info(self) -> Dict[str, Union[str, int]]:
         """Get the information of the Creature
 
         Returns:

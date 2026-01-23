@@ -1,18 +1,20 @@
+"""Simple coordinate parsing and Euclidean distance utilities for demos."""
 import sys
 import math
+from typing import Tuple
 
 
-def parse(to_parse: str) -> tuple:
-    """Transform an argument string to an int
+def parse(to_parse: str) -> Tuple[int, int, int]:
+    """Parse a comma-separated string into a 3D coordinate tuple of ints.
 
     Args:
-        to_parse (str): the argument to transform
+        to_parse (str): the argument to transform, e.g. "1,2,3"
 
     Raises:
-        ValueError: if cannot transform the argument in int
+        ValueError: if cannot transform the argument into three ints
 
     Returns:
-        tuple: the point created
+        Tuple[int, int, int]: the parsed (x, y, z) point
     """
 
     nbr = to_parse.split(",")
@@ -29,15 +31,16 @@ def parse(to_parse: str) -> tuple:
         return t
 
 
-def calculate_distance(t1: tuple, t2: tuple) -> float:
-    """Calculate the distance between 2 points
+def calculate_distance(t1: Tuple[int, int, int],
+                       t2: Tuple[int, int, int]) -> float:
+    """Calculate the Euclidean distance between two 3D points.
 
     Args:
-        t1 (tuple): coordinate of first point
-        t2 (tuple): coordinate of second point
+        t1 (Tuple[int,int,int]): coordinate of first point
+        t2 (Tuple[int,int,int]): coordinate of second point
 
     Returns:
-        float: the distance between the 2 points
+        float: the distance between the two points
     """
 
     return math.sqrt((t2[0]-t1[0])**2 + (t2[1]-t1[1])**2 + (t2[2]-t1[2])**2)
@@ -47,7 +50,7 @@ if __name__ == "__main__":
     """Execute program"""
 
     print("=== Game Coordinate System ===\n")
-    spawn = tuple((0, 0, 0))
+    spawn: Tuple[int, int, int] = tuple((0, 0, 0))
     if len(sys.argv) <= 1:
         print("No arguments found : try with something like <int1,int2,int3>")
     else:

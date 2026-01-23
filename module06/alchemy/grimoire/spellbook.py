@@ -1,3 +1,12 @@
+"""Spellbook helpers for recording spells with validated ingredients.
+
+Provides a single public helper to record a spell after validating
+its ingredients.
+"""
+
+__all__: list[str] = ["record_spell"]
+
+
 def record_spell(spell_name: str, ingredients: str) -> str:
     """Record a spell with validated ingredients.
 

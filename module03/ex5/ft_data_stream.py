@@ -1,11 +1,16 @@
-def processing(events: list):
-    """Generator to show events and retrieve essential events
+from typing import List, Dict, Any, Generator, Tuple, Iterator
+
+
+def processing(events: List[Dict[str, Any]]) -> Generator[Tuple[
+        int, int, int, int], None, None]:
+    """Generator to iterate events and yield essential counters.
 
     Args:
-        events (list): all the events to show
+        events (List[Dict[str, Any]]): list of event dictionaries
 
     Yields:
-        int: the essentials events
+        Tuple[int, int, int, int]: (event_index, high_count, treasure_count,
+        levelup_count)
     """
 
     high = 0
@@ -32,11 +37,11 @@ def processing(events: list):
         yield i, high, treasure, level
 
 
-def fibonacci():
-    """Generator to get the fibonacci suit
+def fibonacci() -> Generator[int, None, None]:
+    """Infinite generator of Fibonacci numbers.
 
     Yields:
-        int: the next number in fibonacci suit
+        int: next Fibonacci number
     """
 
     a, b = 0, 1
@@ -47,11 +52,11 @@ def fibonacci():
         yield b
 
 
-def prime():
-    """Generator to get all the prime number
+def prime() -> Generator[int, None, None]:
+    """Infinite generator of prime numbers.
 
     Yields:
-        nbr: the next prime number
+        int: next prime number
     """
 
     yield 2
@@ -71,7 +76,7 @@ if __name__ == "__main__":
     """Execute program"""
 
     print("=== Game Data Stream Processor ===\n")
-    events = [
+    events: List[Dict[str, Any]] = [
         {
             "id": 1,
             "player": "frank",
@@ -423,7 +428,7 @@ if __name__ == "__main__":
             "data": {"level": 7, "score_delta": -25, "zone": "pixel_zone_5"},
         },
     ]
-    pros = iter(processing(events))
+    pros: Iterator[Tuple[int, int, int, int]] = iter(processing(events))
     while True:
         try:
             n_event, high, treasure, lvl = next(pros)

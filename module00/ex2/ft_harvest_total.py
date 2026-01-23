@@ -1,8 +1,8 @@
-def ft_harvest_total():
-    """Ask user the day to wait to"""
+def ft_harvest_total() -> None:
+    """Prompt harvest amounts for three days and print the total harvest."""
 
-    wei = 0
-    i = 1
+    wei: int = 0
+    i: int = 1
     while i <= 3:
         print(f"Day {i} harvest: ", end="")
         wei += int(input())

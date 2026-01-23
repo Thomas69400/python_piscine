@@ -1,5 +1,16 @@
-def main():
-    """Execute program"""
+"""Vault security utilities demo.
+
+This module demonstrates reading a classified archive and writing new
+security protocols to disk while handling exceptions.
+"""
+
+
+def main() -> None:
+    """Execute vault access and preservation operations.
+
+    Reads a classified file and writes security protocols to a new file.
+    Returns None.
+    """
 
     print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===\n")
 
@@ -14,7 +25,7 @@ def main():
 
         with open("security_protocols.txt", "w") as file:
             print("\n\nSECURE PRESERVATION:")
-            security = "[CLASSIFIED] New security protocols archived"
+            security: str = "[CLASSIFIED] New security protocols archived"
             print(security)
             file.write(security)
 

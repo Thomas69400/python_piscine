@@ -1,44 +1,51 @@
-def dict_comp(data: dict) -> None:
-    """Test dict
+"""Examples of comprehension usage for simple game analytics demonstrations."""
+from typing import Any, Dict, List, Set
+
+
+def dict_comp(data: Dict[str, Any]) -> None:
+    """Build dictionaries summarizing player scores and achievements.
 
     Args:
-        data (dict): the data to sort
+        data (Dict[str, Any]): the game data dictionary
     """
 
     print("\n=== Dict Comprehension Examples ===")
-    player_score = {
+    player_score: Dict[str, int] = {
         player: data["players"][player]["total_score"]
         for player in data["players"]}
-    scores = {"high": len(list(session for session in data["sessions"]
-              if session["score"] >= 2500))}
+    scores: Dict[str, int] = {"high": len(list(session
+                                               for session
+                                               in data["sessions"]
+                                               if session["score"] >= 2500))}
     scores.update({"medium": len(list(session
                                       for session in data["sessions"]
                    if session["score"] >= 1500 and session["score"] < 2500))})
     scores.update({"low": len(list(session
                    for session in data["sessions"]
                    if session["score"] < 1500))})
-    achievements = {player: data["players"][player]["achievements_count"]
-                    for player in data["players"]}
+    achievements: Dict[str, int] = {
+        player: data["players"][player]["achievements_count"]
+        for player in data["players"]}
     print(f"Player scores: {player_score}")
     print(f"Scores categories: {scores}")
     print(f"Achievement counts: {achievements}")
 
 
-def list_comp(data: dict) -> None:
-    """Test lists
+def list_comp(data: Dict[str, Any]) -> None:
+    """Show list comprehension examples for sessions and players.
 
     Args:
-        data (dict): the data to sort
+        data (Dict[str, Any]): the game data dictionary
     """
 
     print("\n=== List Comprehension Examples ===")
-    high = [player for player in data["players"]
-            if data["players"][player]["total_score"] > 2000]
-    bob_sessions_time = [session["duration_minutes"]
-                         for session in data["sessions"]
-                         if session["player"] == "bob"]
-    comp_games = [session["player"] for session in data["sessions"]
-                  if session["mode"] == "competitive"]
+    high: List[str] = [player for player in data["players"]
+                       if data["players"][player]["total_score"] > 2000]
+    bob_sessions_time: List[int] = [session["duration_minutes"]
+                                    for session in data["sessions"]
+                                    if session["player"] == "bob"]
+    comp_games: List[str] = [session["player"] for session in data["sessions"]
+                             if session["mode"] == "competitive"]
     print(f"High scorers (>2000): {high}")
     print(f"Bob' sessions time: {bob_sessions_time}")
     print(f"Bob's max session {max(bob_sessions_time)} minutes" +
@@ -47,38 +54,42 @@ def list_comp(data: dict) -> None:
     print(f"All competitive games: {comp_games}")
 
 
-def set_comp(data: dict) -> None:
-    """Test set
+def set_comp(data: Dict[str, Any]) -> None:
+    """Show set comprehension examples for unique values.
 
     Args:
-        data (dict): the data to sort
+        data (Dict[str, Any]): the game data dictionary
     """
 
     print("\n=== Set Comprehension Examples ===")
-    unique_play = {player for player in data["players"]}
-    unique_achievement = {
+    unique_play: Set[str] = {player for player in data["players"]}
+    unique_achievement: Set[str] = {
         achievement for achievement in data["achievements"]}
+    unique_session_score: Set[int] = {
+        session["score"] for session in data["sessions"]}
     print(f"Unique players: {unique_play}")
     print(f"Unique achievements: {unique_achievement}")
+    print(f"Unique session score: {unique_session_score}")
 
 
-def combine(data: dict) -> None:
-    """Test for combine data (list set tuples dict)
+def combine(data: Dict[str, Any]) -> None:
+    """Combine different summary metrics into a final analysis.
 
     Args:
-        data (dict): the data to sort
+        data (Dict[str, Any]): the game data dictionary
     """
 
     print("\n=== Combined Analysis ===")
-    total = len({player for player in data["players"]})
-    unique = len({achievement for achievement in data["achievements"]})
-    scores = [score["score"] for score in data["sessions"]]
-    average = sum(scores)/len(scores)
-    scores_player = [data["players"][player]["total_score"]
-                     for player in data["players"]]
-    top = {player: data["players"][player]
-           for player in data["players"]
-           if data["players"][player]["total_score"] == max(scores_player)}
+    total: int = len({player for player in data["players"]})
+    unique: int = len({achievement for achievement in data["achievements"]})
+    scores: List[int] = [score["score"] for score in data["sessions"]]
+    average: float = sum(scores)/len(scores)
+    scores_player: List[int] = [data["players"][player]["total_score"]
+                                for player in data["players"]]
+    top: Dict[str, Dict[str, Any]] = {
+        player: data["players"][player]
+        for player in data["players"]
+        if data["players"][player]["total_score"] == max(scores_player)}
     print(f"Total players: {total}")
     print(f"Total unique achievement: {unique}")
     print(f"Average score by session: {'%.2f' % average}")
@@ -87,10 +98,9 @@ def combine(data: dict) -> None:
               f"{top[p]['achievements_count']} achievements)")
 
 
-def main():
+def main() -> None:
     """Execute program"""
-
-    data = {
+    data: Dict[str, Any] = {
         "players": {
             "alice": {
                 "level": 41,
@@ -153,14 +163,14 @@ def main():
             {
                 "player": "diana",
                 "duration_minutes": 17,
-                "score": 1570,
+                "score": 666,
                 "mode": "competitive",
                 "completed": False,
             },
             {
                 "player": "alice",
                 "duration_minutes": 98,
-                "score": 1981,
+                "score": 666,
                 "mode": "ranked",
                 "completed": True,
             },

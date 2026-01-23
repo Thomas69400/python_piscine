@@ -1,3 +1,6 @@
+"""Examples of different import patterns for the alchemy package."""
+
+
 def method_1() -> None:
     """Test full module import method."""
     try:

@@ -1,3 +1,9 @@
+"""Element creation helpers for the four classical elements."""
+
+__all__: list[str] = ["create_fire",
+                      "create_water", "create_earth", "create_air"]
+
+
 def create_fire() -> str:
     """Create a fire element.
 

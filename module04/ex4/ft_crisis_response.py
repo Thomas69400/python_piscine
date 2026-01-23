@@ -1,11 +1,21 @@
-def main():
-    """Execute program"""
+"""Simple demonstration script for file-access error handling scenarios.
 
-    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===\n")
+This module simulates attempts to access various archive files and prints
+status messages to demonstrate handling of FileNotFoundError, PermissionError,
+and generic exceptions.
+"""
 
-    name_lost = "lost_archive.txt"
-    name_class = "classified_data.txt"
-    name_stan = "standard_archive.txt"
+
+def main() -> None:
+    """Simulate crisis archive accesses and print status messages.
+
+    Attempts to open three different archive files demonstrating different
+    exception handling branches. No return value.
+    """
+
+    name_lost: str = "lost_archive.txt"
+    name_class: str = "classified_data.txt"
+    name_stan: str = "standard_archive.txt"
 
     try:
         print(f"CRISIS ALERT: Attempting access to '{name_lost}'...")
