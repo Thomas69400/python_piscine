@@ -6,7 +6,6 @@ step and saves a small plot to disk.
 """
 
 import sys
-from typing import Sequence
 
 
 def main() -> None:
@@ -24,13 +23,14 @@ def main() -> None:
     print("Env path: " + python_exec, end="\n\n")
     print("Checking dependencies:")
     try:
-        import numpy
+        import numpy as np
+        import numpy.typing as npt
         import pandas
         import matplotlib
         import matplotlib.pyplot as plt
         panda: str = pandas.__version__
         print(f"[OK] pandas ({panda}) - Data manipulation ready")
-        num: str = numpy.__version__
+        num: str = np.__version__
         print(f"[OK] numpy ({num}) - Numerical computing ready")
         mat: str = matplotlib.__version__
         print(f"[OK] matplotlib ({mat}) - Visualization ready")
@@ -42,8 +42,8 @@ def main() -> None:
 
     print("\nAnalyzing Matrix data...")
     print("Processing 1000 data points..")
-    x_points: Sequence[int] = numpy.array([10, 20, 20, 50])
-    y_points: Sequence[int] = numpy.array([3, 10, 5, 4])
+    x_points: npt.NDArray[np.int64] = np.array([10, 20, 20, 50])
+    y_points: npt.NDArray[np.int64] = np.array([3, 10, 5, 4])
 
     print("Generating visualization...\n")
 

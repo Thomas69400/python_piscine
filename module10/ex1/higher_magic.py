@@ -8,7 +8,7 @@ def fireball(target: str) -> str:
 
 def heal(target: str) -> str:
     """Return a string describing a heal applied to the target."""
-    return f"Heals hits {target}"
+    return f"Heals {target}"
 
 
 def lightning(damage: int) -> int:
@@ -54,7 +54,8 @@ def main() -> None:
 
     print("Testing spell combiner...")
     try:
-        combined: callable = spell_combiner(fireball, heal)
+        combined: Callable[[str], Tuple[Any, Any]
+                           ] = spell_combiner(fireball, heal)
         combined_spell: tuple = combined(test_targets[0])
         print(
             f"Combined spell result: {combined_spell[0]}, {combined_spell[1]}")
@@ -65,14 +66,15 @@ def main() -> None:
 
     print("\nTesting power amplifier...")
     try:
-        mega_fireball: callable = power_amplifier(lightning, 3)
+        mega_fireball: Callable[[int], int] = power_amplifier(lightning, 3)
         print(f"Original: {lightning(10)}, Amplified: {mega_fireball(10)}")
     except TypeError as e:
         print(f"Error power amplifier: {e}")
 
     print("\nTesting conditional caster...")
     try:
-        condition: callable = conditional_caster(ft_condition, heal)
+        condition: Callable[[str], Any] = conditional_caster(
+            ft_condition, heal)
         if callable(condition):
             print(condition(test_targets[0]))
         else:
@@ -82,7 +84,7 @@ def main() -> None:
 
     print("\nTesting spell sequence...")
     try:
-        spells: callable = spell_sequence([fireball, heal])
+        spells: Callable[[str], List[Any]] = spell_sequence([fireball, heal])
         print(spells(test_targets[1]))
     except TypeError as e:
         print(f"Error spell sequence: {e}")

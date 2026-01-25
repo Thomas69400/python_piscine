@@ -52,17 +52,17 @@ if __name__ == "__main__":
     except AttributeError:
         print("AttributeError - not exposed")
     try:
-        result: str = alchemy.created_earth()
+        result: str = alchemy.create_earth()
         print("alchemy.create_earth(): ", end="")
         print(result)
     except AttributeError:
-        print("AttributeError - not exposed")
+        print("alchemy.create_earth(): AttributeError - not exposed")
     try:
-        result: str = alchemy.created_air()
+        result: str = alchemy.create_air()
         print("alchemy.create_air(): ", end="")
         print(result)
     except AttributeError:
-        print("AttributeError - not exposed")
+        print("alchemy.create_air(): AttributeError - not exposed")
 
     print("\nPackage metadata: ")
     version: str = alchemy.__version__

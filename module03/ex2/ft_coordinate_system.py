@@ -17,18 +17,8 @@ def parse(to_parse: str) -> Tuple[int, int, int]:
         Tuple[int, int, int]: the parsed (x, y, z) point
     """
 
-    nbr = to_parse.split(",")
-    try:
-        t = tuple((int(nbr[0]), int(nbr[1]), int(nbr[2])))
-    except ValueError as e:
-        raise ValueError(f"Parsing invalid coordinates: \"{to_parse}\"\n" +
-                         f"Error parsing coordinates: {e}\n" +
-                         f"Error details - Type: {e.__class__.__name__}, " +
-                         f"Args: {e.args}")
-    else:
-        print(f"Parsing coordinates: \"{to_parse}\"")
-        print(f"Parsed position: {t}")
-        return t
+    parts = to_parse.split(",")
+    return (int(parts[0]), int(parts[1]), int(parts[2]))
 
 
 def calculate_distance(t1: Tuple[int, int, int],
@@ -46,22 +36,47 @@ def calculate_distance(t1: Tuple[int, int, int],
     return math.sqrt((t2[0]-t1[0])**2 + (t2[1]-t1[1])**2 + (t2[2]-t1[2])**2)
 
 
-if __name__ == "__main__":
-    """Execute program"""
-
+def main() -> None:
+    """Execute the coordinate system demonstration."""
     print("=== Game Coordinate System ===\n")
-    spawn: Tuple[int, int, int] = tuple((0, 0, 0))
-    if len(sys.argv) <= 1:
-        print("No arguments found : try with something like <int1,int2,int3>")
-    else:
+
+    origin: Tuple[int, int, int] = (0, 0, 0)
+
+    pos1: Tuple[int, int, int] = (10, 20, 5)
+    print(f"Position created: {pos1}")
+    dist1 = calculate_distance(origin, pos1)
+    print(f"Distance between {origin} and {pos1}: {dist1:.2f}")
+
+    if len(sys.argv) == 2:
+        print(f"\nParsing coordinates: \"{sys.argv[1]}\"")
         try:
-            t = parse(sys.argv[1])
+            pos2 = parse(sys.argv[1])
+            dist2 = calculate_distance(origin, pos2)
+            print(f"Distance between {origin} and {pos2}: {dist2}")
         except ValueError as e:
-            print(f"{e}")
-        else:
-            d = calculate_distance(spawn, t)
-            print(f"Distance between {spawn} and {t}: {d:.2f}")
-            print("\nUnpacking demonstration:")
-            (x, y, z) = t
-            print(f"Player at x={x}, y={y}, z={z}")
-            print(f"Coordinates: X={x}, Y={y}, Z={z}")
+            print(f"Error parsing coordinates: {e}")
+
+    print("\nParsing coordinates: \"3,4,0\"")
+    try:
+        pos2 = parse("3,4,0")
+        print(f"Parsed position: {pos2}")
+        dist2 = calculate_distance(origin, pos2)
+        print(f"Distance between {origin} and {pos2}: {dist2}")
+    except ValueError as e:
+        print(f"Error parsing coordinates: {e}")
+
+    print("\nParsing invalid coordinates: \"abc,def,ghi\"")
+    try:
+        parse("abc,def,ghi")
+    except ValueError as e:
+        print(f"Error parsing coordinates: {e}")
+        print(f"Error details - Type: {type(e).__name__}, Args: {e.args}")
+
+    print("\nUnpacking demonstration:")
+    x, y, z = pos2
+    print(f"Player at x={x}, y={y}, z={z}")
+    print(f"Coordinates: X={x}, Y={y}, Z={z}")
+
+
+if __name__ == "__main__":
+    main()

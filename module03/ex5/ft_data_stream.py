@@ -22,7 +22,7 @@ def processing(events: List[Dict[str, Any]]) -> Generator[Tuple[
         i += 1
         if i <= 3:
             print(
-                f"Event {i + 1}: {event['player']} "
+                f"Event {i}: {event['player']} "
                 + f"(level {event['data']['level']})"
                 + f" {event['event_type']}"
             )

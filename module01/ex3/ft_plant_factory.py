@@ -38,15 +38,14 @@ class PlantFactory:
             plants.append(Plant(name, height_cm, age_days))
         return plants
 
-    @staticmethod
-    def display_created_plants(plants: List[Plant]) -> None:
+    def display_created_plants(self, plants: List[Plant]) -> None:
         """Display all created plants and the total count."""
         print("=== Plant Factory Output ===")
         count: int = 0
         for plant in plants:
             print(f"Created: {plant.get_info()}")
             count += 1
-        print(f"Total plants created: {count}")
+        print(f"\nTotal plants created: {count}")
 
 
 if __name__ == "__main__":
@@ -61,8 +60,4 @@ if __name__ == "__main__":
     factory = PlantFactory()
     plants = factory.create_plants(plant_specs)
 
-    print("=== Plant Factory Output ===")
-    for plant in plants:
-        print(f"Created: {plant.get_info()}")
-    print()
-    print(f"Total plants created: {len(plants)}")
+    factory.display_created_plants(plants)

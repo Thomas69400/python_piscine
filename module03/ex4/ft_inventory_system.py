@@ -10,14 +10,20 @@ def main() -> None:
     """Execute the inventory analysis from command-line arguments."""
 
     if len(sys.argv) <= 1:
+        print("Usage: python3 ft_inventory_system.py item:count ...")
         return
 
     inventory: Dict[str, int] = dict()
     for i in range(1, len(sys.argv)):
-        data = sys.argv[i].split(":")
-        inventory.update({
-            data[0]: int(data[1])
-        })
+        try:
+            data = sys.argv[i].split(":")
+            inventory.update({
+                data[0]: int(data[1])
+            })
+        except ValueError:
+            print(f"Invalid format: {sys.argv[i]}")
+            return
+
     print("=== Inventory System Analysis ===")
     total_item: int = 0
     for item in inventory.values():
@@ -29,12 +35,18 @@ def main() -> None:
     sort: List[Tuple[str, int]] = sorted(
         inventory.items(), key=lambda x: x[1], reverse=True)
     for item in sort:
-        print(item[0] + ": " + str(item[1]) + " units" +
-              f" ({(item[1]/total_item * 100):.1f}%)")
+        unit_str = "unit" if item[1] == 1 else "units"
+        print(f"{item[0]}: {item[1]} {unit_str}"
+              + f" ({(item[1]/total_item * 100):.1f}%)")
 
     print("\n=== Inventory Statistics ===")
-    print(f"Most abundant: {sort[0][0]} ({sort[0][1]} units)")
-    print(f"Least abundant: {sort[-1][0]} ({sort[-1][1]} unit)")
+    most_abundant_unit_str = "unit" if sort[0][1] == 1 else "units"
+    least_abundant_unit_str = "unit" if sort[-1][1] == 1 else "units"
+    print(
+        f"Most abundant: {sort[0][0]} ({sort[0][1]} {most_abundant_unit_str})")
+    print(
+        f"Least abundant: {sort[-1][0]} ({sort[-1][1]} "
+        f"{least_abundant_unit_str})")
 
     print("\n=== Item Categories ===")
     moderate: Dict[str, int] = dict()

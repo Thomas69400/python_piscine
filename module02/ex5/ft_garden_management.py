@@ -95,7 +95,7 @@ class GardenManager:
             raise ValueError(
                 f"Sunlight hours {sunlight_hours} is too low (min 2)")
         if sunlight_hours > 12:
-            raise ValueError(f"Sunlight hours {sunlight_hours} is too high" +
+            raise ValueError(f"Sunlight hours {sunlight_hours} is too high " +
                              "(max 12)")
         return 1
 

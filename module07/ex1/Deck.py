@@ -70,12 +70,9 @@ class Deck:
             Card: The card drawn from the top of the deck.
         """
 
-        try:
-            drew = self.cards[0]
-            self.remove_card(drew.name)
-            return drew
-        except IndexError as e:
-            raise IndexError(e)
+        if not self.cards:
+            raise IndexError("Cannot draw from empty deck")
+        return self.cards.pop(0)
 
     def get_deck_stats(self) -> Dict[str, Union[int, float]]:
         """Get detailed statistics about the deck composition.
@@ -85,29 +82,21 @@ class Deck:
             artifacts, avg_cost
         """
 
-        try:
-            stat = {
-                "total_cards": len(self.cards),
-                "creatures": len([
-                    c for c
-                    in self.cards
-                    if isinstance(c, CreatureCard)
-                ]),
-                "spells": len([
-                    c for c
-                    in self.cards
-                    if isinstance(c, SpellCard)
-                ]),
-                "artifacts": len([
-                    c for c
-                    in self.cards
-                    if isinstance(c, ArtifactCard)
-                ]),
-                "avg_cost": float(int(sum([
-                    card.cost for card
-                    in self.cards])/len(self.cards)+0.9))
-            }
-        except ZeroDivisionError:
-            stat = {"total_cards": 0, "creatures": 0, "spells": 0,
+        if not self.cards:
+            return {"total_cards": 0, "creatures": 0, "spells": 0,
                     "artifacts": 0, "avg_cost": 0.0}
+
+        stat = {
+            "total_cards": len(self.cards),
+            "creatures": len([
+                c for c in self.cards if isinstance(c, CreatureCard)
+            ]),
+            "spells": len([
+                c for c in self.cards if isinstance(c, SpellCard)
+            ]),
+            "artifacts": len([
+                c for c in self.cards if isinstance(c, ArtifactCard)
+            ]),
+            "avg_cost": sum(card.cost for card in self.cards) / len(self.cards)
+        }
         return stat

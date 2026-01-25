@@ -14,10 +14,6 @@ class GameEngine:
         total_damage (int): Class-level total damage dealt.
         battlefield (List[Card]): Class-level battlefield list.
     """
-    turns: int = 0
-    card_played: int = 0
-    total_damage: int = 0
-    battlefield: List[Card] = []
 
     def __init__(self) -> None:
         """Initialize a new GameEngine instance with default resources."""
@@ -27,6 +23,10 @@ class GameEngine:
         self.hand: List[Card] = []
         self.mana: int = 20
         self.health: int = 30
+        self.turns: int = 0
+        self.card_played: int = 0
+        self.total_damage: int = 0
+        self.battlefield: List[Card] = []
 
     def configure_engine(self, factory: CardFactory,
                          strategy: GameStrategy) -> None:
@@ -48,7 +48,7 @@ class GameEngine:
         turn = self.strategy.execute_turn(self.hand, self.battlefield)
         self.card_played += len(turn["cards_played"])
         self.total_damage += turn["damage_dealt"]
-        GameEngine.turns += 1
+        self.turns += 1
         return turn
 
     def get_engine_status(self) -> Dict[str, Union[int, str]]:

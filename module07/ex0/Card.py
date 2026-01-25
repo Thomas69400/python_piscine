@@ -62,10 +62,11 @@ class Card(ABC):
         Returns:
             dict: information about the Card
         """
-        info = dict({
+        info: Dict[str, Union[str, int]] = dict({
             "name": self.name,
             "cost": self.cost,
-            "rarity": self.rarity
+            "rarity": self.rarity,
+            "type": self.get_type()
         })
         return info
 

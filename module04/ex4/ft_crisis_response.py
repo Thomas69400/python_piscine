@@ -12,6 +12,7 @@ def main() -> None:
     Attempts to open three different archive files demonstrating different
     exception handling branches. No return value.
     """
+    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===\n")
 
     name_lost: str = "lost_archive.txt"
     name_class: str = "classified_vault.txt"
@@ -42,15 +43,14 @@ def main() -> None:
     try:
         print(f"\nROUTINE ACCESS: Attempting access to '{name_stan}'...")
         with open(name_stan, "r") as file:
-            print("SUCCESS: Archive recovered - ``", end="")
-            for line in file:
-                print(line, end="\'\'")
+            print(f"SUCCESS: Archive recovered - ``{file.read()}``", end="")
             print("\nSTATUS: Normal operations resumed")
     except FileNotFoundError:
         print(f"RESPONSE: Archive {name_stan} not found")
         print("STATUS: Crisis handled, system stable")
     except Exception as e:
         print(f"Unexpected error: {e}")
+        print("STATUS: Crisis contained")
 
     print("\nAll crisis scenarios handled successfully. Archives secure.")
 

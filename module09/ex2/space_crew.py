@@ -29,7 +29,7 @@ class CrewMember(BaseModel):
         rank: Rank of the crew member (Rank enum).
         age: Age in years.
         specialization: Role or specialization on the mission.
-        years_of_experience: Years of professional experience.
+        years_experience: Years of professional experience.
         is_active: Whether the crew member is active and eligible for missions.
     """
     member_id: str
@@ -37,7 +37,7 @@ class CrewMember(BaseModel):
     rank: Rank
     age: int
     specialization: str
-    years_of_experience: int
+    years_experience: int
     is_active: bool = True
 
     @field_validator("member_id")
@@ -70,11 +70,11 @@ class CrewMember(BaseModel):
                              "characters long")
         return v
 
-    @field_validator("years_of_experience")
-    def validate_years_of_experience(cls: Type['CrewMember'], v: int) -> int:
-        """Validate years_of_experience is between 0 and 50."""
+    @field_validator("years_experience")
+    def validate_years_experience(cls: Type['CrewMember'], v: int) -> int:
+        """Validate years_experience is between 0 and 50."""
         if not 0 <= v <= 50:
-            raise ValueError("years_of_experience must be between 0 and 50")
+            raise ValueError("years_experience must be between 0 and 50")
         return v
 
 
@@ -89,7 +89,7 @@ class SpaceMission(BaseModel):
         duration_days: Mission duration in days.
         crew: List of CrewMember instances.
         mission_status: Current status of the mission.
-        budget_million: Budget in millions.
+        budget_millions: Budget in millions.
     """
     mission_id: str
     mission_name: str
@@ -98,7 +98,7 @@ class SpaceMission(BaseModel):
     duration_days: int
     crew: List[CrewMember]
     mission_status: str = "Planned"
-    budget_million: float
+    budget_millions: float
 
     @field_validator("mission_id")
     def validate_mission_id(cls: Type['SpaceMission'], v: str) -> str:
@@ -140,11 +140,11 @@ class SpaceMission(BaseModel):
                              "less than or equal to 12 CrewMembers")
         return v
 
-    @field_validator("budget_million")
-    def validate_budget_million(cls: Type['SpaceMission'], v: float) -> float:
-        """Validate budget_million is between 1 and 10000."""
+    @field_validator("budget_millions")
+    def validate_budget_millions(cls: Type['SpaceMission'], v: float) -> float:
+        """Validate budget_millions is between 1 and 10000."""
         if not 1 <= v <= 10000:
-            raise ValueError("budget_million must be between 1 and 10000")
+            raise ValueError("budget_millions must be between 1 and 10000")
         return v
 
     @model_validator(mode="after")
@@ -172,7 +172,7 @@ class SpaceMission(BaseModel):
         if self.duration_days > 365:
             experienced_members = [
                 member for member in self.crew
-                if member.years_of_experience >= 5
+                if member.years_experience >= 5
             ]
             if len(experienced_members)/len(self.crew) < 0.5:
                 raise ValueError("Long missions (>365 days) must have at " +
@@ -195,11 +195,12 @@ class SpaceMission(BaseModel):
         print(f"ID: {self.mission_id}")
         print(f"Destination: {self.destination}")
         print(f"Duration: {self.duration_days} days")
-        print(f"Budget: ${self.budget_million}M")
+        print(f"Budget: ${self.budget_millions}M")
         print(f"Crew size: {len(self.crew)}")
         print("Crew Members:")
         for member in self.crew:
-            print(f" - {member.name} - {member.specialization}")
+            print(f"  - {member.name} ({member.rank.name.lower()}) - "
+                  f"{member.specialization}")
         print("\n=========================================")
 
 
@@ -216,7 +217,7 @@ def main() -> None:
                 rank=Rank.CAPTAIN,
                 age=35,
                 specialization="Pilot",
-                years_of_experience=10,
+                years_experience=10,
             ),
             CrewMember(
                 member_id="CM002",
@@ -224,7 +225,7 @@ def main() -> None:
                 rank=Rank.LIEUTENANT,
                 age=29,
                 specialization="Engineer",
-                years_of_experience=6,
+                years_experience=6,
             ),
             CrewMember(
                 member_id="CM003",
@@ -232,7 +233,7 @@ def main() -> None:
                 rank=Rank.OFFICER,
                 age=32,
                 specialization="Scientist",
-                years_of_experience=4,
+                years_experience=4,
             ),
         ]
 
@@ -243,7 +244,7 @@ def main() -> None:
             launch_date=datetime(2030, 5, 14),
             duration_days=400,
             crew=crew,
-            budget_million=5000,
+            budget_millions=5000,
         )
 
         mission.print_mission_summary()
@@ -260,7 +261,7 @@ def main() -> None:
                 rank=Rank.CAPTAIN,
                 age=28,
                 specialization="Medic",
-                years_of_experience=2,
+                years_experience=2,
                 is_active=True,
             ),
         ]
@@ -272,7 +273,7 @@ def main() -> None:
             launch_date=datetime(2029, 8, 20),
             duration_days=30,
             crew=invalid_crew,
-            budget_million=2000.0,
+            budget_millions=2000.0,
         )
 
         invalid_mission.print_mission_summary()

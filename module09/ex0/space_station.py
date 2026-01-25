@@ -86,10 +86,10 @@ class SpaceStation(BaseModel):
         print("Valid station created:")
         print("ID:", self.station_id)
         print("Name:", self.name)
-        print("Crew:", self.crew_size)
-        print("Power:", self.power_level)
+        print(f"Crew: {self.crew_size} people")
+        print(f"Power: {self.power_level}%")
         print("Last Maintenance:", self.last_maintenance.isoformat())
-        print("Oxygen:", self.oxygen_level)
+        print(f"Oxygen: {self.oxygen_level}%")
         if self.is_operational:
             print("Status: Operational")
         else:

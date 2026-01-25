@@ -72,19 +72,14 @@ def retry_spell(max_attempts: int) -> Callable[[Callable[..., Any]],
         def wrapper(*args: Tuple[Any, ...],
                     **kwargs: Dict[str, Any]) -> Any:
             """Wrapper that retries the wrapped function on exception."""
-            if wrapper.attempts >= max_attempts:
-                return (f"Spell casting failed after {max_attempts} "
-                        "attempts")
-            try:
-                result = func(*args, **kwargs)
-                wrapper.attempts = 0
-                return result
-            except Exception:
-                wrapper.attempts += 1
-                print(
-                    "Spell failed, retrying... "
-                    f"(attempt {wrapper.attempts}/{max_attempts})")
-        wrapper.attempts = 0  # type: ignore[attr-defined]
+            for attempt in range(1, max_attempts + 1):
+                try:
+                    return func(*args, **kwargs)
+                except Exception:
+                    print(
+                        f"Spell failed, retrying... "
+                        f"(attempt {attempt}/{max_attempts})")
+            return f"Spell casting failed after {max_attempts} attempts"
         return wrapper
     return retry
 
@@ -105,15 +100,18 @@ class MageGuild:
     Attributes:
         name: The guild member name.
     """
+
     def __init__(self, name: str) -> None:
         self.name: str = name
 
     @staticmethod
     def validate_mage_name(name: str) -> bool:
         """Return True if name looks like a simple alphabetic mage name."""
-        length: int = len(name)
-        if length < 3 or (not name.isalpha() and name.isspace()):
+        if len(name) < 3:
             return False
+        for char in name:
+            if not (char.isalpha() or char.isspace()):
+                return False
         return True
 
     @power_validator(10)
@@ -147,16 +145,6 @@ def main() -> None:
         spell = lightning()
         if spell:
             print(spell)
-        spell = lightning()
-        if spell:
-            print(spell)
-        spell = lightning(False)
-        if spell:
-            print(spell)
-        for _ in range(4):
-            spell = lightning()
-            if spell:
-                print(spell)
     except TypeError as e:
         print(f"Error retry spell: {e}")
 

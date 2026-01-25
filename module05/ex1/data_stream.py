@@ -6,14 +6,19 @@ class DataStream(ABC):
     """Abstract base class representing a generic data stream.
 
     Subclasses must implement process_batch to handle a batch of data.
+
+    Attributes:
+        stats: Dictionary storing stream statistics.
+        s_id: Unique identifier for the stream.
+        s_type: Type classification of the stream.
     """
 
     def __init__(self, s_id: str, s_type: str) -> None:
-        """Initialize DataStream
+        """Initialize DataStream.
 
         Args:
-            s_id (str): the id of stream
-            s_type (str): the type of stream
+            s_id: The id of stream.
+            s_type: The type of stream.
         """
 
         super().__init__()
@@ -69,13 +74,18 @@ class SensorStream(DataStream):
 
     SensorStream parses key:value strings (e.g., "temp:22.5") and stores
     parsed numeric stats in self.stats.
+
+    Attributes:
+        stats: Dictionary storing parsed sensor readings.
+        s_id: Unique identifier for the stream.
+        s_type: Always set to "Environmental Data".
     """
 
     def __init__(self, s_id: str) -> None:
-        """Initialize a SensorStream
+        """Initialize a SensorStream.
 
         Args:
-            s_id (str): the id
+            s_id: The stream identifier.
         """
 
         super().__init__(s_id, "Environmental Data")
@@ -145,11 +155,11 @@ class SensorStream(DataStream):
         if criteria is not None:
             if criteria == "High-priority":
                 try:
-                    filtered: List[float] = [
+                    filtered: List[str] = [
                         data
                         for data
                         in data_batch
-                        if ("temp" or "humidity" in data)
+                        if ("temp" in data or "humidity" in data)
                         and float(data.split(":")[1]) > 50
                     ]
                     return filtered
@@ -163,13 +173,18 @@ class TransactionStream(DataStream):
 
     TransactionStream parses key:value strings (e.g., "buy:100") and stores
     integer values of operations in self.stats with enumerated keys.
+
+    Attributes:
+        stats: Dictionary storing parsed transaction data.
+        s_id: Unique identifier for the stream.
+        s_type: Always set to "Financial Data".
     """
 
     def __init__(self, s_id: str) -> None:
-        """Initialize a TransactionStream
+        """Initialize a TransactionStream.
 
         Args:
-            s_id (str): id of stream
+            s_id: The stream identifier.
         """
 
         super().__init__(s_id, "Financial Data")
@@ -264,13 +279,18 @@ class EventStream(DataStream):
 
     EventStream stores each event from the batch into self.stats using
     event_<n> keys and supports simple event-based reporting.
+
+    Attributes:
+        stats: Dictionary storing event data with enumerated keys.
+        s_id: Unique identifier for the stream.
+        s_type: Always set to "System Events".
     """
 
     def __init__(self, s_id: str) -> None:
-        """Initialize an EventStream
+        """Initialize an EventStream.
 
         Args:
-            s_id (str): id of stream
+            s_id: The stream identifier.
         """
 
         super().__init__(s_id, "System Events")
@@ -316,8 +336,9 @@ class EventStream(DataStream):
             in self.stats
             if self.stats[error] == "error"
         ])
+        error_str: str = "error" if n_error == 1 else "errors"
         return result + f"{ope} events, " + \
-            f"{n_error} error detected"
+            f"{n_error} {error_str} detected"
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:

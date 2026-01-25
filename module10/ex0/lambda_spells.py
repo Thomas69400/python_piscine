@@ -61,19 +61,26 @@ def main() -> None:
 
     print("Testing artifact sorter...")
     try:
-        print(artifact_sorter(artifacts))
+        sorted_artifacts: List[Dict[str, Any]] = artifact_sorter(artifacts)
+        print(f"{sorted_artifacts[0]['name']} "
+              f"({sorted_artifacts[0]['power']} power) "
+              f"comes before {sorted_artifacts[1]['name']} "
+              f"({sorted_artifacts[1]['power']} power)")
     except KeyError as e:
         print(f"Error artifact sorter : {e}")
 
     print("\nTesting power filter...")
     try:
-        print(power_filter(mages, 80))
+        power: List[Dict[str, Any]] = power_filter(mages, 80)
+        for p in power:
+            print(p, end="")
     except (KeyError, TypeError) as e:
         print(f"Error power filter : {e}")
 
-    print("\nTesting spell transformer...")
+    print("\n\nTesting spell transformer...")
     try:
-        print(spell_transformer(spells))
+        transformed: List[str] = spell_transformer(spells)
+        print(" ".join(transformed))
     except TypeError as e:
         print(f"Error spell transformer : {e}")
 

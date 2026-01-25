@@ -36,7 +36,7 @@ def main() -> None:
     print("\nDrawing and playing cards:\n")
 
     try:
-        for i in range(3):
+        for _ in range(3):
             card: Card = deck.draw_card()
             print(f"Drew: {card.name} ({card.get_type()})")
             print(f"Play result: {card.play(game_stat)}\n")

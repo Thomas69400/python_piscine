@@ -105,10 +105,11 @@ class CreatureCard(Card):
             dict: information about the Creature
         """
 
-        info = dict({
+        info: Dict[str, Union[str, int]] = dict({
             "name": self.name,
             "cost": self.cost,
             "rarity": self.rarity,
+            "type": self.get_type(),
             "attack": self.attack,
             "health": self.health
         })

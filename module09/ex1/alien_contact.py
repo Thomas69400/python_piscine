@@ -84,7 +84,7 @@ class AlienContact(BaseModel):
     @field_validator('witness_count')
     def witness_count_is_valid(cls, witness_count: int) -> int:
         """Validate witness_count range (0-100)."""
-        if not (0 <= witness_count <= 100):
+        if not (1 <= witness_count <= 100):
             raise ValueError('witness_count must be between 0 and 100')
         return witness_count
 
@@ -120,6 +120,15 @@ class AlienContact(BaseModel):
         if self.signal_strength > 7.0 and not self.message_received:
             raise ValueError(
                 'message_received must be provided for strong signals')
+        return self
+
+    @model_validator(mode='after')
+    def validate_physical(self) -> Self:
+        """Ensure physical contact reports are verified."""
+        if (self.contact_type == ContactType.PHYSICAL
+                and not self.is_verified):
+            raise ValueError(
+                'physical contact reports must be verified')
         return self
 
     def print_contact(self) -> None:

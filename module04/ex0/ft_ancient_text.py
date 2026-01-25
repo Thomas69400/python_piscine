@@ -19,8 +19,8 @@ def main() -> None:
             print("RECOVERED DATA:")
             print(data)
             print("\nData recovery complete. Storage unit disconnected.")
-    except FileNotFoundError as e:
-        print(f"ERROR: Storage vault not found {e}")
+    except FileNotFoundError:
+        print("ERROR: Storage vault not found. Run data generator first.")
 
 
 if __name__ == "__main__":

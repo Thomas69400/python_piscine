@@ -88,15 +88,16 @@ def main() -> None:
         reducer: int = spell_reducer(spell_powers, operations[1])
         print("Product: ", reducer)
         reducer: int = spell_reducer(spell_powers, operations[2])
-        print("Min: ", reducer)
-        reducer: int = spell_reducer(spell_powers, operations[3])
         print("Max: ", reducer)
+        reducer: int = spell_reducer(spell_powers, operations[3])
+        print("Min: ", reducer)
     except TypeError as e:
         print(f"Error spell reducer: {e}")
 
     print("\nTesting partial enchanter...")
     try:
-        enchanter: Dict[str, callable] = partial_enchanter(base_enchant)
+        enchanter: Dict[str, Callable[..., Dict[str, Any]]
+                        ] = partial_enchanter(base_enchant)
         print(enchanter.keys())
         print(f'Fire enchant: {enchanter["fire_enchant"]("Goblin")}')
     except TypeError as e:
@@ -106,8 +107,8 @@ def main() -> None:
 
     print("\nTesting memoized fibonacci...")
     try:
-        print(f"Fib (10): {memoized_fibonacci(10)}")
-        print(f"Fib (15): {memoized_fibonacci(15)}")
+        print(f"Fib(10): {memoized_fibonacci(10)}")
+        print(f"Fib(15): {memoized_fibonacci(15)}")
     except TypeError as e:
         print(f"Error fibonacci: {e}")
 

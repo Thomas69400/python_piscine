@@ -113,8 +113,7 @@ class TournamentCard(Card, Combatable, Rankable):
         Returns:
             int: Updated rating.
         """
-        rating_delta: int = self.wins * 5 - self.losses * 2
-        self.rating += rating_delta
+        self.rating = 1000 + (self.wins * 16) - (self.losses * 16)
         return self.rating
 
     def get_tournament_stats(self) -> Dict[str, Union[str, int, List[str]]]:
@@ -131,20 +130,22 @@ class TournamentCard(Card, Combatable, Rankable):
         return stats
 
     def update_wins(self, wins: int) -> None:
-        """Increment wins counter.
+        """Increment wins counter and rating.
 
         Args:
             wins (int): Number of wins to add.
         """
         self.wins += wins
+        self.calculate_rating()
 
     def update_losses(self, losses: int) -> None:
-        """Increment losses counter.
+        """Increment losses counter and rating.
 
         Args:
             losses (int): Number of losses to add.
         """
         self.losses += losses
+        self.calculate_rating()
 
     def get_rank_info(self) -> Dict[str, int]:
         """Return ranking information for this card."""
@@ -158,8 +159,6 @@ class TournamentCard(Card, Combatable, Rankable):
     def is_damage_to_kill(self, damage: int) -> bool:
         """Check whether the given damage would result in death.
 
-        NOTE: existing implementation compares current health against damage.
-
         Args:
             damage (int): The damage to evaluate.
 
@@ -167,7 +166,4 @@ class TournamentCard(Card, Combatable, Rankable):
             bool: True if card remains alive (per existing logic),
             False otherwise.
         """
-        try:
-            return self.health > damage
-        except TypeError as e:
-            raise TypeError(e)
+        return self.health > damage

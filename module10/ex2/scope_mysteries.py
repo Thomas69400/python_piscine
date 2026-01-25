@@ -61,7 +61,7 @@ def main() -> None:
 
     print("Testing mage counter...")
     try:
-        counter: callable = mage_counter()
+        counter: Callable[[], int] = mage_counter()
         print(f"Call 1: {counter()}")
         print(f"Call 2: {counter()}")
         print(f"Call 3: {counter()}")
@@ -70,7 +70,8 @@ def main() -> None:
 
     print("\nTesting spell accumulator...")
     try:
-        accumulator: callable = spell_accumulator(initial_powers[0])
+        accumulator: Callable[[int], int] = spell_accumulator(
+            initial_powers[0])
         print(f"Accumulated power: {accumulator(power_additions[0])}")
         print(f"Accumulated power: {accumulator(power_additions[2])}")
         print(f"Accumulated power: {accumulator(power_additions[1])}")
@@ -79,8 +80,10 @@ def main() -> None:
 
     print("\nTesting enchantment factory...")
     try:
-        shocking: callable = enchantment_factory(enchantment_types[0])
-        earthen: callable = enchantment_factory(enchantment_types[2])
+        shocking: Callable[[str], str] = enchantment_factory(
+            enchantment_types[0])
+        earthen: Callable[[str], str] = enchantment_factory(
+            enchantment_types[2])
         print(shocking(items_to_enchant[0]))
         print(earthen(items_to_enchant[3]))
     except TypeError as e:
@@ -88,12 +91,12 @@ def main() -> None:
 
     print("\nTesting memory vault...")
     try:
-        vault: callable = memory_vault()
+        vault: Dict[str, Callable[..., Any]] = memory_vault()
         vault["store"]("1", items_to_enchant[0])
         vault["store"]("2", items_to_enchant[1])
         print(vault["recall"]("1"))
         print(vault["recall"]("3"))
-        vault2: callable = memory_vault()
+        vault2: Dict[str, Callable[..., Any]] = memory_vault()
         print(vault2["recall"]("1"))
     except TypeError as e:
         print(f"Error memory vault: {e}")

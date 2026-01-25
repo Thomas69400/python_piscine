@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any, Optional, List, Dict
 
 
 class DataProcessor(ABC):
@@ -9,8 +9,7 @@ class DataProcessor(ABC):
     """
 
     def __init__(self) -> None:
-        """Initialize DataProcessor"""
-
+        """Initialize DataProcessor."""
         super().__init__()
 
     @abstractmethod
@@ -53,11 +52,16 @@ class DataProcessor(ABC):
 
 
 class NumericProcessor(DataProcessor):
-    """Processor for numeric data."""
+    """Processor for numeric data.
+
+    Attributes:
+        count: Number of numeric values processed.
+        total: Sum of all numeric values.
+        avg: Average of all numeric values.
+    """
 
     def __init__(self) -> None:
         """Initialize NumericProcessor with accumulator attributes."""
-
         super().__init__()
         self.count: Optional[int] = None
         self.total: Optional[int] = None
@@ -93,14 +97,11 @@ class NumericProcessor(DataProcessor):
             bool: true if int or list of int false either
         """
 
-        try:
-            assert isinstance(data, int) or (
-                isinstance(data, list) and all(isinstance(x, int)
-                                               for x in data)
-            )
+        if isinstance(data, int):
             return True
-        except AssertionError as e:
-            raise AssertionError(e)
+        if isinstance(data, list) and all(isinstance(x, int) for x in data):
+            return True
+        return False
 
     def format_output(self, result: str) -> str:
         """Format a string
@@ -118,11 +119,15 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-    """Processor for text data."""
+    """Processor for text data.
+
+    Attributes:
+        length: Length of the processed text.
+        words: Number of words in the processed text.
+    """
 
     def __init__(self) -> None:
         """Initialize TextProcessor with summary attributes."""
-
         super().__init__()
         self.length: Optional[int] = None
         self.words: Optional[int] = None
@@ -156,11 +161,7 @@ class TextProcessor(DataProcessor):
             bool: true if str false either
         """
 
-        try:
-            assert isinstance(data, str)
-            return True
-        except AssertionError as e:
-            raise AssertionError(e)
+        return isinstance(data, str)
 
     def format_output(self, result: str) -> str:
         """Format a string
@@ -177,11 +178,15 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    """Processor for log-entry dictionaries."""
+    """Processor for log-entry dictionaries.
+
+    Attributes:
+        l_type: The log level type (e.g., ERROR, INFO).
+        msg: The log message content.
+    """
 
     def __init__(self) -> None:
         """Initialize LogProcessor with extracted log fields."""
-
         super().__init__()
         self.l_type: Optional[str] = None
         self.msg: Optional[str] = None
@@ -216,11 +221,7 @@ class LogProcessor(DataProcessor):
             bool: true if dict false either
         """
 
-        try:
-            assert isinstance(data, dict)
-            return True
-        except AssertionError as e:
-            raise AssertionError(e)
+        return isinstance(data, dict)
 
     def format_output(self, result: str) -> str:
         """Format a string
@@ -240,13 +241,17 @@ class LogProcessor(DataProcessor):
 
 
 def main() -> None:
-    """Execute program"""
+    """Execute program.
 
+    Demonstrates the usage of different data processors including
+    NumericProcessor, TextProcessor, and LogProcessor through a
+    unified interface.
+    """
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
 
     print("Initializing Numeric Processor...")
-    nume = NumericProcessor()
-    lst = [1, 2, 3, 4, 5, "test"]
+    nume: NumericProcessor = NumericProcessor()
+    lst: List[int] = [1, 2, 3, 4, 5]
     try:
         print(nume.process(lst))
         print("Validation: Numeric data verified")
@@ -255,8 +260,8 @@ def main() -> None:
         print(e, end="\n\n")
 
     print("Initializing Text Processor...")
-    txt = TextProcessor()
-    s = "Hello Nexus World"
+    txt: TextProcessor = TextProcessor()
+    s: str = "Hello Nexus World"
     try:
         print(txt.process(s))
         print("Validation: Text data verified")
@@ -265,8 +270,8 @@ def main() -> None:
         print(e, end="\n\n")
 
     print("Initializing Log Processor...")
-    logs = LogProcessor()
-    dct = {"ERROR": "Connection timeout"}
+    logs: LogProcessor = LogProcessor()
+    dct: Dict[str, str] = {"ERROR": "Connection timeout"}
     try:
         print(logs.process(dct))
         print("Validation: Log entry verified")
@@ -275,7 +280,7 @@ def main() -> None:
         print(e, end="\n\n")
 
     print("\n=== Polymorphic Processing Demo ===")
-    proc = {
+    proc: Dict[DataProcessor, Any] = {
         NumericProcessor(): [1, 2, 3],
         TextProcessor(): "Hello World",
         LogProcessor(): {"INFO": "System ready"}

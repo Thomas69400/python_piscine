@@ -7,8 +7,8 @@ transmutation package using different import approaches.
 
 def absolute() -> None:
     """Test absolute import method."""
-    from alchemy.transmutation.basic import lead_to_gold, stone_to_gem
     try:
+        from alchemy.transmutation.basic import lead_to_gold, stone_to_gem
         print("Testing Absolute Imports (from basic.py):")
         print("lead_to_gold(): ", end="")
         result1: str = lead_to_gold()
@@ -22,9 +22,9 @@ def absolute() -> None:
 
 def relative() -> None:
     """Test relative import method."""
-    from alchemy.transmutation.advanced import philosophers_stone, \
-        elixir_of_life
     try:
+        from alchemy.transmutation.advanced import philosophers_stone, \
+            elixir_of_life
         print("\nTesting Relative Imports (from advanced.py):")
         print("philosophers_stone(): ", end="")
         result1: str = philosophers_stone()
@@ -39,7 +39,7 @@ def relative() -> None:
 def package() -> None:
     """Test package-level import method."""
     try:
-        import alchemy
+        import alchemy.transmutation
         print("\nTesting Package Access:")
         print("alchemy.transmutation.lead_to_gold(): ", end="")
         result1: str = alchemy.transmutation.lead_to_gold()

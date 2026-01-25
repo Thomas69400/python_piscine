@@ -78,16 +78,16 @@ class EliteCard(Card, Combatable, Magical):
         """Defend against incoming damage and return defense summary."""
 
         try:
-            damage = self.defense - incoming_damage
-            if damage < 0:
-                damage = 0
+            damage_taken = incoming_damage - self.defense
+            if damage_taken < 0:
+                damage_taken = 0
+            self.health -= damage_taken
             attack: Dict[str, Union[str, int, bool]] = dict({
                 "defender": self.name,
-                "damage_taken": damage,
+                "damage_taken": damage_taken,
                 "damage_blocked": self.defense,
-                "still_alive": self.is_damage_to_kill(incoming_damage)
+                "still_alive": self.health > 0
             })
-            self.health -= self.defense - incoming_damage
             return attack
         except TypeError as e:
             raise TypeError(e)
@@ -160,6 +160,6 @@ class EliteCard(Card, Combatable, Magical):
         """Determine whether the given damage would be lethal to this card."""
 
         try:
-            return self.health <= damage
+            return self.health > damage
         except TypeError as e:
             raise TypeError(e)
