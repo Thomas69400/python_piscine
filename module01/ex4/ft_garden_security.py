@@ -11,8 +11,8 @@ class SecurePlant:
             age: Initial age in days.
         """
         self.name: str = name
-        self.__height: int = height
-        self.__age: int = age
+        self.__height: int = self.set_height(height)
+        self.__age: int = self.set_age(age)
 
     def set_height(self, new_height: int) -> None:
         """Safely set the plant height if non-negative"""
